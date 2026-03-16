@@ -1,0 +1,749 @@
+{
+  "common": {
+    "siteDescription": "AI and digital transformation for businesses in Cyprus and the Eastern Mediterranean. Custom chatbots, web applications, and growth systems — self-hosted, bilingual, production-ready.",
+    "bookCall": "Book a free discovery call",
+    "viewWork": "View our work",
+    "learnMore": "Learn more",
+    "getInTouch": "Get in touch",
+    "readCaseStudy": "Read case study",
+    "allCaseStudies": "View all case studies"
+  },
+  "nav": {
+    "services": "Services",
+    "aiServices": "AI Services",
+    "aiServicesDesc": "Chatbots, voice agents, and internal tools",
+    "development": "Development",
+    "developmentDesc": "Web apps, dashboards, and mobile",
+    "growth": "Growth & Marketing",
+    "growthDesc": "Ads, funnels, outreach, and market entry",
+    "training": "Training & Consulting",
+    "trainingDesc": "ANAD-certified AI training programmes",
+    "caseStudies": "Case Studies",
+    "about": "About",
+    "blog": "Blog",
+    "contact": "Contact",
+    "bookCall": "Book a call"
+  },
+  "header": {
+    "brandName": "HN Innovaco",
+    "brandTagline": "AI & Digital Transformation"
+  },
+  "footer": {
+    "brandName": "HN Innovaco",
+    "brandTagline": "AI & Digital Transformation",
+    "builtIn": "Built in Larnaca, Cyprus.",
+    "servicesHeading": "Services",
+    "companyHeading": "Company",
+    "contactHeading": "Get in touch",
+    "location": "Larnaca, Cyprus",
+    "chatWhatsApp": "Chat on WhatsApp",
+    "copyright": "© 2025 HN Innovaco Ltd. All rights reserved.",
+    "deployedOn": "Built in Larnaca. Deployed on Hetzner EU.",
+    "privacyPolicy": "Privacy Policy"
+  },
+  "homepage": {
+    "hero": {
+      "badge": "Available for new projects · Larnaca, Cyprus",
+      "headlinePart1": "We build AI systems",
+      "headlinePart2": "that work.",
+      "subheadline": "Custom chatbots, web applications, and growth strategies — deployed on infrastructure you control. Bilingual. Built in Cyprus. Backed by results.",
+      "ctaPrimary": "Book a free discovery call",
+      "ctaSecondary": "See our work",
+      "terminalTitle": "harry@innovaco — bash"
+    },
+    "proofBar": {
+      "trustedBy": "Trusted by"
+    },
+    "servicesOverview": {
+      "label": "What we do",
+      "headline": "Four pillars. One partner.",
+      "description": "We cover the full technology stack for Cypriot and regional businesses — from AI deployment to software development, marketing growth to certified training.",
+      "ai": {
+        "title": "AI Services",
+        "shortDesc": "Chatbots, voice agents, and production AI systems.",
+        "price": "From €1,200",
+        "link": "Explore AI services →"
+      },
+      "development": {
+        "title": "Development",
+        "shortDesc": "Web apps, dashboards, and mobile — on your servers.",
+        "price": "From €1,500",
+        "link": "Explore development →"
+      },
+      "growth": {
+        "title": "Growth & Marketing",
+        "shortDesc": "Ads, funnels, outreach, and market entry strategy.",
+        "price": "From €600/mo",
+        "link": "Explore growth →"
+      },
+      "training": {
+        "title": "Training & Consulting",
+        "shortDesc": "ANAD-certified AI training, up to 80% subsidised.",
+        "price": "From €150/person",
+        "link": "Explore training →"
+      },
+      "stat1Label": "4 service lines",
+      "stat1Desc": "AI, development, growth, training",
+      "stat2Label": "EU-hosted infrastructure",
+      "stat2Desc": "Hetzner and DigitalOcean, never US",
+      "stat3Label": "Bilingual GR/EN",
+      "stat3Desc": "Greek and English natively"
+    },
+    "differentiators": {
+      "label": "Why Innovaco",
+      "headline": "Built for this market. Proven in it.",
+      "eu": {
+        "title": "Data stays in the EU",
+        "description": "We deploy on Hetzner and DigitalOcean EU — never US servers. Full GDPR compliance, no vendor lock-in, infrastructure you can audit."
+      },
+      "bilingual": {
+        "title": "Bilingual from day one",
+        "description": "Every system we build is Greek and English natively. No awkward translation layer. We speak the market."
+      },
+      "proven": {
+        "title": "Proven in Cyprus",
+        "description": "We've delivered for ICPAC, Chtisma Trading, Inspektra, and the Cyprus Medical Council. Named clients, real results, local market knowledge."
+      }
+    },
+    "featuredCaseStudies": {
+      "label": "Our work",
+      "headline": "Real builds. Real results.",
+      "viewAll": "View all case studies",
+      "readCaseStudy": "Read case study →",
+      "placeholders": {
+        "icpac": {
+          "client": "ICPAC",
+          "sector": "Accounting",
+          "result1": "Bilingual AI chatbot serving 6,000+ members",
+          "result2": "Greek and English support",
+          "result3": "Integrated with existing knowledge base"
+        },
+        "chtisma": {
+          "client": "Chtisma Trading",
+          "sector": "Trading",
+          "result1": "Dual AI deployment — customer-facing + internal",
+          "result2": "Automated client enquiry handling",
+          "result3": "Staff productivity tools"
+        },
+        "inspektra": {
+          "client": "Inspektra",
+          "sector": "Field Services",
+          "result1": "6-dashboard PostHog analytics suite",
+          "result2": "Real-time field service monitoring",
+          "result3": "Custom KPI tracking"
+        }
+      }
+    },
+    "anadCallout": {
+      "label": "ANAD Certified Training",
+      "headline": "AI training for your team — up to 80% subsidised.",
+      "description": "We are ANAD-approved training providers. Your staff can access our AI and digital transformation programmes with up to 80% of the cost covered by the Human Resource Development Authority of Cyprus.",
+      "badge": "Up to 80% covered by ANAD",
+      "cta": "View training programmes"
+    },
+    "cta": {
+      "headline": "Ready to build something real?",
+      "subheadline": "Book a free 30-minute discovery call. No pitch, no pressure — just a conversation about what you want to build and whether we can help.",
+      "ctaPrimary": "Book a call",
+      "ctaSecondary": "Or send us a message →"
+    }
+  },
+  "services": {
+    "ai": {
+      "meta": {
+        "title": "AI Services",
+        "description": "Production-ready AI systems for Cypriot and regional businesses. Bilingual chatbots, voice agents, internal tools, and full product builds."
+      },
+      "hero": {
+        "label": "AI Services",
+        "headline": "AI that works for your business — not just in demos.",
+        "subheadline": "Production-ready AI systems for Cypriot and regional businesses. Bilingual, self-hosted, and maintained after launch.",
+        "cta": "Book a free discovery call"
+      },
+      "cards": {
+        "chatbots": {
+          "title": "AI Chatbots",
+          "description": "Customer-facing and internal staff chatbots. Bilingual GR/EN. WhatsApp, website widget, or Facebook Messenger.",
+          "pill1": "Dify + RAG",
+          "pill2": "Self-hosted EU",
+          "pill3": "From €1,200 setup",
+          "price": "From €1,200 setup"
+        },
+        "internalTools": {
+          "title": "AI Internal Tools",
+          "description": "Document Q&A, staff assistants, compliance checkers, report generators.",
+          "pill1": "Custom UI",
+          "pill2": "n8n integration",
+          "pill3": "From €2,500",
+          "price": "From €2,500"
+        },
+        "voiceAgents": {
+          "title": "AI Voice Agents",
+          "description": "Inbound and outbound call handling in Greek and English, 24/7.",
+          "pill1": "ElevenLabs",
+          "pill2": "Vapi",
+          "pill3": "From €2,000 setup",
+          "price": "From €2,000 setup"
+        },
+        "automations": {
+          "title": "AI Automations",
+          "description": "Connect tools, remove manual tasks, run workflows overnight. n8n self-hosted — your data stays in the EU.",
+          "pill1": "n8n self-hosted",
+          "pill2": "Custom webhooks",
+          "pill3": "From €800",
+          "price": "From €800"
+        },
+        "mvps": {
+          "title": "AI-Powered MVPs",
+          "description": "Full product build from idea to deployed application in 4-8 weeks. Equity arrangements available for the right project.",
+          "pill1": "Next.js",
+          "pill2": "Prisma · Dify",
+          "pill3": "From €8,000",
+          "price": "From €8,000"
+        },
+        "audit": {
+          "title": "AI Readiness Audit",
+          "description": "Written report and implementation roadmap. Vendor-neutral, fixed fee. Used for board presentations and EU funding applications.",
+          "pill1": "2-week engagement",
+          "pill2": "Written report",
+          "pill3": "From €1,200",
+          "price": "From €1,200"
+        }
+      },
+      "process": {
+        "label": "Our process",
+        "heading": "How it works",
+        "step1": { "title": "Discovery", "description": "Understand use case, channels, languages" },
+        "step2": { "title": "Knowledge", "description": "Audit and build the information layer" },
+        "step3": { "title": "Build", "description": "Dify environment, bilingual prompts, integrations" },
+        "step4": { "title": "Test", "description": "Staging demo, two revision rounds with client" },
+        "step5": { "title": "Deploy", "description": "Live on client domain, staff training, handover" }
+      },
+      "verticals": {
+        "label": "Industries",
+        "heading": "We've built for:",
+        "hotels": { "name": "Hotels", "description": "Guest enquiries, bookings, concierge in two languages" },
+        "restaurants": { "name": "Restaurants", "description": "Reservations, menu questions, allergen handling" },
+        "accounting": { "name": "Accounting", "description": "Member support, regulation Q&A, document lookup" },
+        "legal": { "name": "Legal", "description": "Client intake, case status, document retrieval" },
+        "medical": { "name": "Medical Clinics", "description": "Appointment booking, procedure FAQs, follow-up" },
+        "realEstate": { "name": "Real Estate", "description": "Property matching, viewing booking, area guides" },
+        "retail": { "name": "Retail", "description": "Product recommendations, stock queries, order tracking" },
+        "schools": { "name": "Private Schools", "description": "Admissions, programme info, parent communication" }
+      }
+    },
+    "development": {
+      "meta": {
+        "title": "Development",
+        "description": "Custom web applications, internal tools, mobile apps, and API integrations. EU-hosted. Maintained by us. No vendor lock-in."
+      },
+      "hero": {
+        "label": "Development",
+        "headline": "Custom software built on infrastructure you own.",
+        "subheadline": "Web applications, internal tools, mobile apps, and API integrations. EU-hosted. Maintained by us. No vendor lock-in.",
+        "cta": "Book a free discovery call"
+      },
+      "cards": {
+        "websites": {
+          "title": "Business Websites",
+          "description": "Fast, responsive, SEO-optimised websites built with Next.js. No WordPress, no page builders, no monthly platform fees.",
+          "pill1": "Next.js",
+          "pill2": "Tailwind CSS",
+          "pill3": "From €1,500",
+          "price": "From €1,500"
+        },
+        "webApps": {
+          "title": "Web Applications",
+          "description": "Full-stack custom applications with authentication, databases, and APIs. Built for your specific workflow.",
+          "pill1": "TypeScript",
+          "pill2": "PostgreSQL",
+          "pill3": "From €5,000",
+          "price": "From €5,000"
+        },
+        "dashboards": {
+          "title": "Internal Tools & Dashboards",
+          "description": "Analytics dashboards, admin panels, and staff tools. See what Inspektra got for €5,600.",
+          "pill1": "PostHog",
+          "pill2": "Custom UI",
+          "pill3": "From €3,000",
+          "price": "From €3,000"
+        },
+        "mobile": {
+          "title": "Mobile Applications",
+          "description": "Cross-platform mobile apps with React Native. One codebase for iOS and Android.",
+          "pill1": "React Native",
+          "pill2": "iOS + Android",
+          "pill3": "From €6,000",
+          "price": "From €6,000"
+        },
+        "apis": {
+          "title": "API Integrations",
+          "description": "Connect your existing tools. Payment gateways, CRMs, ERPs, government portals, WhatsApp Business.",
+          "pill1": "REST + GraphQL",
+          "pill2": "n8n workflows",
+          "pill3": "From €1,000",
+          "price": "From €1,000"
+        },
+        "aiMvp": {
+          "title": "AI-Ready MVP Builds",
+          "description": "From idea to deployed product in 4-8 weeks. Full-stack with AI integration from day one.",
+          "pill1": "Next.js + Dify",
+          "pill2": "Prisma + PostgreSQL",
+          "pill3": "From €8,000",
+          "price": "From €8,000"
+        }
+      },
+      "techStack": {
+        "label": "Technology",
+        "heading": "Our stack",
+        "badges": ["Next.js", "TypeScript", "Prisma", "PostgreSQL", "React Native", "Tailwind CSS", "shadcn/ui", "n8n", "Coolify", "Hetzner", "DigitalOcean"]
+      },
+      "inspektraCallout": {
+        "quote": "We built 6 custom PostHog analytics dashboards for Inspektra's field service platform. €5,600. Delivered on time. Still running.",
+        "link": "Read the case study →"
+      },
+      "noTemplates": {
+        "heading": "We don't do templates.",
+        "body": "Most agencies sell you a WordPress theme with a logo swap. You pay monthly for hosting you don't control, can't export your data, and hit a wall every time you need something custom. We build differently.",
+        "bullet1": "You own the code, not a rental",
+        "bullet2": "Deployed on servers you control",
+        "bullet3": "No platform fee that doubles when you scale",
+        "bullet4": "We stay after launch — not a handover-and-goodbye shop"
+      }
+    },
+    "growth": {
+      "meta": {
+        "title": "Growth & Marketing",
+        "description": "Full-stack growth from strategy to execution. Market entry, paid ads, funnels, outreach, and automation for businesses in Cyprus and the region."
+      },
+      "hero": {
+        "label": "Growth & Marketing",
+        "headline": "Full-stack growth — from strategy to execution.",
+        "subheadline": "We've taken companies from Lebanon into Cyprus and from Cyprus into Europe. We build the systems, run the campaigns, and automate the follow-up.",
+        "cta": "Book a free discovery call"
+      },
+      "cards": {
+        "marketEntry": {
+          "title": "Market Entry Strategy",
+          "description": "The Schedex model. Competitor audit, ICP definition, channel infrastructure, and a 90-day launch plan for new markets.",
+          "pill1": "90-day programme",
+          "pill2": "Cyprus · Greece · UK",
+          "pill3": "€4,500–€9,000 fixed",
+          "price": "€4,500–€9,000 fixed"
+        },
+        "paidAds": {
+          "title": "Paid Ads Management",
+          "description": "Meta and Google campaigns. Creative, targeting, optimisation, and weekly reporting. Bilingual ad copy.",
+          "pill1": "Meta + Google",
+          "pill2": "Bilingual GR/EN",
+          "pill3": "From €600/mo",
+          "price": "From €600/mo"
+        },
+        "funnels": {
+          "title": "Sales Funnel Builds",
+          "description": "Landing pages, lead magnets, email sequences, and conversion tracking. Built in Next.js, not ClickFunnels.",
+          "pill1": "Next.js",
+          "pill2": "A/B tested",
+          "pill3": "From €1,500",
+          "price": "From €1,500"
+        },
+        "outreach": {
+          "title": "Cold Outreach Systems",
+          "description": "Signal-based prospecting. We find companies showing buying signals and reach them before your competitors do.",
+          "pill1": "Signal-based",
+          "pill2": "LinkedIn + Email",
+          "pill3": "From €800 setup + €400/mo",
+          "price": "From €800 setup + €400/mo"
+        },
+        "social": {
+          "title": "Social Media Management",
+          "description": "Content calendar, posting, engagement, and reporting across LinkedIn, Instagram, and Facebook.",
+          "pill1": "LinkedIn + Meta",
+          "pill2": "Monthly calendar",
+          "pill3": "From €500/mo",
+          "price": "From €500/mo"
+        },
+        "automations": {
+          "title": "Marketing Automations",
+          "description": "Automated email sequences, lead scoring, CRM workflows, and notification systems. All self-hosted on n8n.",
+          "pill1": "n8n self-hosted",
+          "pill2": "Custom workflows",
+          "pill3": "From €1,000",
+          "price": "From €1,000"
+        },
+        "seo": {
+          "title": "SEO & Content",
+          "description": "Technical SEO, content strategy, blog writing, and local SEO for Google Maps and Cyprus-specific search.",
+          "pill1": "Technical + Content",
+          "pill2": "Bilingual GR/EN",
+          "pill3": "From €600/mo",
+          "price": "From €600/mo"
+        }
+      },
+      "schedex": {
+        "quote": "We helped Schedex expand from Lebanon into Cyprus with a 90-day market entry programme — competitor audit, ICP definition, channel infrastructure, and launch.",
+        "heading": "The framework:",
+        "step1": "Market and competitor intelligence",
+        "step2": "Ideal customer profile definition",
+        "step3": "Channel setup and infrastructure",
+        "step4": "Content and campaign launch",
+        "step5": "Optimisation and handover"
+      },
+      "packages": {
+        "heading": "Pricing packages",
+        "starter": { "name": "Starter", "price": "€900/mo", "description": "Social media + basic ads management" },
+        "growth": { "name": "Growth", "price": "€1,800/mo", "description": "Full ads + funnels + email automation" },
+        "scale": { "name": "Scale", "price": "€3,500/mo", "description": "Everything in Growth + outreach + SEO" },
+        "marketEntry": { "name": "Market Entry Programme", "price": "€6,000 flat", "description": "90-day market launch — strategy to execution" }
+      },
+      "signals": {
+        "heading": "Buying signals we track",
+        "hiring": { "name": "Hiring signal", "what": "Company is hiring for roles we serve", "how": "Reach out with relevant case study" },
+        "funding": { "name": "Funding signal", "what": "Company just raised funding or won a grant", "how": "Budget is available — present ROI-first" },
+        "weakFunnel": { "name": "Weak funnel signal", "what": "Website has no clear CTA or conversion path", "how": "Offer a free audit with specific fixes" },
+        "newWebsite": { "name": "New website signal", "what": "Company just launched or redesigned their site", "how": "Suggest AI and growth add-ons to maximise investment" },
+        "marketEntry": { "name": "Market entry signal", "what": "Company expanding into Cyprus or from Cyprus", "how": "Propose the market entry programme" },
+        "badRoas": { "name": "Bad ROAS signal", "what": "Running ads with poor return on ad spend", "how": "Offer campaign audit and restructure" }
+      }
+    },
+    "training": {
+      "meta": {
+        "title": "Training & Consulting",
+        "description": "ANAD-certified AI training for Cypriot businesses. Up to 80% subsidised. Bilingual GR/EN. Delivered by a practitioner."
+      },
+      "hero": {
+        "label": "Training & Consulting",
+        "headline": "ANAD-certified AI training for Cypriot businesses.",
+        "subheadline": "Up to 80% subsidised. Bilingual GR/EN. Delivered by a practitioner who has built and deployed the exact systems they teach.",
+        "cta": "Book a free discovery call"
+      },
+      "anadCallout": {
+        "body": "Under the ANAD scheme, employees can claim back up to 80% of training costs. We are ANAD-approved and handle all the paperwork.",
+        "stat": "80%"
+      },
+      "programmes": {
+        "heading": "Training programmes",
+        "businessOwners": {
+          "title": "AI for Business Owners",
+          "duration": "Half day",
+          "audience": "CEOs, founders, and decision-makers",
+          "price": "€150–€250/person",
+          "anadPrice": "€30–€50/person after ANAD"
+        },
+        "hospitality": {
+          "title": "AI Tools for Hospitality",
+          "duration": "Full day",
+          "audience": "Hotel and restaurant staff and managers",
+          "price": "€250–€350/person",
+          "anadPrice": "€50–€70/person after ANAD",
+          "note": "KEBE cluster"
+        },
+        "dxSmes": {
+          "title": "Digital Transformation for SMEs",
+          "duration": "2 days",
+          "audience": "Operations managers and team leads",
+          "price": "€400–€600/person",
+          "anadPrice": "€80–€120/person after ANAD"
+        },
+        "promptEng": {
+          "title": "Prompt Engineering for Professionals",
+          "duration": "Half day",
+          "audience": "Lawyers, accountants, marketers, HR",
+          "price": "€100–€180/person",
+          "anadPrice": "€20–€36/person after ANAD"
+        },
+        "corporate": {
+          "title": "Corporate In-House Training",
+          "duration": "Tailored",
+          "audience": "Your entire team, at your premises",
+          "price": "€1,500–€3,000 flat",
+          "anadPrice": "€300–€600 flat after ANAD"
+        }
+      },
+      "consulting": {
+        "heading": "Consulting services",
+        "audit": {
+          "title": "AI Readiness Audit",
+          "description": "Where is AI useful in your business? Written report with prioritised recommendations.",
+          "price": "€1,200–€3,500"
+        },
+        "roadmap": {
+          "title": "DX Roadmap",
+          "description": "Full digital transformation plan. Phased, budgeted, with vendor-neutral technology recommendations.",
+          "price": "€3,000–€6,000"
+        },
+        "fractionalCto": {
+          "title": "Fractional CTO / AI Advisor",
+          "description": "Part-time strategic technology leadership. Board presentations, vendor evaluation, team hiring support.",
+          "price": "€1,500–€3,000/mo"
+        },
+        "euProject": {
+          "title": "EU Project AI Consulting",
+          "description": "AI components for EU-funded projects. Technical writing, implementation, and reporting.",
+          "price": "€2,000–€5,000"
+        }
+      },
+      "credentials": {
+        "heading": "Why Harry teaches this",
+        "item1": "ANAD certified instructor",
+        "item2": "Presented at EULEP Final Conference, Brussels",
+        "item3": "Delivered AI chatbot for ICPAC (3,000+ members)",
+        "item4": "Named Cyprus case studies across multiple sectors",
+        "item5": "Bilingual Greek and English — delivered natively in both"
+      }
+    }
+  },
+  "caseStudies": {
+    "meta": {
+      "title": "Case Studies",
+      "description": "Real projects delivered for Cypriot and regional businesses. AI chatbots, analytics suites, web platforms, and more."
+    },
+    "hero": {
+      "headline": "Our work",
+      "subheadline": "Real projects. Real clients. Real results."
+    },
+    "featured": "Featured projects",
+    "all": "All case studies",
+    "filterAll": "All",
+    "filterAI": "AI",
+    "filterDevelopment": "Development",
+    "filterAnalytics": "Analytics",
+    "filterPublicSector": "Public Sector",
+    "readCaseStudy": "Read case study →",
+    "detail": {
+      "keyResults": "Key results",
+      "sidebar": {
+        "heading": "Work with us",
+        "body": "Interested in a similar project?",
+        "cta": "Book a discovery call",
+        "contactLink": "Or contact us →"
+      },
+      "topics": "Topics:",
+      "moreCaseStudies": "More case studies"
+    }
+  },
+  "about": {
+    "meta": {
+      "title": "About",
+      "description": "HN Innovaco is a digital transformation and AI company based in Larnaca, Cyprus. We build real systems, maintain them after launch, and think in terms of long-term value."
+    },
+    "hero": {
+      "label": "About HN Innovaco",
+      "headline": "We're building something different in Larnaca.",
+      "subheadline": "A digital transformation and AI company that builds real systems, maintains them after launch, and thinks in terms of long-term value."
+    },
+    "company": {
+      "p1": "HN Innovaco is a technology company based in Larnaca, Cyprus. We build AI systems, custom software, and growth infrastructure for businesses in Cyprus and the Eastern Mediterranean.",
+      "p2": "We are not a traditional agency. We don't sell templates, retainers for vague deliverables, or dashboards nobody checks. Every project has a defined scope, a clear price, and a measurable outcome.",
+      "p3": "We chose Cyprus because the market needs what we do. Businesses here are ready for AI and digital transformation but lack local partners who can build, deploy, and maintain systems in both Greek and English on infrastructure that stays in the EU.",
+      "stat1": "4 active sectors",
+      "stat2": "2 languages natively",
+      "stat3": "100% EU-hosted"
+    },
+    "harry": {
+      "name": "Harry Newton",
+      "title": "Founder & CEO",
+      "photoAlt": "Photo — Harry Newton",
+      "bio1": "Harry is a technologist and entrepreneur who founded HN Innovaco to bring production-grade AI and digital transformation to the Cyprus market. His background spans software development, AI deployment, and business strategy.",
+      "bio2": "He is an ANAD-certified trainer and has presented at the EULEP Final Conference in Brussels on AI applications in professional services. He has delivered AI chatbots for ICPAC, dual deployments for Chtisma Trading, and analytics suites for Inspektra.",
+      "bio3": "Harry is building HN Innovaco as the anchor tech institution in Larnaca — a company that trains, builds, and ships real technology for the local and regional market.",
+      "cred1": "ANAD Certified Instructor",
+      "cred2": "Bilingual — Greek and English",
+      "cred3": "EULEP Final Conference, Brussels",
+      "cred4": "AI systems deployed for ICPAC, Chtisma, and others",
+      "cred5": "Doctor registry platform — Cyprus Medical Council",
+      "cred6": "Market entry strategy — Schedex (Lebanon to Cyprus and EU)"
+    },
+    "nikolas": {
+      "name": "Nikolas Manitaras",
+      "title": "Co-Founder",
+      "bio": "Nikolas brings deep commercial networks and operational experience across Cyprus and Greece. He focuses on partnerships, client relationships, and market development."
+    },
+    "values": {
+      "label": "Our values",
+      "heading": "How we work",
+      "v1": { "name": "Build real things", "description": "Every project ships. We don't do strategy decks that sit in a drawer." },
+      "v2": { "name": "Own the infrastructure", "description": "Your code, your servers, your data. No vendor lock-in, no surprise fees." },
+      "v3": { "name": "Speak plainly", "description": "Clear scope, clear price, clear timeline. No jargon unless it helps." },
+      "v4": { "name": "Stay after launch", "description": "We maintain what we build. Support, updates, and improvements are part of the deal." },
+      "v5": { "name": "Think in equity", "description": "We take equity in the right projects. When we invest, our incentives align with yours." }
+    },
+    "vision": {
+      "label": "The vision",
+      "headline": "Building the Larnaca tech ecosystem",
+      "p1": "Larnaca is changing. New businesses, new residents, new ambitions. But the tech infrastructure hasn't kept pace. There is no local AI company. No training centre. No place where a business owner can walk in and say: I need this built.",
+      "p2": "That is what we are building. Not just a services company, but a hub — a physical and digital centre for technology in Larnaca that trains teams, builds products, and creates local capability.",
+      "p3": "This is ambitious. It is also already underway. Every chatbot we deploy, every team we train, every client we serve adds to the ecosystem.",
+      "practiceHeading": "What this means in practice",
+      "practice1": "Studio and webinar space for workshops and events",
+      "practice2": "ANAD training programmes running quarterly",
+      "practice3": "AI-first incubator for local product ideas",
+      "practice4": "Regional technology reputation anchored in Larnaca"
+    },
+    "ctaSection": {
+      "headline": "Work with us",
+      "subheadline": "Whether you need AI, software, growth systems, or training — let's start with a conversation.",
+      "cta": "Book a discovery call"
+    }
+  },
+  "contact": {
+    "meta": {
+      "title": "Contact",
+      "description": "Get in touch with HN Innovaco. We respond to all enquiries within one business day."
+    },
+    "info": {
+      "headline": "Get in touch",
+      "subheadline": "We respond to all enquiries within one business day. For urgent questions, WhatsApp is fastest.",
+      "location": "Larnaca, Cyprus",
+      "chatWhatsApp": "Chat on WhatsApp",
+      "connectLinkedIn": "Connect on LinkedIn",
+      "preferCall": "Prefer to book a call directly? →"
+    },
+    "form": {
+      "name": "Name",
+      "namePlaceholder": "Your full name",
+      "email": "Email",
+      "emailPlaceholder": "you@company.com",
+      "company": "Company",
+      "companyPlaceholder": "Your company name (optional)",
+      "message": "Message",
+      "messagePlaceholder": "How can we help?",
+      "source": "How did you hear about us?",
+      "sourcePlaceholder": "Select an option",
+      "sourceLinkedIn": "LinkedIn",
+      "sourceGoogle": "Google",
+      "sourceReferral": "Referral",
+      "sourceKebe": "KEBE / Event",
+      "sourceOther": "Other",
+      "submit": "Send message",
+      "sending": "Sending...",
+      "successHeading": "Message sent.",
+      "successBody": "We'll be in touch within one business day.",
+      "backHome": "Back to home",
+      "errorMessage": "Something went wrong. Please try again.",
+      "validation": {
+        "nameMin": "Name must be at least 2 characters",
+        "emailInvalid": "Please enter a valid email address",
+        "messageMin": "Message must be at least 10 characters"
+      }
+    }
+  },
+  "book": {
+    "meta": {
+      "title": "Book a Discovery Call",
+      "description": "Book a free 30-minute discovery call with HN Innovaco. No pitch, no pressure."
+    },
+    "hero": {
+      "headline": "Book a free discovery call",
+      "subheadline": "30 minutes. No pitch, no pressure.",
+      "trust1": "Free, no obligation",
+      "trust2": "Bilingual GR/EN",
+      "trust3": "Response within 1 business day"
+    },
+    "progress": {
+      "step1": "Your business",
+      "step2": "Your project",
+      "step3": "Your details"
+    },
+    "step1": {
+      "businessType": "What type of business do you run?",
+      "hotel": "Hotel or restaurant",
+      "legal": "Legal firm",
+      "accounting": "Accounting firm",
+      "medical": "Medical clinic or pharmacy",
+      "realEstate": "Real estate agency",
+      "retail": "Retail or e-commerce",
+      "construction": "Construction or property",
+      "technology": "Technology company",
+      "other": "Other",
+      "challenge": "What is your main challenge right now?",
+      "challengeAI": "We need AI tools but don't know where to start",
+      "challengeWebApp": "We need a custom web application or platform built",
+      "challengeGrowth": "We need to grow our customer base or enter a new market",
+      "challengeTraining": "We need AI training for our team",
+      "challengeProduct": "We're building a product and need a technical partner",
+      "challengeOther": "Something else",
+      "companySize": "Company size",
+      "size1": "1-5",
+      "size2": "6-20",
+      "size3": "21-50",
+      "size4": "51-200",
+      "size5": "200+"
+    },
+    "step2": {
+      "timeline": "What's your timeline?",
+      "timelineNow": "Ready to start now",
+      "timeline1to3": "1-3 months",
+      "timeline3to6": "3-6 months",
+      "timelineExploring": "Just exploring",
+      "source": "How did you hear about us?",
+      "sourcePlaceholder": "Select an option",
+      "sourceLinkedIn": "LinkedIn",
+      "sourceGoogle": "Google search",
+      "sourceReferral": "Referral",
+      "sourceKebe": "KEBE / training event",
+      "sourceDiggIN": "DiggIN",
+      "sourceOther": "Other",
+      "notes": "Anything else we should know?",
+      "notesPlaceholder": "Project context, budget range, specific requirements..."
+    },
+    "step3": {
+      "firstName": "First name",
+      "lastName": "Last name",
+      "email": "Email",
+      "phone": "Phone",
+      "phoneLabel": "(Optional — we sometimes follow up by WhatsApp)",
+      "companyName": "Company name",
+      "note": "We'll review your answers before the call so we come prepared."
+    },
+    "nav": {
+      "next": "Next →",
+      "back": "← Back",
+      "submit": "Book my call"
+    },
+    "success": {
+      "headline": "You're booked in.",
+      "body": "We'll send a confirmation email and follow up within one business day.",
+      "backHome": "← Back to home"
+    },
+    "error": "Something went wrong — please try again.",
+    "validation": {
+      "required": "This field is required",
+      "emailInvalid": "Please enter a valid email address",
+      "nameMin": "Must be at least 2 characters"
+    }
+  },
+  "blog": {
+    "meta": {
+      "title": "Insights",
+      "description": "Practical thinking on AI, digital transformation, and technology for businesses in Cyprus and the region."
+    },
+    "hero": {
+      "headline": "Insights",
+      "subheadline": "Practical thinking on AI, digital transformation, and technology for businesses in Cyprus and the region."
+    },
+    "filterAll": "All",
+    "filterAI": "AI",
+    "filterTraining": "Training",
+    "filterGDPR": "GDPR",
+    "filterCyprus": "Cyprus",
+    "filterDevelopment": "Development",
+    "read": "Read →",
+    "by": "By",
+    "detail": {
+      "newsletter": {
+        "heading": "Get more like this",
+        "body": "Occasional insights on AI and digital transformation for Cypriot businesses.",
+        "placeholder": "Your email address",
+        "subscribe": "Subscribe",
+        "success": "Subscribed. Thanks!",
+        "error": "Something went wrong. Try again."
+      },
+      "sidebar": {
+        "heading": "Work on a project like this?",
+        "cta": "Book a discovery call"
+      },
+      "authorBio": "Founder and CEO of HN Innovaco. ANAD-certified AI trainer. Builds and deploys AI systems for businesses in Cyprus and the Eastern Mediterranean."
+    }
+  }
+}

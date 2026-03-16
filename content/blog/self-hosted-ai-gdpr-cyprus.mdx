@@ -1,0 +1,82 @@
+---
+title: "Why self-hosted AI matters for GDPR compliance in Cyprus"
+titleEl: "Γιατί το self-hosted AI είναι κρίσιμο για τη συμμόρφωση GDPR στην Κύπρο"
+summary: "When you use a cloud AI tool, where does your customer data go? For Cypriot businesses handling EU personal data, this is a legal question, not a preference."
+summaryEl: "Όταν χρησιμοποιείτε cloud AI, πού πάνε τα δεδομένα πελατών σας;"
+date: 2025-01-20
+author: "Harry Newton"
+tags: ["GDPR", "AI", "Data Privacy", "Cyprus"]
+coverImage: "/images/blog/gdpr-cover.jpg"
+---
+
+## The question nobody asks their AI vendor
+
+When a Cypriot business signs up for a cloud-based AI chatbot or uses a third-party AI tool to process customer data, there is a question that rarely gets asked: where does the data actually go?
+
+The answer matters more than most business owners realise. Under GDPR, any processing of personal data belonging to EU residents is subject to strict rules about where that data is stored, who can access it, and what legal frameworks govern its protection.
+
+Most popular AI tools process data on servers in the United States. When your customer sends a message to your AI chatbot and that message is sent to an API hosted in Virginia, you have just transferred EU personal data to a third country. Under GDPR, this requires specific legal safeguards that many businesses do not have in place.
+
+## What GDPR actually says about AI
+
+GDPR does not ban the use of AI. It does not prohibit cloud services. What it does is establish clear rules about data processing.
+
+**Lawful basis.** You need a legal basis for processing personal data through AI systems. For most business chatbots, this is legitimate interest or contract performance.
+
+**Data minimisation.** You should only process the data you actually need. An AI system that ingests entire customer profiles when it only needs to answer a product question is over-collecting.
+
+**Transfer restrictions.** Personal data should not leave the European Economic Area unless adequate safeguards exist. The US has a Data Privacy Framework in place, but its long-term stability remains uncertain. Businesses that can keep data within the EU eliminate this risk entirely.
+
+**Transparency.** Your customers should know they are interacting with an AI system and understand how their data is being used.
+
+## What "self-hosted" actually means
+
+When we say self-hosted, we mean the AI system runs on servers that you control, located in data centres within the EU.
+
+In practice, this is what it looks like. We deploy AI systems on Hetzner cloud servers in Germany or Finland. The application layer runs on Coolify, an open-source deployment platform. The AI engine uses Dify, an open-source AI application framework. The knowledge base, conversation logs, and user data never leave the EU data centre.
+
+You get a login to the server. You can see where it is hosted. You can audit what data is stored. If you want to move to a different provider, you can export everything. There is no vendor lock-in and no platform dependency.
+
+This is fundamentally different from using a SaaS AI tool where you send data to someone else's servers and trust their privacy policy.
+
+## EU vs US: why it matters practically
+
+The practical difference between processing data in the EU versus the US comes down to legal certainty.
+
+When your data stays in the EU, it is subject to GDPR. Period. There is no question about which legal framework applies, no dependency on international agreements that might change, and no risk of a foreign government requesting access under laws that conflict with EU privacy rights.
+
+When your data goes to the US, even with the current Data Privacy Framework in place, you are relying on a political agreement between governments. The previous two such agreements, Safe Harbor and Privacy Shield, were both invalidated by European courts. Businesses that had relied on them had to scramble to find alternatives.
+
+For a Cypriot business handling customer data for EU residents, keeping processing within the EU is the most straightforward path to compliance. It eliminates an entire category of legal risk.
+
+## Data Processing Agreements
+
+If you use any third-party service to process personal data, including AI tools, you need a Data Processing Agreement (DPA). This is a legal requirement under GDPR Article 28.
+
+A DPA specifies what data the processor handles, how they handle it, what security measures are in place, and what happens when the relationship ends. It also covers breach notification procedures and sub-processor management.
+
+When we deploy a self-hosted AI system for a client, the DPA is straightforward because we can specify exactly where data is stored, confirm it stays in the EU, and demonstrate that no third-party sub-processors have access to the raw data. The entire processing chain is within the EU and under the client's control.
+
+With a cloud AI vendor, the DPA is more complex. You need to verify their sub-processors, understand their data centre locations, assess their security practices, and evaluate the legal frameworks governing data access in each jurisdiction where they operate.
+
+## Practical checklist for Cypriot businesses
+
+If you are evaluating AI tools for your business, here is what to check.
+
+**Where are the servers?** Ask for the specific data centre location, not just "Europe." Germany, Finland, and the Netherlands are common EU hosting locations.
+
+**Who are the sub-processors?** If the AI tool sends your data to OpenAI, Anthropic, or another provider for processing, where do those providers process it? This matters because your DPA needs to cover the entire chain.
+
+**Can you export your data?** If you want to switch providers or shut down the service, can you get all your data out in a usable format? Self-hosted systems give you this by default.
+
+**Do you have a DPA in place?** If any third party processes personal data on your behalf, you need a signed DPA. No exceptions.
+
+**Is the AI system transparent?** Can you explain to your customers what data is collected, how it is used, and how they can request deletion?
+
+**Is the system auditable?** Can you or a regulator inspect what data is stored and how it is processed? Self-hosted systems are fully auditable. Cloud services vary.
+
+## The bottom line
+
+Self-hosting AI is not about being paranoid. It is about being practical. For Cypriot businesses that handle EU personal data, keeping AI processing within the EU eliminates legal uncertainty, simplifies compliance, and gives you control over your own infrastructure.
+
+The technology to do this is mature, affordable, and well-documented. There is no technical reason to send your customer data overseas when you can run the same AI capabilities on servers in Frankfurt or Helsinki.
