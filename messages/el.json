@@ -1,252 +1,240 @@
 {
   "common": {
-    "siteDescription": "",
-    "bookCall": "",
-    "viewWork": "",
-    "learnMore": "",
-    "getInTouch": "",
-    "readCaseStudy": "",
-    "allCaseStudies": ""
+    "siteTitle": "Krystallo Cleaning Services",
+    "siteDescription": "Επαγγελματικές υπηρεσίες βιολογικού καθαρισμού στην Κύπρο",
+    "getQuote": "Πάρε Προσφορά",
+    "bookNow": "Κλείσε Ραντεβού",
+    "learnMore": "Μάθε Περισσότερα",
+    "callUs": "Κάλεσέ μας",
+    "whatsapp": "WhatsApp",
+    "phone": "96653034",
+    "from": "από",
+    "currency": "EUR"
   },
   "nav": {
-    "services": "",
-    "aiServices": "",
-    "aiServicesDesc": "",
-    "development": "",
-    "developmentDesc": "",
-    "growth": "",
-    "growthDesc": "",
-    "training": "",
-    "trainingDesc": "",
-    "caseStudies": "",
-    "about": "",
-    "blog": "",
-    "contact": "",
-    "bookCall": ""
-  },
-  "header": {
-    "brandName": "HN Innovaco",
-    "brandTagline": "AI & Digital Transformation"
-  },
-  "footer": {
-    "brandName": "HN Innovaco",
-    "brandTagline": "AI & Digital Transformation",
-    "builtIn": "",
-    "servicesHeading": "",
-    "companyHeading": "",
-    "contactHeading": "",
-    "location": "",
-    "chatWhatsApp": "",
-    "copyright": "© 2025 HN Innovaco Ltd. All rights reserved.",
-    "deployedOn": "",
-    "privacyPolicy": ""
+    "home": "Αρχική",
+    "services": "Υπηρεσίες",
+    "quote": "Προσφορά",
+    "book": "Κράτηση",
+    "contact": "Επικοινωνία"
   },
   "homepage": {
     "hero": {
-      "badge": "",
-      "headlinePart1": "",
-      "headlinePart2": "",
-      "subheadline": "",
-      "ctaPrimary": "",
-      "ctaSecondary": "",
-      "terminalTitle": "harry@innovaco — bash"
+      "badge": "Εξυπηρέτηση σε Όλη την Κύπρο",
+      "headline": "Βιολογικός Καθαρισμός",
+      "headlineAccent": "για Κάθε Χώρο",
+      "subheadline": "Επαγγελματικός βιολογικός καθαρισμός με οικολογικά προϊόντα. Αυτοκίνητα, σαλόνια, στρώματα, χαλιά και πολλά άλλα.",
+      "ctaPrimary": "Πάρε Προσφορά",
+      "ctaSecondary": "Κλείσε Ραντεβού",
+      "ctaPhone": "ή καλέστε μας στο",
+      "happyClients": "ικανοποιημένοι πελάτες",
+      "imageCaption": "Επαγγελματικός βιολογικός καθαρισμός",
+      "quickResponse": "Απάντηση WhatsApp",
+      "quickResponseTime": "Εντός 30 λεπτών"
     },
-    "proofBar": {
-      "trustedBy": ""
+    "services": {
+      "badge": "Υπηρεσίες",
+      "title": "Τι Καθαρίζουμε",
+      "subtitle": "Αναλαμβάνουμε βιολογικούς καθαρισμούς για κάθε ανάγκη",
+      "viewAll": "Δείτε Όλες τις Υπηρεσίες"
     },
-    "servicesOverview": {
-      "label": "",
-      "headline": "",
-      "description": "",
-      "ai": { "title": "", "shortDesc": "", "price": "", "link": "" },
-      "development": { "title": "", "shortDesc": "", "price": "", "link": "" },
-      "growth": { "title": "", "shortDesc": "", "price": "", "link": "" },
-      "training": { "title": "", "shortDesc": "", "price": "", "link": "" },
-      "stat1Label": "", "stat1Desc": "",
-      "stat2Label": "", "stat2Desc": "",
-      "stat3Label": "", "stat3Desc": ""
+    "trust": {
+      "badge": "Γιατί Εμάς",
+      "title": "Εμπιστευτείτε τους Ειδικούς",
+      "stat1Value": "500+",
+      "stat1Label": "Ικανοποιημένοι Πελάτες",
+      "stat2Value": "8",
+      "stat2Label": "Υπηρεσίες Καθαρισμού",
+      "stat3Value": "100%",
+      "stat3Label": "Οικολογικά Προϊόντα",
+      "stat4Value": "24ωρη",
+      "stat4Label": "Εξυπηρέτηση"
     },
-    "differentiators": {
-      "label": "",
-      "headline": "",
-      "eu": { "title": "", "description": "" },
-      "bilingual": { "title": "", "description": "" },
-      "proven": { "title": "", "description": "" }
+    "process": {
+      "badge": "Πώς Λειτουργεί",
+      "title": "4 Απλά Βήματα",
+      "step1Title": "Επιλέξτε Υπηρεσία",
+      "step1Desc": "Διαλέξτε τον καθαρισμό που χρειάζεστε",
+      "step2Title": "Πάρτε Προσφορά",
+      "step2Desc": "Υπολογίστε το κόστος online",
+      "step3Title": "Κλείστε Ραντεβού",
+      "step3Desc": "Επιλέξτε ημερομηνία και ώρα",
+      "step4Title": "Απολαύστε Καθαριότητα",
+      "step4Desc": "Εμείς αναλαμβάνουμε τα υπόλοιπα"
     },
-    "featuredCaseStudies": {
-      "label": "",
-      "headline": "",
-      "viewAll": "",
-      "readCaseStudy": "",
-      "placeholders": {
-        "icpac": { "client": "ICPAC", "sector": "", "result1": "", "result2": "", "result3": "" },
-        "chtisma": { "client": "Chtisma Trading", "sector": "", "result1": "", "result2": "", "result3": "" },
-        "inspektra": { "client": "Inspektra", "sector": "", "result1": "", "result2": "", "result3": "" }
-      }
+    "gallery": {
+      "badge": "Αποτελέσματα",
+      "title": "Πριν & Μετά",
+      "subtitle": "Δείτε τη διαφορά που κάνει ο βιολογικός καθαρισμός",
+      "before": "Πριν",
+      "after": "Μετά",
+      "mattress": "Καθαρισμός Στρώματος",
+      "leather": "Καθαρισμός Δερμάτινου Καναπέ",
+      "radiator": "Καθαρισμός Καλοριφέρ"
     },
-    "anadCallout": { "label": "", "headline": "", "description": "", "badge": "", "cta": "" },
-    "cta": { "headline": "", "subheadline": "", "ctaPrimary": "", "ctaSecondary": "" }
+    "cta": {
+      "title": "Έτοιμοι για Καθαρισμό;",
+      "subtitle": "Επικοινωνήστε μαζί μας τώρα για δωρεάν εκτίμηση",
+      "phone": "Καλέστε μας",
+      "whatsapp": "Στείλτε WhatsApp",
+      "trustLine": "Δωρεάν εκτίμηση • Οικολογικά προϊόντα • Εγγυημένο αποτέλεσμα"
+    }
   },
   "services": {
-    "ai": {
-      "meta": { "title": "", "description": "" },
-      "hero": { "label": "", "headline": "", "subheadline": "", "cta": "" },
-      "cards": {
-        "chatbots": { "title": "", "description": "", "pill1": "", "pill2": "", "pill3": "", "price": "" },
-        "internalTools": { "title": "", "description": "", "pill1": "", "pill2": "", "pill3": "", "price": "" },
-        "voiceAgents": { "title": "", "description": "", "pill1": "", "pill2": "", "pill3": "", "price": "" },
-        "automations": { "title": "", "description": "", "pill1": "", "pill2": "", "pill3": "", "price": "" },
-        "mvps": { "title": "", "description": "", "pill1": "", "pill2": "", "pill3": "", "price": "" },
-        "audit": { "title": "", "description": "", "pill1": "", "pill2": "", "pill3": "", "price": "" }
-      },
-      "process": {
-        "label": "",
-        "heading": "",
-        "step1": { "title": "", "description": "" },
-        "step2": { "title": "", "description": "" },
-        "step3": { "title": "", "description": "" },
-        "step4": { "title": "", "description": "" },
-        "step5": { "title": "", "description": "" }
-      },
-      "verticals": {
-        "label": "",
-        "heading": "",
-        "hotels": { "name": "", "description": "" },
-        "restaurants": { "name": "", "description": "" },
-        "accounting": { "name": "", "description": "" },
-        "legal": { "name": "", "description": "" },
-        "medical": { "name": "", "description": "" },
-        "realEstate": { "name": "", "description": "" },
-        "retail": { "name": "", "description": "" },
-        "schools": { "name": "", "description": "" }
-      }
+    "pageTitle": "Υπηρεσίες Βιολογικού Καθαρισμού",
+    "pageSubtitle": "Επαγγελματικός καθαρισμός με οικολογικά προϊόντα για κάθε ανάγκη",
+    "startingFrom": "Από",
+    "perUnit": "ανά τεμ.",
+    "requestQuote": "Ζητήστε Προσφορά",
+    "car": {
+      "name": "Καθαρισμός Αυτοκίνητου",
+      "description": "Βαθύς βιολογικός καθαρισμός εσωτερικού αυτοκινήτου. Αφαιρούμε λεκέδες, βακτήρια και δυσάρεστες οσμές με οικολογικά προϊόντα.",
+      "benefit1": "Αφαίρεση λεκέδων και οσμών",
+      "benefit2": "Απολύμανση καθισμάτων και ταμπλό",
+      "benefit3": "Οικολογικά, ασφαλή προϊόντα"
     },
-    "development": {
-      "meta": { "title": "", "description": "" },
-      "hero": { "label": "", "headline": "", "subheadline": "", "cta": "" },
-      "cards": {
-        "websites": { "title": "", "description": "", "pill1": "", "pill2": "", "pill3": "", "price": "" },
-        "webApps": { "title": "", "description": "", "pill1": "", "pill2": "", "pill3": "", "price": "" },
-        "dashboards": { "title": "", "description": "", "pill1": "", "pill2": "", "pill3": "", "price": "" },
-        "mobile": { "title": "", "description": "", "pill1": "", "pill2": "", "pill3": "", "price": "" },
-        "apis": { "title": "", "description": "", "pill1": "", "pill2": "", "pill3": "", "price": "" },
-        "aiMvp": { "title": "", "description": "", "pill1": "", "pill2": "", "pill3": "", "price": "" }
-      },
-      "techStack": {
-        "label": "",
-        "heading": "",
-        "badges": ["Next.js", "TypeScript", "Prisma", "PostgreSQL", "React Native", "Tailwind CSS", "shadcn/ui", "n8n", "Coolify", "Hetzner", "DigitalOcean"]
-      },
-      "inspektraCallout": { "quote": "", "link": "" },
-      "noTemplates": { "heading": "", "body": "", "bullet1": "", "bullet2": "", "bullet3": "", "bullet4": "" }
+    "sofa": {
+      "name": "Καθαρισμός Σαλονιών",
+      "description": "Βιολογικός καθαρισμός καναπέδων και σαλονιών. Ανανεώνουμε τα υφάσματα και αφαιρούμε ακάρεα, σκόνη και αλλεργιογόνα.",
+      "benefit1": "Αφαίρεση ακάρεων και αλλεργιογόνων",
+      "benefit2": "Ανανέωση υφασμάτων",
+      "benefit3": "Ασφαλές για παιδιά και κατοικίδια"
     },
-    "growth": {
-      "meta": { "title": "", "description": "" },
-      "hero": { "label": "", "headline": "", "subheadline": "", "cta": "" },
-      "cards": {
-        "marketEntry": { "title": "", "description": "", "pill1": "", "pill2": "", "pill3": "", "price": "" },
-        "paidAds": { "title": "", "description": "", "pill1": "", "pill2": "", "pill3": "", "price": "" },
-        "funnels": { "title": "", "description": "", "pill1": "", "pill2": "", "pill3": "", "price": "" },
-        "outreach": { "title": "", "description": "", "pill1": "", "pill2": "", "pill3": "", "price": "" },
-        "social": { "title": "", "description": "", "pill1": "", "pill2": "", "pill3": "", "price": "" },
-        "automations": { "title": "", "description": "", "pill1": "", "pill2": "", "pill3": "", "price": "" },
-        "seo": { "title": "", "description": "", "pill1": "", "pill2": "", "pill3": "", "price": "" }
-      },
-      "schedex": { "quote": "", "heading": "", "step1": "", "step2": "", "step3": "", "step4": "", "step5": "" },
-      "packages": {
-        "heading": "",
-        "starter": { "name": "", "price": "", "description": "" },
-        "growth": { "name": "", "price": "", "description": "" },
-        "scale": { "name": "", "price": "", "description": "" },
-        "marketEntry": { "name": "", "price": "", "description": "" }
-      },
-      "signals": {
-        "heading": "",
-        "hiring": { "name": "", "what": "", "how": "" },
-        "funding": { "name": "", "what": "", "how": "" },
-        "weakFunnel": { "name": "", "what": "", "how": "" },
-        "newWebsite": { "name": "", "what": "", "how": "" },
-        "marketEntry": { "name": "", "what": "", "how": "" },
-        "badRoas": { "name": "", "what": "", "how": "" }
-      }
+    "mattress": {
+      "name": "Καθαρισμός Στρωμάτων",
+      "description": "Επαγγελματικός βιολογικός καθαρισμός στρωμάτων. Εξαλείφουμε ακάρεα, βακτήρια και αλλεργιογόνα για υγιεινό ύπνο.",
+      "benefit1": "Εξάλειψη ακάρεων και βακτηρίων",
+      "benefit2": "Βελτίωση ποιότητας ύπνου",
+      "benefit3": "Παράταση ζωής στρώματος"
     },
-    "training": {
-      "meta": { "title": "", "description": "" },
-      "hero": { "label": "", "headline": "", "subheadline": "", "cta": "" },
-      "anadCallout": { "body": "", "stat": "80%" },
-      "programmes": {
-        "heading": "",
-        "businessOwners": { "title": "", "duration": "", "audience": "", "price": "", "anadPrice": "" },
-        "hospitality": { "title": "", "duration": "", "audience": "", "price": "", "anadPrice": "", "note": "" },
-        "dxSmes": { "title": "", "duration": "", "audience": "", "price": "", "anadPrice": "" },
-        "promptEng": { "title": "", "duration": "", "audience": "", "price": "", "anadPrice": "" },
-        "corporate": { "title": "", "duration": "", "audience": "", "price": "", "anadPrice": "" }
-      },
-      "consulting": {
-        "heading": "",
-        "audit": { "title": "", "description": "", "price": "" },
-        "roadmap": { "title": "", "description": "", "price": "" },
-        "fractionalCto": { "title": "", "description": "", "price": "" },
-        "euProject": { "title": "", "description": "", "price": "" }
-      },
-      "credentials": { "heading": "", "item1": "", "item2": "", "item3": "", "item4": "", "item5": "" }
+    "radiator": {
+      "name": "Καθαρισμός Καλοριφέρ",
+      "description": "Βιολογικός καθαρισμός καλοριφέρ θέρμανσης. Αφαιρούμε σκόνη και ρύπους για καλύτερη απόδοση και καθαρότερο αέρα.",
+      "benefit1": "Βελτίωση απόδοσης θέρμανσης",
+      "benefit2": "Καθαρότερος αέρας στο σπίτι",
+      "benefit3": "Εξοικονόμηση ενέργειας"
+    },
+    "carpet": {
+      "name": "Καθαρισμός Χαλιών",
+      "description": "Βιολογικός καθαρισμός χαλιών εσωτερικού και εξωτερικού χώρου. Αφαιρούμε βαθιά βρωμιά, λεκέδες και αλλεργιογόνα.",
+      "benefit1": "Βαθύς καθαρισμός ινών",
+      "benefit2": "Εσωτερικά και εξωτερικά χαλιά",
+      "benefit3": "Αποκατάσταση χρωμάτων"
+    },
+    "leather": {
+      "name": "Καθαρισμός Δερμάτινων Καναπέδων",
+      "description": "Εξειδικευμένος καθαρισμός και συντήρηση δερμάτινων καναπέδων. Καθαρίζουμε, ενυδατώνουμε και προστατεύουμε το δέρμα.",
+      "benefit1": "Καθαρισμός χωρίς φθορά",
+      "benefit2": "Ενυδάτωση και προστασία δέρματος",
+      "benefit3": "Παράταση ζωής επίπλων"
+    },
+    "chair": {
+      "name": "Καθαρισμός Καρεκλών",
+      "description": "Βιολογικός καθαρισμός καρεκλών γραφείου και τραπεζαρίας. Αφαιρούμε λεκέδες και βακτήρια από κάθε τύπο υφάσματος.",
+      "benefit1": "Κατάλληλο για κάθε ύφασμα",
+      "benefit2": "Αφαίρεση βακτηρίων",
+      "benefit3": "Ιδανικό για γραφεία και σπίτια"
+    },
+    "stroller": {
+      "name": "Καθαρισμός Καρότσιων & Car Seats",
+      "description": "Ασφαλής βιολογικός καθαρισμός παιδικών καρότσιων και καθισμάτων αυτοκινήτου. 100% ασφαλή προϊόντα για μωρά.",
+      "benefit1": "100% ασφαλές για μωρά",
+      "benefit2": "Αφαίρεση βακτηρίων και αλλεργιογόνων",
+      "benefit3": "Καθαρισμός κάθε γωνίας"
     }
   },
-  "caseStudies": {
-    "meta": { "title": "", "description": "" },
-    "hero": { "headline": "", "subheadline": "" },
-    "featured": "",
-    "all": "",
-    "filterAll": "",
-    "filterAI": "AI",
-    "filterDevelopment": "",
-    "filterAnalytics": "",
-    "filterPublicSector": "",
-    "readCaseStudy": "",
-    "detail": {
-      "keyResults": "",
-      "sidebar": { "heading": "", "body": "", "cta": "", "contactLink": "" },
-      "topics": "",
-      "moreCaseStudies": ""
-    }
-  },
-  "about": {
-    "meta": { "title": "", "description": "" },
-    "hero": { "label": "", "headline": "", "subheadline": "" },
-    "company": { "p1": "", "p2": "", "p3": "", "stat1": "", "stat2": "", "stat3": "" },
-    "harry": { "name": "Harry Newton", "title": "", "photoAlt": "", "bio1": "", "bio2": "", "bio3": "", "cred1": "", "cred2": "", "cred3": "", "cred4": "", "cred5": "", "cred6": "" },
-    "nikolas": { "name": "Nikolas Manitaras", "title": "", "bio": "" },
-    "values": { "label": "", "heading": "", "v1": { "name": "", "description": "" }, "v2": { "name": "", "description": "" }, "v3": { "name": "", "description": "" }, "v4": { "name": "", "description": "" }, "v5": { "name": "", "description": "" } },
-    "vision": { "label": "", "headline": "", "p1": "", "p2": "", "p3": "", "practiceHeading": "", "practice1": "", "practice2": "", "practice3": "", "practice4": "" },
-    "ctaSection": { "headline": "", "subheadline": "", "cta": "" }
-  },
-  "contact": {
-    "meta": { "title": "", "description": "" },
-    "info": { "headline": "", "subheadline": "", "location": "", "chatWhatsApp": "", "connectLinkedIn": "", "preferCall": "" },
-    "form": { "name": "", "namePlaceholder": "", "email": "", "emailPlaceholder": "", "company": "", "companyPlaceholder": "", "message": "", "messagePlaceholder": "", "source": "", "sourcePlaceholder": "", "sourceLinkedIn": "", "sourceGoogle": "", "sourceReferral": "", "sourceKebe": "", "sourceOther": "", "submit": "", "sending": "", "successHeading": "", "successBody": "", "backHome": "", "errorMessage": "", "validation": { "nameMin": "", "emailInvalid": "", "messageMin": "" } }
+  "quote": {
+    "pageTitle": "Υπολογισμός Κόστους",
+    "pageSubtitle": "Επιλέξτε υπηρεσίες και ποσότητα για εκτιμώμενο κόστος",
+    "selectServices": "Επιλέξτε Υπηρεσίες",
+    "quantity": "Ποσότητα",
+    "vehicles": "Αυτοκίνητα",
+    "seats": "Θέσεις καναπέ",
+    "mattresses": "Στρώματα",
+    "units": "Τεμάχια",
+    "sqm": "Τ.μ. χαλιού",
+    "pieces": "Τεμάχια",
+    "chairs": "Καρέκλες",
+    "items": "Τεμάχια",
+    "summary": "Σύνοψη Προσφοράς",
+    "estimatedCost": "Εκτιμώμενο Κόστος",
+    "disclaimer": "Οι τιμές είναι ενδεικτικές. Η τελική τιμή μπορεί να διαφέρει ανάλογα με την κατάσταση.",
+    "proceedToBook": "Συνέχεια για Κράτηση",
+    "contactWhatsApp": "Στείλτε μας στο WhatsApp",
+    "noServicesSelected": "Επιλέξτε τουλάχιστον μία υπηρεσία",
+    "total": "Σύνολο",
+    "subtotal": "Υποσύνολο",
+    "selected": "επιλεγμένες",
+    "servicesCount": "υπηρεσίες",
+    "itemsCount": "τεμάχια",
+    "needHelp": "Χρειάζεστε βοήθεια με την προσφορά;"
   },
   "book": {
-    "meta": { "title": "", "description": "" },
-    "hero": { "headline": "", "subheadline": "", "trust1": "", "trust2": "", "trust3": "" },
-    "progress": { "step1": "", "step2": "", "step3": "" },
-    "step1": { "businessType": "", "hotel": "", "legal": "", "accounting": "", "medical": "", "realEstate": "", "retail": "", "construction": "", "technology": "", "other": "", "challenge": "", "challengeAI": "", "challengeWebApp": "", "challengeGrowth": "", "challengeTraining": "", "challengeProduct": "", "challengeOther": "", "companySize": "", "size1": "1-5", "size2": "6-20", "size3": "21-50", "size4": "51-200", "size5": "200+" },
-    "step2": { "timeline": "", "timelineNow": "", "timeline1to3": "", "timeline3to6": "", "timelineExploring": "", "source": "", "sourcePlaceholder": "", "sourceLinkedIn": "", "sourceGoogle": "", "sourceReferral": "", "sourceKebe": "", "sourceDiggIN": "", "sourceOther": "", "notes": "", "notesPlaceholder": "" },
-    "step3": { "firstName": "", "lastName": "", "email": "", "phone": "", "phoneLabel": "", "companyName": "", "note": "" },
-    "nav": { "next": "", "back": "", "submit": "" },
-    "success": { "headline": "", "body": "", "backHome": "" },
-    "error": "",
-    "validation": { "required": "", "emailInvalid": "", "nameMin": "" }
+    "from": "από",
+    "pageTitle": "Κράτηση Ραντεβού",
+    "pageSubtitle": "Κλείστε τον καθαρισμό σας σε 4 απλά βήματα",
+    "step1": "Υπηρεσία",
+    "step2": "Ημ/νία",
+    "step3": "Στοιχεία",
+    "step4": "Επιβεβαίωση",
+    "selectServices": "Επιλέξτε Υπηρεσίες",
+    "selectDate": "Επιλέξτε Ημερομηνία",
+    "selectTime": "Επιλέξτε Ώρα",
+    "morning": "Πρωί (09:00-12:00)",
+    "afternoon": "Απόγευμα (12:00-15:00)",
+    "evening": "Απόγευμα (15:00-18:00)",
+    "contactDetails": "Στοιχεία Επικοινωνίας",
+    "fullName": "Ονοματεπώνυμο",
+    "phone": "Τηλέφωνο",
+    "email": "Email (προαιρετικό)",
+    "address": "Διεύθυνση / Περιοχή",
+    "notes": "Σημειώσεις (προαιρετικό)",
+    "confirmation": "Επιβεβαίωση Κράτησης",
+    "confirmationText": "Ελέγξτε τα στοιχεία σας πριν την υποβολή",
+    "selectedServices": "Υπηρεσίες",
+    "selectedDate": "Ημερομηνία",
+    "selectedTime": "Ώρα",
+    "contactInfo": "Στοιχεία",
+    "submit": "Στείλτε μέσω WhatsApp",
+    "next": "Επόμενο",
+    "back": "Πίσω",
+    "edit": "Επεξεργασία",
+    "success": {
+      "title": "Η κράτηση στάλθηκε!",
+      "message": "Θα σας ανοίξει το WhatsApp για να ολοκληρώσετε την κράτησή σας.",
+      "bookAnother": "Νέα Κράτηση"
+    },
+    "validation": {
+      "selectService": "Επιλέξτε τουλάχιστον μία υπηρεσία",
+      "selectDate": "Επιλέξτε ημερομηνία",
+      "selectTime": "Επιλέξτε ώρα",
+      "nameRequired": "Το όνομα είναι υποχρεωτικό",
+      "phoneRequired": "Το τηλέφωνο είναι υποχρεωτικό"
+    },
+    "availabilityNote": "Θα επιβεβαιώσουμε τη διαθεσιμότητα"
   },
-  "blog": {
-    "meta": { "title": "", "description": "" },
-    "hero": { "headline": "", "subheadline": "" },
-    "filterAll": "", "filterAI": "AI", "filterTraining": "", "filterGDPR": "GDPR", "filterCyprus": "", "filterDevelopment": "",
-    "read": "",
-    "by": "",
-    "detail": {
-      "newsletter": { "heading": "", "body": "", "placeholder": "", "subscribe": "", "success": "", "error": "" },
-      "sidebar": { "heading": "", "cta": "" },
-      "authorBio": ""
-    }
+  "contact": {
+    "pageTitle": "Επικοινωνία",
+    "pageSubtitle": "Είμαστε εδώ για κάθε ερώτηση",
+    "phone": "Τηλέφωνο",
+    "whatsapp": "WhatsApp",
+    "location": "Τοποθεσία",
+    "locationValue": "Κύπρος",
+    "hours": "Ώρες Λειτουργίας",
+    "hoursValue": "Δευ - Σαβ: 08:00 - 19:00",
+    "formTitle": "Στείλτε μας Μήνυμα",
+    "name": "Όνομα",
+    "phonePlaceholder": "Τηλέφωνο",
+    "emailPlaceholder": "Email (προαιρετικό)",
+    "message": "Μήνυμα",
+    "send": "Στείλτε μέσω WhatsApp"
+  },
+  "footer": {
+    "brand": "Krystallo Cleaning Services",
+    "tagline": "Επαγγελματικός βιολογικός καθαρισμός στην Κύπρο",
+    "services": "Υπηρεσίες",
+    "quickLinks": "Γρήγοροι Σύνδεσμοι",
+    "contactInfo": "Επικοινωνία",
+    "rights": "Με επιφύλαξη παντός δικαιώματος"
   }
 }

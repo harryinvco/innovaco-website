@@ -1,17 +1,10 @@
 import { Hero } from '@/components/sections/home/Hero'
-import { ProofBar } from '@/components/sections/home/ProofBar'
 import { ServicesOverview } from '@/components/sections/home/ServicesOverview'
-import { Differentiators } from '@/components/sections/home/Differentiators'
-import { FeaturedCaseStudies } from '@/components/sections/home/FeaturedCaseStudies'
-import { AnadCallout } from '@/components/sections/home/AnadCallout'
+import { TrustSignals } from '@/components/sections/home/TrustSignals'
+import { ProcessSteps } from '@/components/sections/home/ProcessSteps'
+import { BeforeAfter } from '@/components/sections/home/BeforeAfter'
 import { HomeCTA } from '@/components/sections/home/HomeCTA'
 import { JsonLd } from '@/components/shared/JsonLd'
-
-const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://hninnovaco.com'
-
-export const metadata = {
-  title: 'HN Innovaco — AI & Digital Transformation Cyprus',
-}
 
 export default function HomePage() {
   return (
@@ -19,23 +12,33 @@ export default function HomePage() {
       <JsonLd
         data={{
           '@context': 'https://schema.org',
-          '@type': 'Organization',
-          name: 'HN Innovaco Ltd',
-          url: baseUrl,
-          description: 'AI and digital transformation company, Larnaca, Cyprus',
-          address: {
-            '@type': 'PostalAddress',
-            addressLocality: 'Larnaca',
-            addressCountry: 'CY',
+          '@type': 'LocalBusiness',
+          name: 'Krystallo Cleaning Services',
+          description:
+            'Professional biological cleaning services in Cyprus. Car, sofa, mattress, carpet cleaning and more.',
+          telephone: '+35796653034',
+          url: 'https://krystallo.cy',
+          areaServed: {
+            '@type': 'Country',
+            name: 'Cyprus',
           },
+          serviceType: [
+            'Car Cleaning',
+            'Sofa Cleaning',
+            'Mattress Cleaning',
+            'Carpet Cleaning',
+            'Leather Sofa Cleaning',
+            'Chair Cleaning',
+            'Radiator Cleaning',
+            'Stroller Cleaning',
+          ],
         }}
       />
       <Hero />
-      <ProofBar />
       <ServicesOverview />
-      <Differentiators />
-      <FeaturedCaseStudies />
-      <AnadCallout />
+      <BeforeAfter />
+      <TrustSignals />
+      <ProcessSteps />
       <HomeCTA />
     </>
   )

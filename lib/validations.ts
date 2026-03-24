@@ -1,27 +1,23 @@
 import { z } from 'zod'
 
-export const contactSchema = z.object({
-  name: z.string().min(2),
-  email: z.string().email(),
-  company: z.string().optional(),
-  message: z.string().min(10),
-  source: z.string().optional(),
-})
-
-export type ContactFormData = z.infer<typeof contactSchema>
-
 export const bookingSchema = z.object({
-  businessType: z.string().min(1),
-  challenge: z.string().min(1),
-  companySize: z.string().min(1),
-  timeline: z.string().min(1),
-  source: z.string().optional(),
+  services: z.array(z.string()).min(1, 'Select at least one service'),
+  preferredDate: z.string().min(1, 'Select a date'),
+  preferredTime: z.enum(['morning', 'afternoon', 'evening']),
+  fullName: z.string().min(2, 'Name is required'),
+  phone: z.string().min(8, 'Valid phone number required'),
+  email: z.string().email('Invalid email').optional().or(z.literal('')),
+  address: z.string().optional(),
   notes: z.string().optional(),
-  firstName: z.string().min(2),
-  lastName: z.string().min(2),
-  email: z.string().email(),
-  phone: z.string().optional(),
-  companyName: z.string().min(1),
 })
 
 export type BookingFormData = z.infer<typeof bookingSchema>
+
+export const contactSchema = z.object({
+  name: z.string().min(2, 'Name is required'),
+  phone: z.string().min(8, 'Valid phone number required'),
+  email: z.string().email('Invalid email').optional().or(z.literal('')),
+  message: z.string().min(10, 'Message too short'),
+})
+
+export type ContactFormData = z.infer<typeof contactSchema>

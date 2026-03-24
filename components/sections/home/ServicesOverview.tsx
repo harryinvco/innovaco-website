@@ -2,135 +2,101 @@
 
 import Link from 'next/link'
 import { useLocale, useTranslations } from 'next-intl'
-import { motion, useMotionValue, useTransform } from 'framer-motion'
-import { Bot, Code2, TrendingUp, GraduationCap } from 'lucide-react'
-import type { LucideIcon } from 'lucide-react'
+import { motion } from 'framer-motion'
+import {
+  Car, Sofa, BedDouble, Heater, SquareDashedBottom, Armchair, Baby, ArrowRight,
+} from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { AnimatedSection } from '@/components/shared/AnimatedSection'
+import { services as serviceData } from '@/lib/services'
 
-const cards = [
-  { ns: 'ai' as const, Icon: Bot, href: '/services/ai', num: '01' },
-  { ns: 'development' as const, Icon: Code2, href: '/services/development', num: '02' },
-  { ns: 'growth' as const, Icon: TrendingUp, href: '/services/growth', num: '03' },
-  { ns: 'training' as const, Icon: GraduationCap, href: '/services/training', num: '04' },
-]
-
-function BentoCard({
-  Icon,
-  title,
-  description,
-  price,
-  linkText,
-  href,
-  num,
-  index,
-}: {
-  Icon: LucideIcon
-  title: string
-  description: string
-  price: string
-  linkText: string
-  href: string
-  num: string
-  index: number
-}) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5, delay: index * 0.1, ease: 'easeOut' }}
-    >
-      <Link href={href} className="group relative block overflow-hidden rounded-3xl border border-slate-100 bg-white p-8 transition-colors duration-300 hover:border-teal/30">
-        <Icon className="h-12 w-12 text-navy" strokeWidth={1.2} />
-        <h3 className="mt-5 text-2xl font-semibold text-navy">{title}</h3>
-        <p className="mt-2 text-base text-muted-foreground">{description}</p>
-        <p className="mt-4 font-mono text-sm font-medium text-teal">{price}</p>
-        <span className="mt-3 inline-block text-sm font-medium text-navy group-hover:text-teal">
-          {linkText}
-        </span>
-        {/* Decorative number */}
-        <motion.span
-          className="pointer-events-none absolute bottom-3 right-5 select-none text-8xl font-bold leading-none text-slate-100"
-          initial={{ x: 0 }}
-          whileHover={{ x: 5 }}
-          transition={{ duration: 0.3 }}
-        >
-          {num}
-        </motion.span>
-      </Link>
-    </motion.div>
-  )
+const iconMap: Record<string, React.ElementType> = {
+  Car, Sofa, BedDouble, Heater, SquareDashedBottom,
+  Armchair, ArmchairIcon: Armchair, Baby,
 }
 
+// Alternating subtle accent colors for visual variety
+const accentColors = [
+  'from-sky-500/10 to-sky-500/5',
+  'from-emerald-500/10 to-emerald-500/5',
+  'from-violet-500/10 to-violet-500/5',
+  'from-amber-500/10 to-amber-500/5',
+  'from-rose-500/10 to-rose-500/5',
+  'from-cyan-500/10 to-cyan-500/5',
+  'from-indigo-500/10 to-indigo-500/5',
+  'from-orange-500/10 to-orange-500/5',
+]
+
 export function ServicesOverview() {
-  const t = useTranslations('homepage.servicesOverview')
+  const t = useTranslations('homepage.services')
+  const tServices = useTranslations('services')
   const locale = useLocale()
 
   return (
-    <section className="bg-white py-12 sm:py-16 lg:py-24">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <p className="text-sm font-medium uppercase tracking-widest text-teal">
-          {t('label')}
-        </p>
-        <h2 className="mt-2 text-4xl font-bold text-navy">{t('headline')}</h2>
-        <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
-          {t('description')}
-        </p>
+    <section className="py-20 lg:py-28 bg-white relative overflow-hidden">
+      {/* Subtle bg pattern */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(14,165,233,0.03),transparent_50%)]" />
 
-        {/* Top row — 2 large cards */}
-        <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2">
-          {cards.slice(0, 2).map((card, i) => (
-            <BentoCard
-              key={card.ns}
-              Icon={card.Icon}
-              title={t(`${card.ns}.title`)}
-              description={t(`${card.ns}.shortDesc`)}
-              price={t(`${card.ns}.price`)}
-              linkText={t(`${card.ns}.link`)}
-              href={`/${locale}${card.href}`}
-              num={card.num}
-              index={i}
-            />
-          ))}
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <AnimatedSection className="text-center mb-14">
+          <span className="inline-flex items-center gap-1.5 bg-crystal/10 text-crystal text-sm font-medium px-3.5 py-1.5 rounded-full mb-4">
+            {t('badge')}
+          </span>
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-navy-dark tracking-tight">
+            {t('title')}
+          </h2>
+          <p className="mt-3 text-body/70 text-lg max-w-xl mx-auto">
+            {t('subtitle')}
+          </p>
+        </AnimatedSection>
+
+        {/* Bento-style grid */}
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
+          {serviceData.map((service, i) => {
+            const Icon = iconMap[service.icon]
+            return (
+              <motion.div
+                key={service.id}
+                initial={{ opacity: 0, y: 15 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.35, delay: i * 0.04 }}
+              >
+                <Link
+                  href={`/${locale}/quote?service=${service.id}`}
+                  className="group relative flex flex-col h-full p-5 sm:p-6 rounded-2xl bg-white border border-slate-100 hover:border-crystal/20 hover:shadow-xl hover:shadow-crystal/5 transition-all duration-300"
+                >
+                  {/* Icon with gradient bg */}
+                  <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${accentColors[i]} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
+                    <Icon className="h-6 w-6 text-crystal" />
+                  </div>
+
+                  <h3 className="font-semibold text-navy-dark text-sm sm:text-[15px] leading-snug mb-1">
+                    {tServices(`${service.id}.name`)}
+                  </h3>
+
+                  <p className="text-xs text-body/50 mt-auto pt-2">
+                    {tServices('startingFrom')} &euro;{service.priceMin}
+                  </p>
+
+                  {/* Hover arrow */}
+                  <div className="absolute top-4 right-4 w-6 h-6 rounded-full bg-crystal/0 group-hover:bg-crystal/10 flex items-center justify-center transition-all duration-300 opacity-0 group-hover:opacity-100">
+                    <ArrowRight className="h-3 w-3 text-crystal" />
+                  </div>
+                </Link>
+              </motion.div>
+            )
+          })}
         </div>
 
-        {/* Stat bar */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="mt-6 rounded-2xl bg-slate-50 p-6"
-        >
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-3 sm:divide-x sm:divide-slate-200">
-            {(['stat1', 'stat2', 'stat3'] as const).map((key) => (
-              <div key={key} className="text-center">
-                <p className="font-mono text-2xl font-bold text-teal">
-                  {t(`${key}Label`)}
-                </p>
-                <p className="mt-1 text-sm text-muted-foreground">
-                  {t(`${key}Desc`)}
-                </p>
-              </div>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* Bottom row — 2 smaller cards */}
-        <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2">
-          {cards.slice(2).map((card, i) => (
-            <BentoCard
-              key={card.ns}
-              Icon={card.Icon}
-              title={t(`${card.ns}.title`)}
-              description={t(`${card.ns}.shortDesc`)}
-              price={t(`${card.ns}.price`)}
-              linkText={t(`${card.ns}.link`)}
-              href={`/${locale}${card.href}`}
-              num={card.num}
-              index={i + 2}
-            />
-          ))}
-        </div>
+        <AnimatedSection className="text-center mt-10" delay={0.2}>
+          <Link href={`/${locale}/services`}>
+            <Button variant="secondary" className="group">
+              {t('viewAll')}
+              <ArrowRight className="h-4 w-4 ml-2 group-hover:translate-x-0.5 transition-transform" />
+            </Button>
+          </Link>
+        </AnimatedSection>
       </div>
     </section>
   )

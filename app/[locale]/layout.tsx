@@ -1,64 +1,61 @@
 import { NextIntlClientProvider } from 'next-intl'
 import { getMessages, getTranslations } from 'next-intl/server'
 import { notFound } from 'next/navigation'
+import { locales } from '@/i18n'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
-import { PostHogProvider } from '@/components/providers/PostHogProvider'
-import { PostHogPageView } from '@/components/providers/PostHogPageView'
+import { WhatsAppButton } from '@/components/shared/WhatsAppButton'
 import { PageTransition } from '@/components/providers/PageTransition'
-
-const locales = ['el', 'en']
-
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ locale: string }>
-}) {
-  const { locale } = await params
-  const t = await getTranslations({ locale, namespace: 'common' })
-  return {
-    title: {
-      template: '%s | HN Innovaco',
-      default: 'HN Innovaco — AI & Digital Transformation Cyprus',
-    },
-    description: t('siteDescription'),
-  }
-}
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }))
 }
 
+export async function generateMetadata({
+  params: { locale },
+}: {
+  params: { locale: string }
+}) {
+  const t = await getTranslations({ locale, namespace: 'common' })
+
+  return {
+    title: {
+      template: '%s | Krystallo Cleaning',
+      default: t('siteTitle') + ' — ' + t('siteDescription'),
+    },
+    description: t('siteDescription'),
+  }
+}
+
 export default async function LocaleLayout({
   children,
-  params,
+  params: { locale },
 }: {
   children: React.ReactNode
-  params: Promise<{ locale: string }>
+  params: { locale: string }
 }) {
-  const { locale } = await params
-  if (!locales.includes(locale)) notFound()
+  if (!locales.includes(locale as any)) notFound()
 
   const messages = await getMessages()
 
   return (
-    <NextIntlClientProvider locale={locale} messages={messages}>
-      <PostHogProvider>
-        <PostHogPageView />
-        <a
-          href="#main-content"
-          className="sr-only rounded-xl bg-teal px-4 py-2 text-white focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50"
-        >
-          Skip to main content
-        </a>
-        <div className="flex min-h-screen flex-col">
+    <html lang={locale} suppressHydrationWarning>
+      <body className="font-sans antialiased">
+        <NextIntlClientProvider messages={messages}>
+          <a
+            href="#main-content"
+            className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:bg-crystal focus:text-white focus:p-3"
+          >
+            Skip to main content
+          </a>
           <Header />
-          <main id="main-content" className="flex-1">
-            <PageTransition>{children}</PageTransition>
-          </main>
+          <PageTransition>
+            <main id="main-content">{children}</main>
+          </PageTransition>
           <Footer />
-        </div>
-      </PostHogProvider>
-    </NextIntlClientProvider>
+          <WhatsAppButton />
+        </NextIntlClientProvider>
+      </body>
+    </html>
   )
 }

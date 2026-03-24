@@ -1,312 +1,180 @@
 'use client'
 
-import { useEffect, useState, useMemo } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { useLocale, useTranslations } from 'next-intl'
 import { motion } from 'framer-motion'
-import { ArrowRight } from 'lucide-react'
+import { Sparkles, Phone, MessageCircle, ArrowRight, Star } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 
-// ─── Typing effect hook ──────────────────────────────────────
-function useTypingEffect(
-  lines: { text: string; className: string }[],
-  charDelay: number,
-  lineDelay: number,
-  startDelay: number
-) {
-  const [displayed, setDisplayed] = useState<
-    { text: string; className: string; done: boolean }[]
-  >([])
-  const [allDone, setAllDone] = useState(false)
-
-  useEffect(() => {
-    let timeout: ReturnType<typeof setTimeout>
-    let currentLine = 0
-    let currentChar = 0
-    let cancelled = false
-
-    function tick() {
-      if (cancelled) return
-
-      if (currentLine >= lines.length) {
-        setAllDone(true)
-        return
-      }
-
-      const line = lines[currentLine]
-
-      if (currentChar === 0) {
-        setDisplayed((prev) => [
-          ...prev,
-          { text: '', className: line.className, done: false },
-        ])
-      }
-
-      if (currentChar < line.text.length) {
-        const char = line.text[currentChar]
-        setDisplayed((prev) => {
-          const updated = [...prev]
-          const last = updated[updated.length - 1]
-          updated[updated.length - 1] = { ...last, text: last.text + char }
-          return updated
-        })
-        currentChar++
-        timeout = setTimeout(tick, charDelay)
-      } else {
-        setDisplayed((prev) => {
-          const updated = [...prev]
-          updated[updated.length - 1] = {
-            ...updated[updated.length - 1],
-            done: true,
-          }
-          return updated
-        })
-        currentLine++
-        currentChar = 0
-        timeout = setTimeout(tick, lineDelay)
-      }
-    }
-
-    timeout = setTimeout(tick, startDelay)
-
-    return () => {
-      cancelled = true
-      clearTimeout(timeout)
-    }
-  }, [lines, charDelay, lineDelay, startDelay])
-
-  return { displayed, allDone }
-}
-
-// ─── Floating particles ──────────────────────────────────────
-const particles = Array.from({ length: 14 }, (_, i) => ({
-  id: i,
-  x: `${5 + Math.random() * 90}%`,
-  y: `${5 + Math.random() * 90}%`,
-  duration: 4 + Math.random() * 4,
-  delay: Math.random() * 3,
-}))
-
-// ─── Component ───────────────────────────────────────────────
 export function Hero() {
   const t = useTranslations('homepage.hero')
   const locale = useLocale()
 
-  const terminalLines = useMemo(
-    () => [
-      { text: '$ dify deploy --client icpac --lang el,en', className: '' },
-      {
-        text: '✓ Knowledge base: 847 documents indexed',
-        className: 'text-green-400',
-      },
-      {
-        text: '✓ WhatsApp Business API connected',
-        className: 'text-green-400',
-      },
-      {
-        text: '✓ Bilingual prompts: Greek + English',
-        className: 'text-green-400',
-      },
-      {
-        text: '✓ Self-hosted: Hetzner EU (Frankfurt)',
-        className: 'text-green-400',
-      },
-      { text: '$ status check', className: '' },
-      {
-        text: '✓ Live · 3 active sessions · 0 errors',
-        className: 'text-green-400',
-      },
-    ],
-    []
-  )
-
-  const { displayed, allDone } = useTypingEffect(terminalLines, 30, 400, 1200)
-
   return (
-    <section className="relative min-h-[90vh] overflow-hidden bg-[#050A14]">
-      {/* Grid texture */}
-      <div
-        className="pointer-events-none absolute inset-0"
-        style={{
-          backgroundImage: `
-            linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)
-          `,
-          backgroundSize: '60px 60px',
-        }}
-      />
+    <section className="relative min-h-[92vh] flex items-center overflow-hidden">
+      {/* Layered background */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,rgba(14,165,233,0.12),transparent)]" />
+      <div className="absolute inset-0 bg-gradient-to-b from-white via-crystal-50/30 to-white" />
 
-      {/* Radial glow */}
-      <div
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            'radial-gradient(ellipse 60% 50% at 20% 50%, rgba(14,127,110,0.08) 0%, transparent 70%)',
-        }}
-      />
+      {/* Floating orbs */}
+      <div className="absolute top-1/4 -right-20 w-[500px] h-[500px] bg-crystal/[0.04] rounded-full blur-3xl" />
+      <div className="absolute -bottom-20 -left-20 w-[400px] h-[400px] bg-crystal/[0.06] rounded-full blur-3xl" />
 
-      {/* Floating particles */}
-      {particles.map((p) => (
+      {/* Animated sparkles */}
+      {[
+        { top: '15%', left: '8%', delay: 0, size: 'h-5 w-5' },
+        { top: '25%', right: '12%', delay: 0.8, size: 'h-6 w-6' },
+        { top: '65%', left: '15%', delay: 1.6, size: 'h-4 w-4' },
+        { top: '45%', right: '25%', delay: 0.4, size: 'h-5 w-5' },
+      ].map((s, i) => (
         <motion.div
-          key={p.id}
-          className="pointer-events-none absolute h-[2px] w-[2px] rounded-full bg-teal/20"
-          style={{ left: p.x, top: p.y }}
-          animate={{ y: [0, -20, 0] }}
-          transition={{
-            duration: p.duration,
-            delay: p.delay,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-        />
+          key={i}
+          animate={{ scale: [0.6, 1.2, 0.6], opacity: [0.15, 0.5, 0.15], rotate: [0, 180, 360] }}
+          transition={{ duration: 4, repeat: Infinity, delay: s.delay }}
+          className="absolute text-crystal/25"
+          style={{ top: s.top, left: s.left, right: s.right }}
+        >
+          <Sparkles className={s.size} />
+        </motion.div>
       ))}
 
-      {/* Content */}
-      <div className="relative z-10 mx-auto flex max-w-7xl flex-col items-center gap-12 px-4 py-20 sm:px-6 lg:flex-row lg:gap-16 lg:px-8 lg:py-28">
-        {/* Left column — 60% */}
-        <div className="w-full lg:w-[60%]">
-          {/* Badge */}
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 pt-28">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+          {/* Text content */}
+          <div>
+            {/* Badge */}
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <span className="inline-flex items-center gap-1.5 bg-crystal/10 text-crystal text-sm font-medium px-4 py-1.5 rounded-full">
+                <Sparkles className="h-3.5 w-3.5" />
+                {t('badge')}
+              </span>
+            </motion.div>
+
+            {/* Headline */}
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="mt-6 text-4xl sm:text-5xl lg:text-[3.5rem] font-extrabold text-navy-dark leading-[1.1] tracking-tight"
+            >
+              {t('headline')}
+              <br />
+              <span className="bg-gradient-to-r from-crystal to-crystal-600 bg-clip-text text-transparent">
+                {t('headlineAccent')}
+              </span>
+            </motion.h1>
+
+            {/* Subheadline */}
+            <motion.p
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="mt-5 text-lg text-body/80 max-w-lg leading-relaxed"
+            >
+              {t('subheadline')}
+            </motion.p>
+
+            {/* CTAs */}
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              className="mt-8 flex flex-col sm:flex-row gap-3"
+            >
+              <Link href={`/${locale}/quote`}>
+                <Button size="lg" className="w-full sm:w-auto text-base shadow-lg shadow-crystal/20 group">
+                  {t('ctaPrimary')}
+                  <ArrowRight className="h-4 w-4 ml-2 group-hover:translate-x-0.5 transition-transform" />
+                </Button>
+              </Link>
+              <Link href={`/${locale}/book`}>
+                <Button variant="secondary" size="lg" className="w-full sm:w-auto text-base">
+                  {t('ctaSecondary')}
+                </Button>
+              </Link>
+            </motion.div>
+
+            {/* Phone + social proof row */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.5 }}
+              className="mt-8 flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6"
+            >
+              <a
+                href="tel:+35796653034"
+                className="flex items-center gap-2 text-sm text-body hover:text-crystal transition-colors"
+              >
+                <div className="w-9 h-9 rounded-full bg-crystal/10 flex items-center justify-center">
+                  <Phone className="h-4 w-4 text-crystal" />
+                </div>
+                <span>
+                  <span className="text-body/60 block text-xs">{t('ctaPhone')}</span>
+                  <span className="font-semibold text-navy-dark">96653034</span>
+                </span>
+              </a>
+              <div className="hidden sm:block w-px h-8 bg-slate-200" />
+              {/* Mini social proof */}
+              <div className="flex items-center gap-1.5">
+                <div className="flex -space-x-1">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" />
+                  ))}
+                </div>
+                <span className="text-xs text-body/60 ml-1">500+ {t('happyClients')}</span>
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Hero image composition */}
           <motion.div
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.7, delay: 0.2 }}
+            className="hidden lg:block relative"
           >
-            <span className="inline-flex items-center gap-2 rounded-full border border-teal/20 bg-teal/10 px-4 py-1.5 text-xs font-medium text-teal">
-              <span className="relative flex h-2 w-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-green-400" />
-              </span>
-              {t('badge')}
-            </span>
+            {/* Glow behind image */}
+            <div className="absolute -inset-8 bg-gradient-to-br from-crystal/10 to-crystal/5 rounded-[2rem] blur-2xl" />
+
+            {/* Main image */}
+            <div className="relative rounded-2xl overflow-hidden shadow-2xl shadow-crystal/10">
+              <Image
+                src="/images/work-in-action.webp"
+                alt="Krystallo Cleaning Services - Professional biological cleaning"
+                width={600}
+                height={600}
+                className="relative object-cover w-full"
+                priority
+              />
+              {/* Gradient overlay at bottom */}
+              <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-navy-dark/60 to-transparent" />
+              <div className="absolute bottom-4 left-4 right-4">
+                <p className="text-white/90 text-sm font-medium">{t('imageCaption')}</p>
+              </div>
+            </div>
+
+            {/* Floating stat card */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.8, duration: 0.5 }}
+              className="absolute -bottom-4 -left-6 bg-white rounded-xl shadow-lg p-3 flex items-center gap-3 border border-slate-100"
+            >
+              <div className="w-10 h-10 rounded-lg bg-[#25D366]/10 flex items-center justify-center">
+                <MessageCircle className="h-5 w-5 text-[#25D366]" />
+              </div>
+              <div>
+                <p className="text-xs text-body/60">{t('quickResponse')}</p>
+                <p className="text-sm font-bold text-navy-dark">{t('quickResponseTime')}</p>
+              </div>
+            </motion.div>
           </motion.div>
-
-          {/* Headline */}
-          <h1 className="mt-8">
-            <motion.span
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' }}
-              className="block text-5xl font-normal leading-tight text-white md:text-6xl lg:text-7xl"
-            >
-              {t('headlinePart1')}
-            </motion.span>
-            <motion.span
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.25, ease: 'easeOut' }}
-              className="block bg-gradient-to-r from-teal to-teal/60 bg-clip-text text-5xl italic leading-tight text-transparent md:text-6xl lg:text-[5rem]"
-            >
-              {t('headlinePart2')}
-              <span className="ml-1 inline-block h-[1em] w-[2px] translate-y-[0.05em] animate-pulse bg-teal" />
-            </motion.span>
-          </h1>
-
-          {/* Subheadline */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.4, ease: 'easeOut' }}
-            className="mt-6 max-w-lg text-lg text-slate-400 md:text-xl"
-          >
-            {t('subheadline')}
-          </motion.p>
-
-          {/* CTAs */}
-          <div className="mt-8 flex flex-col gap-4 sm:flex-row">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.6, ease: 'easeOut' }}
-            >
-              <Link
-                href={`/${locale}/book`}
-                className="group inline-flex items-center rounded-xl bg-white px-6 py-3 font-medium text-navy transition-colors hover:bg-slate-100"
-              >
-                {t('ctaPrimary')}
-                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-[3px]" />
-              </Link>
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.7, ease: 'easeOut' }}
-            >
-              <Link
-                href={`/${locale}/case-studies`}
-                className="inline-flex rounded-xl border border-slate-600 bg-transparent px-6 py-3 font-medium text-slate-300 transition-colors hover:border-slate-400 hover:text-white"
-              >
-                {t('ctaSecondary')}
-              </Link>
-            </motion.div>
-          </div>
         </div>
-
-        {/* Right column — 40% — Terminal */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3, ease: 'easeOut' }}
-          className="w-full lg:w-[40%]"
-        >
-          <div
-            className="overflow-hidden rounded-xl border border-slate-700/50 bg-[#0C1220]"
-            style={{
-              boxShadow: '0 0 80px 0 rgba(14, 127, 110, 0.15)',
-            }}
-          >
-            {/* Title bar */}
-            <div className="flex items-center border-b border-slate-700/50 bg-[#0C1220] px-4 py-3">
-              <div className="flex gap-2">
-                <span className="h-3 w-3 rounded-full bg-[#FF5F57]" />
-                <span className="h-3 w-3 rounded-full bg-[#FEBC2E]" />
-                <span className="h-3 w-3 rounded-full bg-[#28C840]" />
-              </div>
-              <span className="mx-auto text-xs text-slate-500">
-                {t('terminalTitle')}
-              </span>
-              <div className="w-[52px]" />
-            </div>
-
-            {/* Terminal body */}
-            <div className="px-5 py-4">
-              <div className="min-h-[220px] space-y-1 font-mono text-[13px] leading-relaxed">
-                {displayed.map((line, i) => (
-                  <div key={i} className="flex">
-                    <span
-                      className={
-                        line.className ||
-                        (line.text.startsWith('$')
-                          ? 'text-white'
-                          : 'text-slate-400')
-                      }
-                    >
-                      {line.text.startsWith('$') ? (
-                        <>
-                          <span className="text-teal">$</span>
-                          <span className="text-white">
-                            {line.text.slice(1)}
-                          </span>
-                        </>
-                      ) : (
-                        line.text
-                      )}
-                    </span>
-                    {/* Cursor on current typing line */}
-                    {i === displayed.length - 1 && !line.done && (
-                      <span className="ml-[1px] inline-block h-[1.1em] w-[7px] translate-y-[1px] animate-pulse bg-slate-400" />
-                    )}
-                  </div>
-                ))}
-                {/* Final blinking cursor */}
-                {allDone && (
-                  <div className="flex items-center">
-                    <span className="text-teal">$</span>
-                    <span className="ml-2 inline-block h-[1.1em] w-[7px] translate-y-[1px] animate-pulse bg-slate-400" />
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </motion.div>
       </div>
     </section>
   )

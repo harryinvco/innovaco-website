@@ -1,57 +1,83 @@
+'use client'
+
+import Image from 'next/image'
 import Link from 'next/link'
 import { useLocale, useTranslations } from 'next-intl'
-import { MapPin, Mail, MessageCircle, Linkedin } from 'lucide-react'
-
-const serviceLinks = [
-  { key: 'aiServices' as const, href: '/services/ai' },
-  { key: 'development' as const, href: '/services/development' },
-  { key: 'growth' as const, href: '/services/growth' },
-  { key: 'training' as const, href: '/services/training' },
-]
-
-const companyLinks = [
-  { key: 'about' as const, href: '/about' },
-  { key: 'caseStudies' as const, href: '/case-studies' },
-  { key: 'blog' as const, href: '/blog' },
-  { key: 'contact' as const, href: '/contact' },
-]
+import { Phone, MessageCircle, MapPin } from 'lucide-react'
 
 export function Footer() {
   const t = useTranslations('footer')
   const tNav = useTranslations('nav')
+  const tServices = useTranslations('services')
   const locale = useLocale()
 
+  const serviceNames = [
+    'car',
+    'sofa',
+    'mattress',
+    'radiator',
+    'carpet',
+    'leather',
+    'chair',
+    'stroller',
+  ] as const
+
+  const quickLinks = [
+    { key: 'home', href: `/${locale}` },
+    { key: 'services', href: `/${locale}/services` },
+    { key: 'quote', href: `/${locale}/quote` },
+    { key: 'book', href: `/${locale}/book` },
+    { key: 'contact', href: `/${locale}/contact` },
+  ]
+
   return (
-    <footer className="bg-navy-dark">
-      <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
-          {/* Col 1 — Brand */}
+    <footer className="bg-navy-dark text-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+          {/* Brand */}
           <div>
-            <p className="text-lg font-bold text-white">{t('brandName')}</p>
-            <p className="mt-1 text-sm text-slate-400">{t('brandTagline')}</p>
-            <p className="mt-3 text-sm text-slate-400">{t('builtIn')}</p>
-            <a
-              href="https://www.linkedin.com/company/hninnovaco"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-4 inline-flex items-center gap-1.5 text-sm text-slate-400 transition-colors hover:text-white"
-            >
-              <Linkedin className="h-4 w-4" />
-              LinkedIn
-            </a>
+            <div className="mb-3">
+              <Image
+                src="/images/logo.png"
+                alt={t('brand')}
+                width={160}
+                height={50}
+                className="h-12 w-auto brightness-0 invert"
+              />
+            </div>
+            <p className="text-slate-400 text-sm">{t('tagline')}</p>
           </div>
 
-          {/* Col 2 — Services */}
+          {/* Services */}
           <div>
-            <p className="mb-3 text-sm font-semibold uppercase tracking-wider text-white">
-              {t('servicesHeading')}
-            </p>
+            <h3 className="font-semibold text-sm uppercase tracking-wider text-slate-300 mb-4">
+              {t('services')}
+            </h3>
             <ul className="space-y-2">
-              {serviceLinks.map((link) => (
+              {serviceNames.map((name) => (
+                <li key={name}>
+                  <Link
+                    href={`/${locale}/services`}
+                    className="text-sm text-slate-400 hover:text-crystal transition-colors"
+                  >
+                    {tServices(`${name}.name`)}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Quick Links */}
+          <div>
+            <h3 className="font-semibold text-sm uppercase tracking-wider text-slate-300 mb-4">
+              {t('quickLinks')}
+            </h3>
+            <ul className="space-y-2">
+              {quickLinks.map((link) => (
                 <li key={link.key}>
                   <Link
-                    href={`/${locale}${link.href}`}
-                    className="text-sm text-slate-400 transition-colors hover:text-white"
+                    href={link.href}
+                    className="text-sm text-slate-400 hover:text-crystal transition-colors"
                   >
                     {tNav(link.key)}
                   </Link>
@@ -60,70 +86,44 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Col 3 — Company */}
+          {/* Contact */}
           <div>
-            <p className="mb-3 text-sm font-semibold uppercase tracking-wider text-white">
-              {t('companyHeading')}
-            </p>
-            <ul className="space-y-2">
-              {companyLinks.map((link) => (
-                <li key={link.key}>
-                  <Link
-                    href={`/${locale}${link.href}`}
-                    className="text-sm text-slate-400 transition-colors hover:text-white"
-                  >
-                    {tNav(link.key)}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Col 4 — Contact */}
-          <div>
-            <p className="mb-3 text-sm font-semibold uppercase tracking-wider text-white">
-              {t('contactHeading')}
-            </p>
+            <h3 className="font-semibold text-sm uppercase tracking-wider text-slate-300 mb-4">
+              {t('contactInfo')}
+            </h3>
             <ul className="space-y-3">
-              <li className="flex items-center gap-2 text-sm text-slate-400">
-                <MapPin className="h-4 w-4 flex-shrink-0" />
-                {t('location')}
-              </li>
               <li>
                 <a
-                  href="mailto:hello@hninnovaco.com"
-                  className="flex items-center gap-2 text-sm text-slate-400 transition-colors hover:text-white"
+                  href="tel:+35796653034"
+                  className="flex items-center gap-2 text-sm text-slate-400 hover:text-crystal transition-colors"
                 >
-                  <Mail className="h-4 w-4 flex-shrink-0" />
-                  hello@hninnovaco.com
+                  <Phone className="h-4 w-4" />
+                  96653034
                 </a>
               </li>
               <li>
                 <a
-                  href="https://wa.me/35799000000"
+                  href="https://wa.me/35796653034"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-sm text-slate-400 transition-colors hover:text-white"
+                  className="flex items-center gap-2 text-sm text-slate-400 hover:text-[#25D366] transition-colors"
                 >
-                  <MessageCircle className="h-4 w-4 flex-shrink-0" />
-                  {t('chatWhatsApp')}
+                  <MessageCircle className="h-4 w-4" />
+                  WhatsApp
                 </a>
+              </li>
+              <li className="flex items-center gap-2 text-sm text-slate-400">
+                <MapPin className="h-4 w-4" />
+                Cyprus
               </li>
             </ul>
           </div>
         </div>
 
-        {/* Bottom bar */}
-        <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-slate-700 pt-6 sm:flex-row">
-          <p className="text-xs text-slate-600">
-            {t('copyright')} · {t('deployedOn')}
+        <div className="mt-12 pt-8 border-t border-slate-700">
+          <p className="text-center text-sm text-slate-500">
+            &copy; {new Date().getFullYear()} Krystallo Cleaning Services. {t('rights')}.
           </p>
-          <Link
-            href={`/${locale}/privacy`}
-            className="text-xs text-slate-500 transition-colors hover:text-white"
-          >
-            {t('privacyPolicy')}
-          </Link>
         </div>
       </div>
     </footer>
