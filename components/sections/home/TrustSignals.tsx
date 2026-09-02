@@ -1,64 +1,58 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import { motion } from 'framer-motion'
-import { AnimatedSection } from '@/components/shared/AnimatedSection'
-import { Users, Sparkles, Leaf, Clock } from 'lucide-react'
+import { Clock, Leaf, Sparkles, Users } from 'lucide-react'
+import { AnimatedItem } from '@/components/shared/AnimatedSection'
+import { SectionHeading } from '@/components/shared/SectionHeading'
 
 const statConfig = [
-  { icon: Users, color: 'from-sky-500 to-blue-600' },
-  { icon: Sparkles, color: 'from-violet-500 to-purple-600' },
-  { icon: Leaf, color: 'from-emerald-500 to-green-600' },
-  { icon: Clock, color: 'from-amber-500 to-orange-600' },
+  { icon: Users, tint: 'from-crystal-500 to-crystal-700' },
+  { icon: Sparkles, tint: 'from-aqua-400 to-crystal-500' },
+  { icon: Leaf, tint: 'from-emerald-500 to-emerald-700' },
+  { icon: Clock, tint: 'from-crystal-400 to-aqua-500' },
 ]
 
 export function TrustSignals() {
   const t = useTranslations('homepage.trust')
 
-  const stats = [
-    { value: t('stat1Value'), label: t('stat1Label') },
-    { value: t('stat2Value'), label: t('stat2Label') },
-    { value: t('stat3Value'), label: t('stat3Label') },
-    { value: t('stat4Value'), label: t('stat4Label') },
-  ]
+  const stats = statConfig.map((config, i) => ({
+    ...config,
+    value: t(`stat${i + 1}Value`),
+    label: t(`stat${i + 1}Label`),
+  }))
 
   return (
-    <section className="py-20 lg:py-28 bg-white relative overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(14,165,233,0.04),transparent_50%)]" />
+    <section className="section relative overflow-hidden bg-white">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_80%,rgba(110,207,225,0.09),transparent_50%)]" />
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <AnimatedSection className="text-center mb-14">
-          <span className="inline-flex items-center gap-1.5 bg-crystal/10 text-crystal text-sm font-medium px-3.5 py-1.5 rounded-full mb-4">
-            {t('badge')}
-          </span>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-navy-dark tracking-tight">
-            {t('title')}
-          </h2>
-        </AnimatedSection>
+      <div className="container-page relative">
+        <SectionHeading
+          eyebrow={t('badge')}
+          title={t('title')}
+          subtitle={t('subtitle')}
+        />
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-5">
+        <div className="mt-12 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
           {stats.map((stat, i) => {
-            const { icon: Icon, color } = statConfig[i]
+            const Icon = stat.icon
             return (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: i * 0.08 }}
+              <AnimatedItem
+                key={stat.label}
+                delay={i * 0.07}
+                className="group rounded-2xl border border-ink-100 bg-white p-6 text-center transition-all duration-300 hover:-translate-y-0.5 hover:shadow-card-hover sm:p-8"
               >
-                <div className="group relative text-center p-6 sm:p-8 rounded-2xl bg-slate-50/80 hover:bg-white border border-slate-100 hover:border-slate-200 hover:shadow-xl hover:shadow-slate-100/50 transition-all duration-300">
-                  {/* Gradient icon */}
-                  <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${color} flex items-center justify-center mx-auto mb-4 shadow-sm group-hover:scale-110 transition-transform duration-300`}>
-                    <Icon className="h-6 w-6 text-white" />
-                  </div>
-
-                  <div className="text-3xl sm:text-4xl font-extrabold text-navy-dark mb-1 tracking-tight">
-                    {stat.value}
-                  </div>
-                  <div className="text-sm text-body/60 font-medium">{stat.label}</div>
-                </div>
-              </motion.div>
+                <span
+                  className={`mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br ${stat.tint} shadow-brand transition-transform duration-300 group-hover:scale-105`}
+                >
+                  <Icon className="h-6 w-6 text-white" aria-hidden />
+                </span>
+                <p className="font-display text-3xl font-extrabold tracking-tight text-ink-900 sm:text-4xl">
+                  {stat.value}
+                </p>
+                <p className="mt-1 text-sm font-medium text-ink-400">
+                  {stat.label}
+                </p>
+              </AnimatedItem>
             )
           })}
         </div>

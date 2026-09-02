@@ -1,180 +1,185 @@
+import { site } from '@/lib/site'
+
+/**
+ * Pricing mirrors the published Krystallo price list ("ΝΕΟΣ ΤΙΜΟΚΑΤΑΛΟΓΟΣ").
+ *
+ *   'from'      — an opening price; the real figure depends on the item's condition
+ *   'range'     — quoted between two figures
+ *   'fixed'     — a single flat figure
+ *   'onRequest' — not on the printed list, quoted after we see the piece
+ */
+export type PriceKind = 'from' | 'range' | 'fixed' | 'onRequest'
+
+export interface ServiceTier {
+  id: string
+  kind: PriceKind
+  min: number
+  max: number
+}
+
 export interface ServiceConfig {
   id: string
-  slug: string
   icon: string
-  nameKey: string
-  descriptionKey: string
-  benefitKeys: string[]
-  priceUnit: string
-  priceMin: number
-  priceMax: number
-  quantityLabel: string
+  /** i18n key suffix under `units.*` — what a single unit of this service is */
+  unit: string
+  /** Ceiling for the quantity stepper in the calculator */
   maxQuantity: number
+  /** Price list footnote: "depending on the condition" */
+  conditionDependent: boolean
+  /** Pulled forward in the homepage grid */
+  featured?: boolean
+  tiers: ServiceTier[]
 }
 
 export const services: ServiceConfig[] = [
   {
-    id: 'car',
-    slug: 'car-cleaning',
-    icon: 'Car',
-    nameKey: 'services.car.name',
-    descriptionKey: 'services.car.description',
-    benefitKeys: [
-      'services.car.benefit1',
-      'services.car.benefit2',
-      'services.car.benefit3',
-    ],
-    priceUnit: 'per_vehicle',
-    priceMin: 40,
-    priceMax: 80,
-    quantityLabel: 'quote.vehicles',
-    maxQuantity: 5,
-  },
-  {
     id: 'sofa',
-    slug: 'sofa-cleaning',
     icon: 'Sofa',
-    nameKey: 'services.sofa.name',
-    descriptionKey: 'services.sofa.description',
-    benefitKeys: [
-      'services.sofa.benefit1',
-      'services.sofa.benefit2',
-      'services.sofa.benefit3',
-    ],
-    priceUnit: 'per_seat',
-    priceMin: 15,
-    priceMax: 30,
-    quantityLabel: 'quote.seats',
-    maxQuantity: 10,
+    unit: 'seat',
+    maxQuantity: 12,
+    conditionDependent: true,
+    featured: true,
+    tiers: [{ id: 'seat', kind: 'from', min: 20, max: 20 }],
   },
   {
-    id: 'mattress',
-    slug: 'mattress-cleaning',
-    icon: 'BedDouble',
-    nameKey: 'services.mattress.name',
-    descriptionKey: 'services.mattress.description',
-    benefitKeys: [
-      'services.mattress.benefit1',
-      'services.mattress.benefit2',
-      'services.mattress.benefit3',
-    ],
-    priceUnit: 'per_mattress',
-    priceMin: 30,
-    priceMax: 60,
-    quantityLabel: 'quote.mattresses',
-    maxQuantity: 6,
-  },
-  {
-    id: 'radiator',
-    slug: 'radiator-cleaning',
-    icon: 'Heater',
-    nameKey: 'services.radiator.name',
-    descriptionKey: 'services.radiator.description',
-    benefitKeys: [
-      'services.radiator.benefit1',
-      'services.radiator.benefit2',
-      'services.radiator.benefit3',
-    ],
-    priceUnit: 'per_unit',
-    priceMin: 20,
-    priceMax: 40,
-    quantityLabel: 'quote.units',
-    maxQuantity: 15,
-  },
-  {
-    id: 'carpet',
-    slug: 'carpet-cleaning',
-    icon: 'SquareDashedBottom',
-    nameKey: 'services.carpet.name',
-    descriptionKey: 'services.carpet.description',
-    benefitKeys: [
-      'services.carpet.benefit1',
-      'services.carpet.benefit2',
-      'services.carpet.benefit3',
-    ],
-    priceUnit: 'per_sqm',
-    priceMin: 5,
-    priceMax: 12,
-    quantityLabel: 'quote.sqm',
-    maxQuantity: 100,
-  },
-  {
-    id: 'leather',
-    slug: 'leather-sofa-cleaning',
+    id: 'armchair',
     icon: 'Armchair',
-    nameKey: 'services.leather.name',
-    descriptionKey: 'services.leather.description',
-    benefitKeys: [
-      'services.leather.benefit1',
-      'services.leather.benefit2',
-      'services.leather.benefit3',
-    ],
-    priceUnit: 'per_piece',
-    priceMin: 25,
-    priceMax: 50,
-    quantityLabel: 'quote.pieces',
-    maxQuantity: 8,
+    unit: 'piece',
+    maxQuantity: 10,
+    conditionDependent: true,
+    featured: true,
+    tiers: [{ id: 'standard', kind: 'from', min: 25, max: 25 }],
   },
   {
     id: 'chair',
-    slug: 'chair-cleaning',
-    icon: 'ArmchairIcon',
-    nameKey: 'services.chair.name',
-    descriptionKey: 'services.chair.description',
-    benefitKeys: [
-      'services.chair.benefit1',
-      'services.chair.benefit2',
-      'services.chair.benefit3',
-    ],
-    priceUnit: 'per_chair',
-    priceMin: 10,
-    priceMax: 25,
-    quantityLabel: 'quote.chairs',
-    maxQuantity: 20,
+    icon: 'RockingChair',
+    unit: 'chair',
+    maxQuantity: 24,
+    conditionDependent: true,
+    tiers: [{ id: 'standard', kind: 'from', min: 7, max: 7 }],
   },
   {
-    id: 'stroller',
-    slug: 'stroller-carseat-cleaning',
-    icon: 'Baby',
-    nameKey: 'services.stroller.name',
-    descriptionKey: 'services.stroller.description',
-    benefitKeys: [
-      'services.stroller.benefit1',
-      'services.stroller.benefit2',
-      'services.stroller.benefit3',
+    id: 'mattress',
+    icon: 'BedDouble',
+    unit: 'mattress',
+    maxQuantity: 8,
+    conditionDependent: false,
+    featured: true,
+    tiers: [
+      { id: 'superDouble', kind: 'fixed', min: 70, max: 70 },
+      { id: 'double', kind: 'fixed', min: 60, max: 60 },
+      { id: 'single', kind: 'fixed', min: 40, max: 40 },
+      { id: 'cot', kind: 'range', min: 25, max: 30 },
     ],
-    priceUnit: 'per_item',
-    priceMin: 25,
-    priceMax: 50,
-    quantityLabel: 'quote.items',
-    maxQuantity: 5,
+  },
+  {
+    id: 'car',
+    icon: 'CarFront',
+    unit: 'vehicle',
+    maxQuantity: 4,
+    conditionDependent: true,
+    featured: true,
+    tiers: [{ id: 'standard', kind: 'from', min: 60, max: 60 }],
+  },
+  {
+    id: 'baby',
+    icon: 'Baby',
+    unit: 'item',
+    maxQuantity: 6,
+    conditionDependent: false,
+    tiers: [
+      { id: 'carSeat', kind: 'range', min: 20, max: 25 },
+      { id: 'stroller', kind: 'range', min: 25, max: 30 },
+      { id: 'travelCot', kind: 'fixed', min: 30, max: 30 },
+    ],
+  },
+  {
+    id: 'carpet',
+    icon: 'Rows3',
+    unit: 'sqm',
+    maxQuantity: 120,
+    conditionDependent: false,
+    featured: true,
+    tiers: [
+      { id: 'standard', kind: 'range', min: 8, max: 10 },
+      { id: 'persian', kind: 'range', min: 10, max: 12 },
+    ],
+  },
+  {
+    id: 'leather',
+    icon: 'Droplets',
+    unit: 'piece',
+    maxQuantity: 8,
+    conditionDependent: true,
+    tiers: [{ id: 'standard', kind: 'onRequest', min: 0, max: 0 }],
+  },
+  {
+    id: 'radiator',
+    icon: 'Heater',
+    unit: 'unit',
+    maxQuantity: 15,
+    conditionDependent: true,
+    tiers: [{ id: 'standard', kind: 'onRequest', min: 0, max: 0 }],
   },
 ]
 
+export const featuredServices = services.filter((s) => s.featured)
+
+export function getService(id: string): ServiceConfig | undefined {
+  return services.find((s) => s.id === id)
+}
+
+export function getTier(service: ServiceConfig, tierId?: string): ServiceTier {
+  return service.tiers.find((t) => t.id === tierId) ?? service.tiers[0]
+}
+
+/** Lowest published figure for a service — powers every "from €X" label. */
+export function entryPrice(service: ServiceConfig): number | null {
+  const priced = service.tiers.filter((t) => t.kind !== 'onRequest')
+  if (priced.length === 0) return null
+  return Math.min(...priced.map((t) => t.min))
+}
+
 export interface QuoteSelection {
   serviceId: string
+  tierId: string
   quantity: number
 }
 
-export function calculateEstimate(selections: QuoteSelection[]): {
+export interface Estimate {
   min: number
   max: number
-} {
+  /** At least one line is an open-ended "from €X", so the total is a floor */
+  startingFrom: boolean
+  /** At least one line is quoted after inspection and is not in the total */
+  hasOnRequest: boolean
+}
+
+export function calculateEstimate(selections: QuoteSelection[]): Estimate {
   let min = 0
   let max = 0
+  let startingFrom = false
+  let hasOnRequest = false
+
   for (const sel of selections) {
-    const service = services.find((s) => s.id === sel.serviceId)
-    if (service) {
-      min += service.priceMin * sel.quantity
-      max += service.priceMax * sel.quantity
+    const service = getService(sel.serviceId)
+    if (!service) continue
+    const tier = getTier(service, sel.tierId)
+    if (tier.kind === 'onRequest') {
+      hasOnRequest = true
+      continue
     }
+    if (tier.kind === 'from') startingFrom = true
+    min += tier.min * sel.quantity
+    max += tier.max * sel.quantity
   }
-  return { min, max }
+
+  return { min, max, startingFrom, hasOnRequest }
 }
 
 export function generateWhatsAppLink(
   message: string,
-  phone: string = '35796653034'
+  phone: string = site.whatsapp
 ): string {
   return `https://wa.me/${phone}?text=${encodeURIComponent(message)}`
 }

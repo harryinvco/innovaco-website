@@ -4,28 +4,29 @@ import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center whitespace-nowrap rounded-xl text-sm font-semibold ring-offset-background transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 active:scale-[0.97]',
+  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl text-sm font-semibold ring-offset-background transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98]',
   {
     variants: {
       variant: {
         default:
-          'bg-gradient-to-b from-crystal to-crystal-600 text-white shadow-md shadow-crystal/25 hover:shadow-lg hover:shadow-crystal/30 hover:brightness-110',
+          'bg-crystal-500 text-white shadow-brand hover:bg-crystal-600 hover:shadow-brand-lg',
         secondary:
-          'border-2 border-crystal/20 bg-crystal/[0.06] text-crystal hover:bg-crystal hover:text-white hover:border-crystal hover:shadow-md hover:shadow-crystal/20',
+          'border border-crystal-200 bg-crystal-50 text-crystal-700 hover:border-crystal-300 hover:bg-crystal-100',
         outline:
-          'border border-slate-200 bg-white text-navy-dark hover:bg-slate-50 hover:border-slate-300 shadow-sm',
-        ghost:
-          'text-body hover:text-crystal hover:bg-crystal/5',
+          'border border-ink-200 bg-white text-ink-900 shadow-sm hover:border-ink-300 hover:bg-ink-50',
+        ghost: 'text-ink-600 hover:bg-crystal-50 hover:text-crystal-700',
+        inverse:
+          'bg-white text-ink-900 shadow-lg shadow-black/10 hover:bg-crystal-50',
         destructive:
-          'bg-gradient-to-b from-red-500 to-red-600 text-white shadow-md shadow-red-500/25 hover:shadow-lg hover:shadow-red-500/30 hover:brightness-110',
-        link: 'text-crystal underline-offset-4 hover:underline p-0 h-auto',
+          'bg-red-500 text-white shadow-md shadow-red-500/25 hover:bg-red-600',
+        link: 'h-auto p-0 text-crystal-600 underline-offset-4 hover:underline',
         whatsapp:
-          'bg-gradient-to-b from-[#25D366] to-[#1FAD55] text-white shadow-md shadow-[#25D366]/25 hover:shadow-lg hover:shadow-[#25D366]/30 hover:brightness-110',
+          'bg-whatsapp text-white shadow-md shadow-whatsapp/30 hover:bg-whatsapp-dark hover:shadow-lg hover:shadow-whatsapp/35',
       },
       size: {
-        default: 'h-11 px-6 py-2',
-        sm: 'h-9 rounded-lg px-4 text-xs',
-        lg: 'h-[52px] rounded-2xl px-8 text-base',
+        default: 'h-11 px-5',
+        sm: 'h-9 rounded-lg px-3.5 text-xs',
+        lg: 'h-[52px] rounded-2xl px-7 text-base',
         icon: 'h-10 w-10 rounded-xl',
       },
     },

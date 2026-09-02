@@ -1,28 +1,14 @@
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
 import './globals.css'
 
-const inter = Inter({
-  subsets: ['latin', 'greek'],
-  variable: '--font-inter',
-  display: 'swap',
-})
-
-export const metadata: Metadata = {
-  title: 'Krystallo Cleaning Services',
-  description: 'Professional biological cleaning services in Cyprus',
-}
-
+/**
+ * The locale layout owns <html> and <body> (it needs `lang` from the route
+ * segment), so this root layout must stay a pass-through — rendering a second
+ * html/body here nests documents and breaks hydration.
+ */
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  return (
-    <html suppressHydrationWarning>
-      <body className={`${inter.variable} font-sans antialiased`}>
-        {children}
-      </body>
-    </html>
-  )
+  return children
 }

@@ -1,196 +1,367 @@
 {
   "common": {
     "siteTitle": "Krystallo Cleaning Services",
-    "siteDescription": "Professional biological cleaning services in Cyprus",
-    "getQuote": "Get Quote",
-    "bookNow": "Book Now",
-    "learnMore": "Learn More",
-    "callUs": "Call Us",
+    "siteDescription": "Deep cleaning for sofas, mattresses, rugs and car interiors across Cyprus. Eco-friendly products, clear prices, free estimate.",
+    "tagline": "Eco-friendly deep cleaning across Cyprus",
+    "getQuote": "Get your price",
+    "bookNow": "Book now",
+    "learnMore": "Learn more",
+    "callUs": "Call us",
     "whatsapp": "WhatsApp",
-    "phone": "96653034",
+    "whatsappCta": "Message us on WhatsApp",
+    "phone": "96 653 034",
+    "seePrices": "See price list",
     "from": "from",
-    "currency": "EUR"
+    "currency": "EUR",
+    "menu": "Menu",
+    "close": "Close",
+    "skipToContent": "Skip to main content",
+    "defaultWhatsAppMessage": "Hello! I'd like to ask about your deep cleaning services.",
+    "backToTop": "Back to top"
   },
   "nav": {
     "home": "Home",
     "services": "Services",
-    "quote": "Quote",
+    "pricing": "Prices",
+    "quote": "Get a price",
     "book": "Book",
     "contact": "Contact"
   },
+  "units": {
+    "seat": {
+      "one": "seat",
+      "many": "seats",
+      "per": "per seat"
+    },
+    "piece": {
+      "one": "piece",
+      "many": "pieces",
+      "per": "per piece"
+    },
+    "chair": {
+      "one": "chair",
+      "many": "chairs",
+      "per": "per chair"
+    },
+    "mattress": {
+      "one": "mattress",
+      "many": "mattresses",
+      "per": "per mattress"
+    },
+    "vehicle": {
+      "one": "car",
+      "many": "cars",
+      "per": "per car"
+    },
+    "item": {
+      "one": "item",
+      "many": "items",
+      "per": "per item"
+    },
+    "sqm": {
+      "one": "m²",
+      "many": "m²",
+      "per": "per m²"
+    },
+    "unit": {
+      "one": "radiator",
+      "many": "radiators",
+      "per": "per radiator"
+    }
+  },
+  "price": {
+    "from": "From",
+    "onRequest": "Quoted after we see it",
+    "onRequestShort": "On request",
+    "conditionNote": "depending on condition",
+    "startingFrom": "From",
+    "each": "each"
+  },
   "homepage": {
     "hero": {
-      "badge": "Serving All of Cyprus",
-      "headline": "Biological Cleaning",
-      "headlineAccent": "for Every Space",
-      "subheadline": "Professional biological cleaning with eco-friendly products. Cars, sofas, mattresses, carpets and much more.",
-      "ctaPrimary": "Get Quote",
-      "ctaSecondary": "Book Now",
-      "ctaPhone": "or call us at",
-      "happyClients": "happy clients",
-      "imageCaption": "Professional biological cleaning",
+      "badge": "Serving all of Cyprus",
+      "headline": "Sofas, mattresses & rugs",
+      "headlineAccent": "cleaned like new",
+      "subheadline": "Deep cleaning with eco-friendly products that are safe for children and pets. We come to you with our own professional equipment.",
+      "ctaPrimary": "Get your price",
+      "ctaSecondary": "See price list",
+      "ctaPhone": "or call us on",
+      "priceAnchor": "Prices from",
+      "priceAnchorUnit": "per chair",
+      "point1": "Free estimate",
+      "point2": "No hidden charges",
+      "point3": "Reply within 30 minutes",
+      "happyClients": "happy customers",
+      "imageCaption": "Deep cleaning a sofa at a customer's home",
       "quickResponse": "WhatsApp reply",
       "quickResponseTime": "Within 30 minutes"
     },
+    "trustBar": {
+      "item1Title": "Free estimate",
+      "item1Desc": "The price is agreed before we start",
+      "item2Title": "Eco-friendly products",
+      "item2Desc": "Safe for children and pets",
+      "item3Title": "Reply within 30 minutes",
+      "item3Desc": "On WhatsApp, seven days a week",
+      "item4Title": "All across Cyprus",
+      "item4Desc": "We come to your home or office"
+    },
     "services": {
       "badge": "Services",
-      "title": "What We Clean",
-      "subtitle": "We handle biological cleaning for every need",
-      "viewAll": "View All Services"
+      "title": "What we clean",
+      "subtitle": "Professional deep cleaning for every soft furnishing in your home and car.",
+      "viewAll": "All services & prices"
+    },
+    "pricing": {
+      "badge": "Price list",
+      "title": "Our new price list",
+      "subtitle": "Clear prices, no surprises. We confirm the final figure with you before any work starts.",
+      "viewFull": "See the full price list",
+      "thanks": "Thank you for your trust. We keep bringing quality, freshness and care to every job we take on."
     },
     "trust": {
-      "badge": "Why Us",
-      "title": "Trust the Experts",
+      "badge": "Why us",
+      "title": "Why customers trust us",
+      "subtitle": "We work with professional hot-water extraction equipment and eco-friendly detergents — and we always tell you upfront what can realistically come out.",
       "stat1Value": "500+",
-      "stat1Label": "Happy Clients",
-      "stat2Value": "8",
-      "stat2Label": "Cleaning Services",
+      "stat1Label": "Happy customers",
+      "stat2Value": "9",
+      "stat2Label": "Cleaning services",
       "stat3Value": "100%",
-      "stat3Label": "Eco-Friendly Products",
-      "stat4Value": "24hr",
-      "stat4Label": "Customer Service"
+      "stat3Label": "Eco-friendly products",
+      "stat4Value": "30 min",
+      "stat4Label": "Average reply time"
     },
     "process": {
-      "badge": "How It Works",
-      "title": "4 Simple Steps",
-      "step1Title": "Choose Service",
-      "step1Desc": "Pick the cleaning you need",
-      "step2Title": "Get a Quote",
-      "step2Desc": "Calculate the cost online",
-      "step3Title": "Book Appointment",
-      "step3Desc": "Choose date and time",
-      "step4Title": "Enjoy Cleanliness",
-      "step4Desc": "We take care of the rest"
+      "badge": "How it works",
+      "title": "Four simple steps",
+      "subtitle": "From your first message to a spotless result, with no back and forth.",
+      "step1Title": "Pick a service",
+      "step1Desc": "Tell us what needs cleaning",
+      "step2Title": "See the price",
+      "step2Desc": "Work out the cost online in 30 seconds",
+      "step3Title": "Book a slot",
+      "step3Desc": "Choose the date and time that suits you",
+      "step4Title": "Enjoy the result",
+      "step4Desc": "We arrive with our equipment and handle the rest"
     },
     "gallery": {
       "badge": "Results",
-      "title": "Before & After",
-      "subtitle": "See the difference biological cleaning makes",
+      "title": "Before & after",
+      "subtitle": "Real jobs, straight out of the camera. See the difference a proper deep clean makes.",
       "before": "Before",
       "after": "After",
-      "mattress": "Mattress Cleaning",
-      "leather": "Leather Sofa Cleaning",
-      "radiator": "Radiator Cleaning"
+      "mattress": "Mattresses",
+      "leather": "Leather sofas",
+      "radiator": "Radiators"
+    },
+    "faq": {
+      "badge": "FAQ",
+      "title": "Questions we get asked",
+      "subtitle": "Can't find your answer? Send us a message and we'll reply the same day.",
+      "q1": "How long does a clean take?",
+      "a1": "A three-seat sofa takes roughly 45–60 minutes and a double mattress 30–40 minutes. We'll give you an exact time once we know what we're cleaning.",
+      "q2": "How long does it take to dry?",
+      "a2": "With decent ventilation, fabrics dry in 4–6 hours. You can usually sleep on your mattress the same night.",
+      "q3": "Are the products safe for children and pets?",
+      "a3": "Yes. We use eco-friendly, biodegradable detergents with no harsh smell. That's why we're happy to take on cot mattresses, prams and car seats.",
+      "q4": "Do all stains come out?",
+      "a4": "Most of them come out completely. Old paint, ink or bleach marks may have permanently changed the fibre — we'll tell you honestly before we start, not after you've paid.",
+      "q5": "Do you come to my place?",
+      "a5": "Yes, we cover the whole of Cyprus. We bring all the equipment with us and only need a power socket and access to water.",
+      "q6": "How do I pay?",
+      "a6": "Cash or bank transfer once the job is done. The price is agreed before we start, with no hidden charges.",
+      "stillQuestions": "Still have a question?"
+    },
+    "reviews": {
+      "badge": "Reviews",
+      "title": "What our customers say"
     },
     "cta": {
-      "title": "Ready for a Clean?",
-      "subtitle": "Contact us now for a free estimate",
-      "phone": "Call Us",
-      "whatsapp": "Send WhatsApp",
-      "trustLine": "Free estimate • Eco-friendly products • Guaranteed results"
+      "title": "Ready for a proper clean?",
+      "subtitle": "Send us a photo on WhatsApp and we'll come back with a price the same day — free and with no obligation.",
+      "phone": "Call us",
+      "whatsapp": "Message on WhatsApp",
+      "trustLine": "Free estimate • Eco-friendly products • No hidden charges"
     }
   },
   "services": {
-    "pageTitle": "Biological Cleaning Services",
-    "pageSubtitle": "Professional cleaning with eco-friendly products for every need",
+    "pageTitle": "Deep cleaning services",
+    "pageSubtitle": "Professional cleaning with eco-friendly products, at your place, anywhere in Cyprus.",
+    "badge": "Services",
     "startingFrom": "From",
-    "perUnit": "per unit",
-    "requestQuote": "Request Quote",
-    "car": {
-      "name": "Car Cleaning",
-      "description": "Deep biological interior car cleaning. We remove stains, bacteria and unpleasant odors with eco-friendly products.",
-      "benefit1": "Stain and odor removal",
-      "benefit2": "Seat and dashboard sanitization",
-      "benefit3": "Eco-friendly, safe products"
-    },
+    "requestQuote": "Get a price",
+    "whatWeDo": "What's included",
+    "priceLabel": "Price",
     "sofa": {
-      "name": "Sofa Cleaning",
-      "description": "Biological cleaning of sofas and living room furniture. We refresh fabrics and remove mites, dust and allergens.",
-      "benefit1": "Mite and allergen removal",
-      "benefit2": "Fabric refreshing",
-      "benefit3": "Safe for children and pets"
+      "name": "Sofas",
+      "short": "Fabric sofas & corner suites",
+      "description": "Deep cleaning for fabric sofas and corner suites. We lift stains, dust mites and odours out of every seat, cushion and backrest.",
+      "benefit1": "Removes dust mites and allergens",
+      "benefit2": "Cushions and backrests cleaned too",
+      "benefit3": "Colour and freshness restored",
+      "tiers": {
+        "seat": "Per seat"
+      }
     },
-    "mattress": {
-      "name": "Mattress Cleaning",
-      "description": "Professional biological mattress cleaning. We eliminate mites, bacteria and allergens for healthy sleep.",
-      "benefit1": "Mite and bacteria elimination",
-      "benefit2": "Improved sleep quality",
-      "benefit3": "Extended mattress lifespan"
-    },
-    "radiator": {
-      "name": "Radiator Cleaning",
-      "description": "Biological cleaning of heating radiators. We remove dust and pollutants for better performance and cleaner air.",
-      "benefit1": "Improved heating efficiency",
-      "benefit2": "Cleaner air at home",
-      "benefit3": "Energy savings"
-    },
-    "carpet": {
-      "name": "Carpet Cleaning",
-      "description": "Biological cleaning of indoor and outdoor carpets. We remove deep dirt, stains and allergens.",
-      "benefit1": "Deep fiber cleaning",
-      "benefit2": "Indoor and outdoor carpets",
-      "benefit3": "Color restoration"
-    },
-    "leather": {
-      "name": "Leather Sofa Cleaning",
-      "description": "Specialized cleaning and maintenance of leather sofas. We clean, moisturize and protect the leather.",
-      "benefit1": "Damage-free cleaning",
-      "benefit2": "Leather moisturizing and protection",
-      "benefit3": "Extended furniture lifespan"
+    "armchair": {
+      "name": "Armchairs",
+      "short": "Armchairs & footstools",
+      "description": "Cleaning for armchairs, wingbacks and footstools. We work the sides and arms too, which is where most of the grime collects.",
+      "benefit1": "Cleaned on every side, not just the seat",
+      "benefit2": "Safe on delicate upholstery",
+      "benefit3": "No lingering chemical smell",
+      "tiers": {
+        "standard": "Per armchair"
+      }
     },
     "chair": {
-      "name": "Chair Cleaning",
-      "description": "Biological cleaning of office and dining chairs. We remove stains and bacteria from every fabric type.",
-      "benefit1": "Suitable for all fabrics",
-      "benefit2": "Bacteria removal",
-      "benefit3": "Ideal for offices and homes"
+      "name": "Dining chairs",
+      "short": "Dining & office chairs",
+      "description": "Deep cleaning for upholstered dining and office chairs. Ideal for family homes, restaurants and workplaces.",
+      "benefit1": "Suitable for every fabric type",
+      "benefit2": "Lifts food and drink stains",
+      "benefit3": "Better rate for larger sets",
+      "tiers": {
+        "standard": "Per chair"
+      }
     },
-    "stroller": {
-      "name": "Stroller & Car Seat Cleaning",
-      "description": "Safe biological cleaning of strollers and car seats. 100% baby-safe products.",
-      "benefit1": "100% baby safe",
-      "benefit2": "Bacteria and allergen removal",
-      "benefit3": "Every corner cleaned"
+    "mattress": {
+      "name": "Mattresses",
+      "short": "Mattresses in every size",
+      "description": "Professional mattress cleaning on both sides. We clear out dust mites, sweat and allergens so you actually sleep in a clean bed.",
+      "benefit1": "Clears dust mites and bacteria",
+      "benefit2": "Both sides cleaned",
+      "benefit3": "Ready to sleep on the same night",
+      "tiers": {
+        "superDouble": "Super king",
+        "double": "Double",
+        "single": "Single & small double",
+        "cot": "Cot & toddler"
+      }
+    },
+    "car": {
+      "name": "Car interior deep clean",
+      "short": "Car interiors",
+      "description": "A full deep clean inside your car: seats, carpets, headlining and trim. Stains, pet hair and cigarette odours all go.",
+      "benefit1": "Seats, carpets and headlining",
+      "benefit2": "Odours removed, not masked",
+      "benefit3": "Touch points sanitised",
+      "tiers": {
+        "standard": "Per car"
+      }
+    },
+    "baby": {
+      "name": "Baby & kids gear",
+      "short": "Prams, car seats & travel cots",
+      "description": "Safe deep cleaning for child car seats, prams and travel cots, using products suitable for babies.",
+      "benefit1": "Baby-safe products only",
+      "benefit2": "Straps, frames and folds cleaned",
+      "benefit3": "Removes bacteria and allergens",
+      "tiers": {
+        "carSeat": "Car seats",
+        "stroller": "Prams & strollers",
+        "travelCot": "Travel cots"
+      }
+    },
+    "carpet": {
+      "name": "Rugs & carpets",
+      "short": "Rugs & fitted carpets",
+      "description": "Deep cleaning for rugs and fitted carpets, charged by the square metre. We also handle delicate Persian and handmade pieces.",
+      "benefit1": "Cleaned right through the pile",
+      "benefit2": "Special care for Persian and handmade rugs",
+      "benefit3": "Colours brought back",
+      "tiers": {
+        "standard": "Standard rugs & carpets",
+        "persian": "Persian & handmade"
+      }
+    },
+    "leather": {
+      "name": "Leather sofas",
+      "short": "Leather & faux leather",
+      "description": "Specialist cleaning and care for leather sofas. We clean, condition and protect the hide so it doesn't dry out and crack.",
+      "benefit1": "Cleaned without damaging the hide",
+      "benefit2": "Conditioned and protected",
+      "benefit3": "Priced once we've seen the piece",
+      "tiers": {
+        "standard": "Quoted after we see it"
+      }
+    },
+    "radiator": {
+      "name": "Radiators",
+      "short": "Heating radiators",
+      "description": "Cleaning for heating radiators, inside and out. Clears the packed-in dust that burns and smells the moment the heating goes on.",
+      "benefit1": "Cleaned inside the panels, not just the front",
+      "benefit2": "Better heating performance",
+      "benefit3": "Cleaner air at home",
+      "tiers": {
+        "standard": "Quoted after we see it"
+      }
     }
   },
+  "pricing": {
+    "pageTitle": "Price list",
+    "pageSubtitle": "Clear prices, no surprises. We confirm the final figure with you before any work starts.",
+    "badge": "New price list",
+    "thanksTitle": "Thank you for your trust",
+    "thanksBody": "We keep bringing quality, freshness and care to every job we take on.",
+    "notesTitle": "Good to know",
+    "note1": "Prices are for cleaning at your place and exclude VAT where it applies.",
+    "note2": "Where a price says \"from\", the final figure depends on the size and condition of the piece.",
+    "note3": "For leather sofas and radiators we quote once we've seen a photo or the piece itself.",
+    "note4": "Get in touch for a better rate on larger quantities or several services together.",
+    "ctaTitle": "Not sure what you need?",
+    "ctaBody": "Send us a photo on WhatsApp and we'll come back with an exact price the same day.",
+    "calculatorCta": "Work out your total"
+  },
   "quote": {
-    "pageTitle": "Cost Calculator",
-    "pageSubtitle": "Select services and quantity for an estimated cost",
-    "selectServices": "Select Services",
+    "pageTitle": "Price calculator",
+    "pageSubtitle": "Pick your services and quantities to see an estimated cost straight away.",
+    "badge": "Free estimate",
+    "selectServices": "Choose your services",
+    "chooseType": "Choose a type",
     "quantity": "Quantity",
-    "vehicles": "Vehicles",
-    "seats": "Sofa seats",
-    "mattresses": "Mattresses",
-    "units": "Units",
-    "sqm": "Carpet sqm",
-    "pieces": "Pieces",
-    "chairs": "Chairs",
-    "items": "Items",
-    "summary": "Quote Summary",
-    "estimatedCost": "Estimated Cost",
-    "disclaimer": "Prices are indicative. Final price may vary depending on condition.",
-    "proceedToBook": "Proceed to Booking",
-    "contactWhatsApp": "Contact via WhatsApp",
-    "noServicesSelected": "Select at least one service",
+    "summary": "Your estimate",
+    "estimatedCost": "Estimated cost",
+    "disclaimer": "This is an estimate. The final price is confirmed before we start and depends on size and condition.",
+    "onRequestNote": "One or more of your choices is quoted after we see it, so it isn't included in the total.",
+    "proceedToBook": "Continue to booking",
+    "contactWhatsApp": "Send this on WhatsApp",
+    "noServicesSelected": "Choose at least one service to see a price",
     "total": "Total",
     "subtotal": "Subtotal",
-    "selected": "selected",
-    "servicesCount": "services",
-    "itemsCount": "items",
-    "needHelp": "Need help with your quote?"
+    "selected": "{count, plural, one {selected} other {selected}}",
+    "servicesCount": "{count, plural, one {service} other {services}}",
+    "itemsCount": "{count, plural, one {item} other {items}}",
+    "needHelp": "Need a hand with your quote?",
+    "viewSummary": "View summary",
+    "whatsappIntro": "Hello! I'd like a quote for:",
+    "whatsappTotal": "Estimated cost",
+    "whatsappOnRequest": "And I'd like an estimate for:"
   },
   "book": {
-    "from": "from",
-    "pageTitle": "Book Appointment",
-    "pageSubtitle": "Book your cleaning in 4 simple steps",
+    "pageTitle": "Book an appointment",
+    "pageSubtitle": "Book your clean in four simple steps.",
     "step1": "Service",
     "step2": "Date",
     "step3": "Details",
     "step4": "Confirm",
-    "selectServices": "Select Services",
-    "selectDate": "Select Date",
-    "selectTime": "Select Time",
-    "morning": "Morning (09:00-12:00)",
-    "afternoon": "Afternoon (12:00-15:00)",
-    "evening": "Evening (15:00-18:00)",
-    "contactDetails": "Contact Details",
-    "fullName": "Full Name",
+    "from": "from",
+    "selectServices": "Choose your services",
+    "selectDate": "Choose a date",
+    "selectTime": "Choose a time",
+    "morning": "Morning (09:00–12:00)",
+    "midday": "Midday (12:00–15:00)",
+    "afternoon": "Afternoon (15:00–18:00)",
+    "contactDetails": "Your details",
+    "fullName": "Full name",
     "phone": "Phone",
     "email": "Email (optional)",
-    "address": "Address / Area",
+    "address": "Address / area",
     "notes": "Notes (optional)",
-    "confirmation": "Booking Confirmation",
-    "confirmationText": "Review your details before submitting",
+    "notesPlaceholder": "E.g. five-seat corner sofa, coffee stain on one cushion",
+    "confirmation": "Confirm your booking",
+    "confirmationText": "Check your details before you send them.",
     "selectedServices": "Services",
     "selectedDate": "Date",
     "selectedTime": "Time",
@@ -198,43 +369,52 @@
     "submit": "Send via WhatsApp",
     "next": "Next",
     "back": "Back",
-    "edit": "Edit",
+    "edit": "Change",
+    "summaryTitle": "Your booking",
+    "summaryEmpty": "Choose your services to see a summary",
+    "whatsappTitle": "Appointment request — Krystallo Cleaning",
     "success": {
-      "title": "Booking Sent!",
-      "message": "WhatsApp will open to complete your booking.",
-      "bookAnother": "New Booking"
+      "title": "Booking sent!",
+      "message": "We've opened WhatsApp so you can send your booking. We'll reply to confirm availability.",
+      "bookAnother": "Make another booking"
     },
     "validation": {
-      "selectService": "Select at least one service",
-      "selectDate": "Select a date",
-      "selectTime": "Select a time",
-      "nameRequired": "Name is required",
-      "phoneRequired": "Phone is required"
+      "selectService": "Choose at least one service",
+      "selectDate": "Choose a date",
+      "selectTime": "Choose a time",
+      "nameRequired": "Please enter your name",
+      "phoneRequired": "Please enter a valid phone number"
     },
-    "availabilityNote": "We will confirm availability"
+    "availabilityNote": "We'll message you to confirm availability"
   },
   "contact": {
-    "pageTitle": "Contact",
-    "pageSubtitle": "We're here for any questions",
+    "pageTitle": "Contact us",
+    "pageSubtitle": "Send us a photo and we'll come back with a price the same day.",
+    "badge": "Contact",
     "phone": "Phone",
     "whatsapp": "WhatsApp",
-    "location": "Location",
-    "locationValue": "Cyprus",
-    "hours": "Working Hours",
-    "hoursValue": "Mon - Sat: 08:00 - 19:00",
-    "formTitle": "Send Us a Message",
+    "whatsappValue": "Reply within 30 minutes",
+    "location": "Service area",
+    "locationValue": "All of Cyprus",
+    "hours": "Opening hours",
+    "hoursValue": "Monday – Saturday, 08:00–19:00",
+    "formTitle": "Send us a message",
+    "formSubtitle": "Leave your details and we'll get back to you on WhatsApp.",
     "name": "Name",
     "phonePlaceholder": "Phone",
     "emailPlaceholder": "Email (optional)",
     "message": "Message",
-    "send": "Send via WhatsApp"
+    "messagePlaceholder": "Tell us what needs cleaning",
+    "send": "Send via WhatsApp",
+    "whatsappTitle": "Message from the website"
   },
   "footer": {
     "brand": "Krystallo Cleaning Services",
-    "tagline": "Professional biological cleaning in Cyprus",
+    "tagline": "Professional deep cleaning for sofas, mattresses, rugs and car interiors, anywhere in Cyprus.",
     "services": "Services",
-    "quickLinks": "Quick Links",
+    "quickLinks": "Quick links",
     "contactInfo": "Contact",
+    "hours": "Mon – Sat, 08:00–19:00",
     "rights": "All rights reserved"
   }
 }

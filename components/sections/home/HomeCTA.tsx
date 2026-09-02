@@ -3,95 +3,81 @@
 import Image from 'next/image'
 import { useTranslations } from 'next-intl'
 import { motion } from 'framer-motion'
-import { Phone, MessageCircle, Sparkles } from 'lucide-react'
+import { MessageCircle, Phone, Sparkles } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { AnimatedSection } from '@/components/shared/AnimatedSection'
 import { generateWhatsAppLink } from '@/lib/services'
+import { site } from '@/lib/site'
+
+const sparklePositions = [
+  { top: '12%', left: '6%', delay: 0 },
+  { top: '22%', right: '9%', delay: 1 },
+  { bottom: '16%', left: '13%', delay: 2 },
+  { bottom: '26%', right: '16%', delay: 0.6 },
+]
 
 export function HomeCTA() {
   const t = useTranslations('homepage.cta')
+  const tc = useTranslations('common')
 
   return (
-    <section className="relative py-24 lg:py-32 overflow-hidden">
-      {/* Gradient background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-navy-dark via-navy to-navy-dark" />
+    <section className="relative overflow-hidden py-20 lg:py-28">
+      <div className="absolute inset-0 bg-gradient-to-br from-ink-900 via-crystal-900 to-ink-950" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(110,207,225,0.18),transparent_60%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,rgba(38,120,209,0.25),transparent_60%)]" />
 
-      {/* Decorative elements */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(14,165,233,0.15),transparent_60%)]" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,rgba(14,165,233,0.1),transparent_60%)]" />
-
-      {/* Sparkle animations */}
-      {[
-        { top: '10%', left: '5%', delay: 0 },
-        { top: '20%', right: '8%', delay: 1 },
-        { bottom: '15%', left: '12%', delay: 2 },
-        { bottom: '25%', right: '15%', delay: 0.5 },
-      ].map((pos, i) => (
+      {sparklePositions.map((pos, i) => (
         <motion.div
           key={i}
-          animate={{ opacity: [0.1, 0.4, 0.1], scale: [0.8, 1.1, 0.8] }}
-          transition={{ duration: 3, repeat: Infinity, delay: pos.delay }}
-          className="absolute text-crystal/20"
+          aria-hidden
+          animate={{ opacity: [0.1, 0.4, 0.1], scale: [0.85, 1.1, 0.85] }}
+          transition={{ duration: 3.5, repeat: Infinity, delay: pos.delay }}
+          className="absolute text-aqua-300/30"
           style={pos}
         >
           <Sparkles className="h-5 w-5" />
         </motion.div>
       ))}
 
-      <div className="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-        >
-          <div className="mb-6">
-            <Image
-              src="/images/logo.png"
-              alt="Krystallo Cleaning Services"
-              width={160}
-              height={50}
-              className="h-14 w-auto brightness-0 invert opacity-60 mx-auto"
-            />
-          </div>
+      <div className="container-page relative">
+        <AnimatedSection className="mx-auto max-w-2xl text-center">
+          <Image
+            src="/images/logo-white.png"
+            alt={site.name}
+            width={240}
+            height={145}
+            className="mx-auto h-12 w-auto opacity-70"
+          />
 
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mb-4 tracking-tight leading-tight">
+          <h2 className="mt-7 font-display text-3xl font-extrabold leading-tight tracking-tight text-white sm:text-4xl lg:text-5xl">
             {t('title')}
           </h2>
-          <p className="text-crystal-200/80 text-lg mb-10 max-w-md mx-auto">
+          <p className="mx-auto mt-4 max-w-lg text-base leading-relaxed text-white/70 sm:text-lg">
             {t('subtitle')}
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <a href="tel:+35796653034">
-              <Button
-                size="lg"
-                className="w-full sm:w-auto bg-white text-navy-dark hover:bg-crystal-50 text-base shadow-xl shadow-black/10 font-semibold group"
-              >
-                <Phone className="h-5 w-5 mr-2 text-crystal" />
-                {t('phone')} — 96653034
+          <div className="mt-9 flex flex-col justify-center gap-3 sm:flex-row">
+            <a href={`tel:${site.phoneE164}`} className="sm:w-auto">
+              <Button variant="inverse" size="lg" className="w-full">
+                <Phone className="h-5 w-5 text-crystal-600" aria-hidden />
+                {t('phone')} — {tc('phone')}
               </Button>
             </a>
             <a
-              href={generateWhatsAppLink('Γεια σας! Ενδιαφέρομαι για βιολογικό καθαρισμό.')}
+              href={generateWhatsAppLink(tc('defaultWhatsAppMessage'))}
               target="_blank"
               rel="noopener noreferrer"
+              className="sm:w-auto"
             >
-              <Button
-                variant="whatsapp"
-                size="lg"
-                className="w-full sm:w-auto text-base shadow-xl shadow-black/10"
-              >
-                <MessageCircle className="h-5 w-5 mr-2" />
+              <Button variant="whatsapp" size="lg" className="w-full">
+                <MessageCircle className="h-5 w-5" aria-hidden />
                 {t('whatsapp')}
               </Button>
             </a>
           </div>
 
-          {/* Trust line */}
-          <p className="mt-8 text-sm text-white/30">
-            {t('trustLine')}
-          </p>
-        </motion.div>
+          <p className="mt-8 text-sm text-white/40">{t('trustLine')}</p>
+        </AnimatedSection>
       </div>
     </section>
   )

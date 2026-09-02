@@ -4,33 +4,180 @@
 
 @layer base {
   :root {
-    --background: 210 40% 98%;
-    --foreground: 222.2 47.4% 11.2%;
+    --background: 210 40% 99%;
+    --foreground: 213 62% 15%;
     --card: 0 0% 100%;
-    --card-foreground: 222.2 47.4% 11.2%;
+    --card-foreground: 213 62% 15%;
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 47.4% 11.2%;
-    --primary: 199 89% 48%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 199 89% 48%;
+    --popover-foreground: 213 62% 15%;
+    --primary: 211 69% 48%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 210 40% 96.5%;
+    --secondary-foreground: 213 62% 15%;
+    --muted: 210 40% 96.5%;
+    --muted-foreground: 213 25% 46%;
+    --accent: 210 40% 96.5%;
+    --accent-foreground: 213 62% 15%;
+    --destructive: 0 78% 55%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 213 30% 91%;
+    --input: 213 30% 88%;
+    --ring: 211 69% 48%;
     --radius: 0.75rem;
+
+    /* Height of the fixed site header — pages offset their content by this */
+    --header-h: 4.75rem;
+  }
+
+  @media (min-width: 1024px) {
+    :root {
+      --header-h: 8rem;
+    }
   }
 
   * {
     @apply border-border;
   }
 
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+
   body {
-    @apply bg-background text-foreground font-sans antialiased;
+    @apply bg-background text-body font-sans antialiased;
+    font-synthesis-weight: none;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* ── Greek-first typography ───────────────────────────────────────────
+     Greek lowercase carries accents (ά, έ, ή, ί, ό, ύ, ώ) and a diaeresis
+     that collide with tight leading, and Greek capitals sit taller than
+     Latin ones. Give Greek a touch more line-height and slightly looser
+     word spacing so accents breathe.                                     */
+  :lang(el) {
+    line-height: 1.65;
+    word-spacing: 0.01em;
+  }
+
+  /* `:not([class*="leading-"])` keeps this from overriding an explicit
+     leading utility, which would otherwise win on specificity. */
+  :lang(el) :is(h1, h2, h3, h4):not([class*='leading-']) {
+    line-height: 1.25;
+  }
+
+  :lang(el) :is(h1, h2, h3, h4) {
+    letter-spacing: -0.005em; /* Greek needs far less negative tracking than Latin */
+  }
+
+  h1, h2, h3, h4 {
+    @apply font-display text-ink-900;
+    text-wrap: balance;
+    letter-spacing: -0.02em;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background-color: theme('colors.crystal.200');
+    color: theme('colors.ink.900');
+  }
+
+  :focus-visible {
+    outline: 2px solid theme('colors.crystal.500');
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  /* Small capitalised label above a section heading.
+     Greek is NEVER set in all-caps here: CSS `text-transform: uppercase`
+     keeps the accents (ΥΠΗΡΕΣΊΕΣ), which is wrong in Greek orthography —
+     accents are dropped in real Greek capitals. So Greek gets sentence
+     case with a little tracking instead. */
+  .eyebrow {
+    @apply inline-flex items-center gap-1.5 rounded-full bg-crystal-50 px-3.5 py-1.5 text-xs font-semibold text-crystal-700 ring-1 ring-inset ring-crystal-100;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  :lang(el) .eyebrow {
+    text-transform: none;
+    letter-spacing: 0.03em;
+    @apply text-[13px];
+  }
+
+  .header-offset {
+    padding-top: var(--header-h);
+  }
+
+  /* Lets a hero bleed its background up behind the translucent header */
+  .header-bleed {
+    margin-top: calc(var(--header-h) * -1);
+    padding-top: var(--header-h);
+  }
+
+  .section {
+    @apply py-16 sm:py-20 lg:py-24;
+  }
+
+  /* Sections that follow a page header band need less air above them */
+  .section-below-header {
+    @apply pb-16 pt-10 sm:pb-20 sm:pt-14 lg:pb-24 lg:pt-16;
+  }
+
+  .container-page {
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+
+  .heading-1 {
+    @apply font-display text-[2rem] font-extrabold leading-[1.12] text-ink-900 sm:text-5xl lg:text-[3.25rem];
+  }
+
+  .heading-2 {
+    @apply font-display text-[1.75rem] font-extrabold leading-[1.15] text-ink-900 sm:text-4xl;
+  }
+
+  .lead {
+    @apply text-base leading-relaxed text-ink-500 sm:text-lg;
+  }
+
+  .surface {
+    @apply rounded-2xl border border-ink-100 bg-white shadow-card;
+  }
+}
+
+@layer utilities {
+  .text-gradient-brand {
+    @apply bg-gradient-to-r from-crystal-600 via-crystal-500 to-aqua-400 bg-clip-text text-transparent;
+  }
+
+  /* Keeps the fixed bottom action bar clear of the iOS home indicator */
+  .safe-bottom {
+    padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+  }
+
+  .pb-safe-bar {
+    padding-bottom: calc(4.75rem + env(safe-area-inset-bottom));
+  }
+
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

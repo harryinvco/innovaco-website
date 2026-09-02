@@ -1,165 +1,250 @@
 'use client'
 
-import { useState, useEffect, useMemo, useRef } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
-import { motion, AnimatePresence } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
+import { addDays, format, isSunday } from 'date-fns'
+import { el, enUS } from 'date-fns/locale'
 import {
-  Car,
-  Sofa,
-  BedDouble,
-  Heater,
-  SquareDashedBottom,
-  Armchair,
-  Baby,
+  CalendarDays,
   Check,
   ChevronLeft,
   ChevronRight,
-  MessageCircle,
-  Sun,
-  CloudSun,
-  Sunset,
-  Sparkles,
-  CalendarDays,
   Clock,
-  User,
-  Phone,
-  Mail,
-  MapPin,
-  FileText,
-  Send,
+  CloudSun,
+  MessageCircle,
+  Minus,
   PartyPopper,
-  Pencil,
+  Plus,
   ShieldCheck,
+  Sparkles,
+  Sun,
+  Sunset,
+  User,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import { services as serviceData, generateWhatsAppLink } from '@/lib/services'
+import { ServiceIcon } from '@/components/shared/ServiceIcon'
+import {
+  calculateEstimate,
+  generateWhatsAppLink,
+  getService,
+  getTier,
+  services as serviceData,
+  type QuoteSelection,
+} from '@/lib/services'
+import {
+  euro,
+  lineTotalText,
+  servicePriceText,
+  tierPriceCompact,
+} from '@/lib/price'
 import { cn } from '@/lib/utils'
-import { addDays, format, isToday, isSunday } from 'date-fns'
-import { el, enUS } from 'date-fns/locale'
 
-const iconMap: Record<string, React.ElementType> = {
-  Car, Sofa, BedDouble, Heater, SquareDashedBottom,
-  Armchair, ArmchairIcon: Armchair, Baby,
-}
-
-const timeSlotConfig = [
-  { key: 'morning' as const, icon: Sun, hours: '09:00 – 12:00' },
-  { key: 'afternoon' as const, icon: CloudSun, hours: '12:00 – 15:00' },
-  { key: 'evening' as const, icon: Sunset, hours: '15:00 – 18:00' },
-]
+const timeSlots = [
+  { key: 'morning', icon: Sun, hours: '09:00 – 12:00' },
+  { key: 'midday', icon: CloudSun, hours: '12:00 – 15:00' },
+  { key: 'afternoon', icon: Sunset, hours: '15:00 – 18:00' },
+] as const
 
 const stepVariants = {
-  enter: (dir: number) => ({ x: dir > 0 ? 60 : -60, opacity: 0 }),
+  enter: (dir: number) => ({ x: dir > 0 ? 48 : -48, opacity: 0 }),
   center: { x: 0, opacity: 1 },
-  exit: (dir: number) => ({ x: dir > 0 ? -60 : 60, opacity: 0 }),
+  exit: (dir: number) => ({ x: dir > 0 ? -48 : 48, opacity: 0 }),
+}
+
+interface Line {
+  tierId: string
+  quantity: number
 }
 
 export function BookClient() {
   const t = useTranslations('book')
+  const tRoot = useTranslations()
+  const tQuote = useTranslations('quote')
   const tServices = useTranslations('services')
   const locale = useLocale()
   const searchParams = useSearchParams()
-  const dateScrollRef = useRef<HTMLDivElement>(null)
-  const dateFnsLocale = locale === 'el' ? el : enUS
+  const dateLocale = locale === 'el' ? el : enUS
 
   const [step, setStep] = useState(1)
   const [direction, setDirection] = useState(1)
-  const [selectedServices, setSelectedServices] = useState<string[]>([])
+  const [lines, setLines] = useState<Map<string, Line>>(new Map())
   const [selectedDate, setSelectedDate] = useState('')
   const [selectedTime, setSelectedTime] = useState('')
-  const [formData, setFormData] = useState({
-    fullName: '', phone: '', email: '', address: '', notes: '',
+  const [form, setForm] = useState({
+    fullName: '',
+    phone: '',
+    email: '',
+    address: '',
+    notes: '',
   })
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [submitted, setSubmitted] = useState(false)
 
+  // Carried over from the calculator: ?s=mattress:double:2
   useEffect(() => {
-    const params = searchParams.getAll('s')
-    if (params.length > 0) {
-      const serviceIds = params.map((p) => p.split(':')[0])
-      setSelectedServices(serviceIds.filter((id) => serviceData.find((s) => s.id === id)))
+    const raw = searchParams.getAll('s')
+    if (raw.length === 0) return
+    const next = new Map<string, Line>()
+    for (const entry of raw) {
+      const [serviceId, tierId, qty] = entry.split(':')
+      const service = getService(serviceId)
+      if (!service) continue
+      next.set(serviceId, {
+        tierId: getTier(service, tierId).id,
+        quantity: Math.min(
+          service.maxQuantity,
+          Math.max(1, Number.parseInt(qty ?? '1', 10) || 1)
+        ),
+      })
     }
+    if (next.size > 0) setLines(next)
   }, [searchParams])
 
   const availableDates = useMemo(() => {
-    const dates = []
     const today = new Date()
+    const dates: Date[] = []
     for (let i = 1; i <= 21; i++) {
-      const d = addDays(today, i)
-      if (!isSunday(d)) dates.push(d)
+      const day = addDays(today, i)
+      if (!isSunday(day)) dates.push(day)
     }
     return dates
   }, [])
 
   const toggleService = (id: string) => {
-    setSelectedServices((prev) =>
-      prev.includes(id) ? prev.filter((s) => s !== id) : [...prev, id]
-    )
+    const service = getService(id)
+    if (!service) return
+    setLines((prev) => {
+      const next = new Map(prev)
+      if (next.has(id)) next.delete(id)
+      else next.set(id, { tierId: service.tiers[0].id, quantity: 1 })
+      return next
+    })
     setErrors((e) => ({ ...e, services: '' }))
   }
 
+  const setTier = (id: string, tierId: string) =>
+    setLines((prev) => {
+      const next = new Map(prev)
+      const line = next.get(id)
+      if (line) next.set(id, { ...line, tierId })
+      return next
+    })
+
+  const changeQuantity = (id: string, delta: number) => {
+    const service = getService(id)
+    if (!service) return
+    setLines((prev) => {
+      const next = new Map(prev)
+      const line = next.get(id)
+      if (!line) return prev
+      next.set(id, {
+        ...line,
+        quantity: Math.max(
+          1,
+          Math.min(service.maxQuantity, line.quantity + delta)
+        ),
+      })
+      return next
+    })
+  }
+
+  const selections: QuoteSelection[] = useMemo(
+    () =>
+      Array.from(lines.entries()).map(([serviceId, line]) => ({
+        serviceId,
+        tierId: line.tierId,
+        quantity: line.quantity,
+      })),
+    [lines]
+  )
+
+  const estimate = useMemo(() => calculateEstimate(selections), [selections])
+
+  const totalText = useMemo(() => {
+    if (estimate.min === 0 && estimate.max === 0) {
+      return estimate.hasOnRequest ? tRoot('price.onRequestShort') : euro(0)
+    }
+    const range =
+      estimate.min === estimate.max
+        ? euro(estimate.min)
+        : `${euro(estimate.min)} – ${euro(estimate.max)}`
+    return estimate.startingFrom ? `${tRoot('price.from')} ${range}` : range
+  }, [estimate, tRoot])
+
   const validateStep = (): boolean => {
-    const newErrors: Record<string, string> = {}
-    if (step === 1 && selectedServices.length === 0)
-      newErrors.services = t('validation.selectService')
+    const next: Record<string, string> = {}
+    if (step === 1 && lines.size === 0)
+      next.services = t('validation.selectService')
     if (step === 2) {
-      if (!selectedDate) newErrors.date = t('validation.selectDate')
-      if (!selectedTime) newErrors.time = t('validation.selectTime')
+      if (!selectedDate) next.date = t('validation.selectDate')
+      if (!selectedTime) next.time = t('validation.selectTime')
     }
     if (step === 3) {
-      if (!formData.fullName.trim()) newErrors.fullName = t('validation.nameRequired')
-      if (!formData.phone.trim() || formData.phone.length < 8)
-        newErrors.phone = t('validation.phoneRequired')
+      if (!form.fullName.trim()) next.fullName = t('validation.nameRequired')
+      if (form.phone.replace(/\D/g, '').length < 8)
+        next.phone = t('validation.phoneRequired')
     }
-    setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
+    setErrors(next)
+    return Object.keys(next).length === 0
   }
 
   const goTo = (target: number) => {
     if (target < step || validateStep()) {
       setDirection(target > step ? 1 : -1)
       setStep(target)
+      if (typeof window !== 'undefined') {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      }
     }
   }
-  const nextStep = () => goTo(step + 1)
-  const prevStep = () => goTo(step - 1)
 
   const handleSubmit = () => {
-    const serviceNames = selectedServices
-      .map((id) => {
-        const s = serviceData.find((sd) => sd.id === id)
-        return s ? tServices(`${s.id}.name`) : id
-      })
-      .join(', ')
+    const serviceLines = selections.map((sel) => {
+      const service = getService(sel.serviceId)!
+      const tier = getTier(service, sel.tierId)
+      const tierName =
+        service.tiers.length > 1
+          ? ` (${tServices(`${service.id}.tiers.${tier.id}`)})`
+          : ''
+      return `• ${tServices(`${service.id}.name`)}${tierName} x${sel.quantity} — ${lineTotalText(tier, sel.quantity, tRoot)}`
+    })
 
     const message = [
-      `Κράτηση Ραντεβού - Krystallo Cleaning`,
-      ``,
-      `Υπηρεσίες: ${serviceNames}`,
-      `Ημερομηνία: ${format(new Date(selectedDate), 'EEEE d MMMM yyyy', { locale: el })}`,
-      `Ώρα: ${t(selectedTime as any)}`,
-      ``,
-      `Όνομα: ${formData.fullName}`,
-      `Τηλέφωνο: ${formData.phone}`,
-      formData.email ? `Email: ${formData.email}` : '',
-      formData.address ? `Διεύθυνση: ${formData.address}` : '',
-      formData.notes ? `Σημειώσεις: ${formData.notes}` : '',
-    ].filter(Boolean).join('\n')
+      t('whatsappTitle'),
+      '',
+      `${t('selectedServices')}:`,
+      ...serviceLines,
+      '',
+      `${tQuote('estimatedCost')}: ${totalText}`,
+      '',
+      `${t('selectedDate')}: ${format(new Date(selectedDate), 'EEEE d MMMM yyyy', { locale: dateLocale })}`,
+      `${t('selectedTime')}: ${t(selectedTime as 'morning')}`,
+      '',
+      `${t('fullName')}: ${form.fullName}`,
+      `${t('phone')}: ${form.phone}`,
+      form.email ? `Email: ${form.email}` : '',
+      form.address ? `${t('address')}: ${form.address}` : '',
+      form.notes ? `${t('notes')}: ${form.notes}` : '',
+    ]
+      .filter(Boolean)
+      .join('\n')
 
-    window.open(generateWhatsAppLink(message), '_blank')
+    window.open(generateWhatsAppLink(message), '_blank', 'noopener,noreferrer')
     setSubmitted(true)
   }
 
-  const resetForm = () => {
+  const reset = () => {
     setStep(1)
     setDirection(1)
-    setSelectedServices([])
+    setLines(new Map())
     setSelectedDate('')
     setSelectedTime('')
-    setFormData({ fullName: '', phone: '', email: '', address: '', notes: '' })
+    setForm({ fullName: '', phone: '', email: '', address: '', notes: '' })
     setErrors({})
     setSubmitted(false)
   }
@@ -171,143 +256,110 @@ export function BookClient() {
     { label: t('step4'), icon: ShieldCheck },
   ]
 
-  // Completion percentage for the progress ring
-  const progress = ((step - 1) / 3) * 100
-
   if (submitted) {
     return (
-      <section className="pt-28 pb-20 min-h-[80vh] flex items-center">
-        <div className="max-w-lg mx-auto px-4 text-center">
-          <motion.div
+      <section className="flex min-h-[70vh] items-center py-16">
+        <div className="container-page max-w-lg text-center">
+          <motion.span
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ type: 'spring', stiffness: 200, damping: 15 }}
-            className="w-24 h-24 rounded-full bg-[#25D366]/10 flex items-center justify-center mx-auto mb-6"
+            className="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-whatsapp/10"
           >
-            <PartyPopper className="h-12 w-12 text-[#25D366]" />
-          </motion.div>
-          <motion.h2
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="text-2xl font-bold text-navy-dark mb-2"
-          >
-            {t('success.title')}
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="text-body mb-8"
-          >
-            {t('success.message')}
-          </motion.p>
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-          >
-            <Button onClick={resetForm} variant="secondary" size="lg">
-              {t('success.bookAnother')}
-            </Button>
-          </motion.div>
+            <PartyPopper className="h-12 w-12 text-whatsapp" aria-hidden />
+          </motion.span>
+          <h1 className="heading-2">{t('success.title')}</h1>
+          <p className="lead mt-3">{t('success.message')}</p>
+          <Button onClick={reset} variant="outline" size="lg" className="mt-8">
+            {t('success.bookAnother')}
+          </Button>
         </div>
       </section>
     )
   }
 
+  const fields = [
+    { name: 'fullName', label: t('fullName'), required: true, autoComplete: 'name', type: 'text' },
+    { name: 'phone', label: t('phone'), required: true, autoComplete: 'tel', type: 'tel' },
+    { name: 'email', label: t('email'), required: false, autoComplete: 'email', type: 'email' },
+    { name: 'address', label: t('address'), required: false, autoComplete: 'street-address', type: 'text' },
+  ] as const
+
   return (
-    <section className="pt-24 pb-20 min-h-screen bg-gradient-to-br from-slate-50 via-white to-crystal-50/30">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-8"
-        >
-          <h1 className="text-2xl sm:text-3xl font-bold text-navy-dark">
-            {t('pageTitle')}
-          </h1>
-          <p className="mt-1 text-body text-sm">{t('pageSubtitle')}</p>
-        </motion.div>
-
-        {/* Stepper — pill style with animated connector */}
-        <div className="relative mb-10">
-          {/* Background track */}
-          <div className="absolute top-5 left-[10%] right-[10%] h-0.5 bg-slate-200 hidden sm:block" />
-          {/* Active track */}
-          <motion.div
-            className="absolute top-5 left-[10%] h-0.5 bg-crystal hidden sm:block"
-            initial={false}
-            animate={{ width: `${(Math.min(step - 1, 3) / 3) * 80}%` }}
-            transition={{ duration: 0.4, ease: 'easeInOut' }}
-          />
-
-          <div className="flex justify-between relative">
-            {steps.map((s, i) => {
-              const StepIcon = s.icon
-              const isComplete = step > i + 1
-              const isCurrent = step === i + 1
-              const isClickable = i + 1 < step
-
-              return (
-                <button
-                  key={i}
-                  onClick={() => isClickable && goTo(i + 1)}
-                  disabled={!isClickable && !isCurrent}
-                  className={cn(
-                    'flex flex-col items-center gap-1.5 group relative z-10',
-                    isClickable && 'cursor-pointer'
-                  )}
-                >
-                  <motion.div
-                    layout
-                    className={cn(
-                      'w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300',
-                      isComplete
-                        ? 'bg-crystal text-white shadow-md shadow-crystal/25'
-                        : isCurrent
-                        ? 'bg-crystal text-white shadow-lg shadow-crystal/30 ring-4 ring-crystal/15'
-                        : 'bg-white border-2 border-slate-200 text-slate-400'
-                    )}
-                  >
-                    {isComplete ? (
-                      <motion.div
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        transition={{ type: 'spring', stiffness: 300 }}
-                      >
-                        <Check className="h-5 w-5" />
-                      </motion.div>
-                    ) : (
-                      <StepIcon className="h-4 w-4" />
-                    )}
-                  </motion.div>
-                  <span
-                    className={cn(
-                      'text-[11px] font-medium hidden sm:block transition-colors',
-                      isCurrent ? 'text-crystal' : isComplete ? 'text-navy-dark' : 'text-slate-400'
-                    )}
-                  >
-                    {s.label}
-                  </span>
-                  {/* Selection count badge */}
-                  {i === 0 && selectedServices.length > 0 && !isCurrent && (
-                    <span className="absolute -top-1 -right-1 w-5 h-5 bg-crystal text-white text-[10px] font-bold rounded-full flex items-center justify-center">
-                      {selectedServices.length}
-                    </span>
-                  )}
-                </button>
-              )
-            })}
-          </div>
+    <section className="min-h-screen bg-gradient-to-b from-crystal-50/60 via-white to-white py-12">
+      <div className="container-page max-w-5xl">
+        <div className="text-center">
+          <h1 className="heading-2">{t('pageTitle')}</h1>
+          <p className="lead mt-2">{t('pageSubtitle')}</p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Main form area */}
+        {/* Stepper */}
+        <div className="relative mt-10">
+          <div className="absolute left-[12%] right-[12%] top-5 hidden h-0.5 bg-ink-100 sm:block" />
+          <motion.div
+            className="absolute left-[12%] top-5 hidden h-0.5 bg-crystal-500 sm:block"
+            initial={false}
+            animate={{ width: `${((step - 1) / 3) * 76}%` }}
+            transition={{ duration: 0.35, ease: 'easeInOut' }}
+          />
+          <ol className="relative flex justify-between">
+            {steps.map((s, i) => {
+              const Icon = s.icon
+              const complete = step > i + 1
+              const current = step === i + 1
+              const clickable = i + 1 < step
+              return (
+                <li key={s.label}>
+                  <button
+                    type="button"
+                    onClick={() => clickable && goTo(i + 1)}
+                    disabled={!clickable}
+                    aria-current={current ? 'step' : undefined}
+                    className="relative z-10 flex flex-col items-center gap-1.5"
+                  >
+                    <span
+                      className={cn(
+                        'flex h-10 w-10 items-center justify-center rounded-full transition-all duration-300',
+                        complete
+                          ? 'bg-crystal-500 text-white shadow-brand'
+                          : current
+                            ? 'bg-crystal-500 text-white shadow-brand ring-4 ring-crystal-100'
+                            : 'border-2 border-ink-200 bg-white text-ink-300'
+                      )}
+                    >
+                      {complete ? (
+                        <Check className="h-5 w-5" aria-hidden />
+                      ) : (
+                        <Icon className="h-4 w-4" aria-hidden />
+                      )}
+                    </span>
+                    <span
+                      className={cn(
+                        'hidden text-[11px] font-medium sm:block',
+                        current
+                          ? 'text-crystal-700'
+                          : complete
+                            ? 'text-ink-800'
+                            : 'text-ink-300'
+                      )}
+                    >
+                      {s.label}
+                    </span>
+                    {i === 0 && lines.size > 0 && !current && (
+                      <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-aqua-400 text-[10px] font-bold text-white">
+                        {lines.size}
+                      </span>
+                    )}
+                  </button>
+                </li>
+              )
+            })}
+          </ol>
+        </div>
+
+        <div className="mt-8 grid gap-5 lg:grid-cols-3">
           <div className="lg:col-span-2">
-            <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-5 sm:p-8 min-h-[420px]">
+            <div className="min-h-[26rem] rounded-2xl border border-ink-100 bg-white p-5 shadow-card sm:p-8">
               <AnimatePresence mode="wait" custom={direction}>
                 <motion.div
                   key={step}
@@ -316,424 +368,410 @@ export function BookClient() {
                   initial="enter"
                   animate="center"
                   exit="exit"
-                  transition={{ duration: 0.25, ease: 'easeInOut' }}
+                  transition={{ duration: 0.22, ease: 'easeInOut' }}
                 >
-                  {/* ─── Step 1: Services ─── */}
+                  {/* Step 1 — services */}
                   {step === 1 && (
                     <div>
-                      <div className="flex items-center gap-2 mb-5">
-                        <div className="w-8 h-8 rounded-lg bg-crystal/10 flex items-center justify-center">
-                          <Sparkles className="h-4 w-4 text-crystal" />
-                        </div>
-                        <h2 className="text-lg font-semibold text-navy-dark">
-                          {t('selectServices')}
-                        </h2>
-                      </div>
+                      <h2 className="mb-5 font-display text-lg font-bold text-ink-900">
+                        {t('selectServices')}
+                      </h2>
                       {errors.services && (
-                        <motion.p
-                          initial={{ opacity: 0, y: -5 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          className="text-red-500 text-sm mb-3 bg-red-50 rounded-lg px-3 py-2"
-                        >
+                        <p className="mb-3 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600">
                           {errors.services}
-                        </motion.p>
+                        </p>
                       )}
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div className="grid items-start gap-3 sm:grid-cols-2">
                         {serviceData.map((service) => {
-                          const Icon = iconMap[service.icon]
-                          const isSelected = selectedServices.includes(service.id)
+                          const line = lines.get(service.id)
+                          const isSelected = Boolean(line)
                           return (
-                            <motion.button
+                            <div
                               key={service.id}
-                              whileTap={{ scale: 0.97 }}
-                              onClick={() => toggleService(service.id)}
                               className={cn(
-                                'flex items-center gap-3 p-4 rounded-2xl border-2 text-left transition-all duration-200 relative overflow-hidden',
+                                'overflow-hidden rounded-2xl border-2 transition-all duration-200',
                                 isSelected
-                                  ? 'border-crystal bg-crystal/[0.03]'
-                                  : 'border-transparent bg-slate-50 hover:bg-slate-100/80'
+                                  ? 'border-crystal-500 bg-white'
+                                  : 'border-transparent bg-ink-50 hover:bg-ink-100/70'
                               )}
                             >
-                              <div
-                                className={cn(
-                                  'w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-200',
-                                  isSelected
-                                    ? 'bg-crystal text-white shadow-sm shadow-crystal/30'
-                                    : 'bg-white text-crystal shadow-sm'
-                                )}
+                              <button
+                                type="button"
+                                onClick={() => toggleService(service.id)}
+                                aria-pressed={isSelected}
+                                className="flex w-full items-center gap-3 p-4 text-left"
                               >
-                                <Icon className="h-5 w-5" />
-                              </div>
-                              <div className="flex-1 min-w-0">
-                                <p className="font-semibold text-sm text-navy-dark truncate">
-                                  {tServices(`${service.id}.name`)}
-                                </p>
-                                <p className="text-xs text-body/70 mt-0.5">
-                                  {t('from')} &euro;{service.priceMin}
-                                </p>
-                              </div>
-                              {/* Checkmark */}
-                              <AnimatePresence>
+                                <span
+                                  className={cn(
+                                    'flex h-11 w-11 shrink-0 items-center justify-center rounded-xl transition-colors',
+                                    isSelected
+                                      ? 'bg-crystal-500 text-white'
+                                      : 'bg-white text-crystal-600 shadow-sm'
+                                  )}
+                                >
+                                  <ServiceIcon name={service.icon} className="h-5 w-5" />
+                                </span>
+                                <span className="min-w-0 flex-1">
+                                  <span className="block font-display text-sm font-bold leading-snug text-ink-900">
+                                    {tServices(`${service.id}.name`)}
+                                  </span>
+                                  <span className="mt-0.5 block text-xs text-ink-400 tabular">
+                                    {servicePriceText(service, tRoot)}
+                                  </span>
+                                </span>
                                 {isSelected && (
+                                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-crystal-500 text-white">
+                                    <Check className="h-3.5 w-3.5" strokeWidth={3} aria-hidden />
+                                  </span>
+                                )}
+                              </button>
+
+                              <AnimatePresence initial={false}>
+                                {isSelected && line && (
                                   <motion.div
-                                    initial={{ scale: 0, opacity: 0 }}
-                                    animate={{ scale: 1, opacity: 1 }}
-                                    exit={{ scale: 0, opacity: 0 }}
-                                    className="w-6 h-6 rounded-full bg-crystal flex items-center justify-center"
+                                    initial={{ height: 0, opacity: 0 }}
+                                    animate={{ height: 'auto', opacity: 1 }}
+                                    exit={{ height: 0, opacity: 0 }}
+                                    transition={{ duration: 0.2 }}
                                   >
-                                    <Check className="h-3.5 w-3.5 text-white" strokeWidth={3} />
+                                    <div className="space-y-3 px-4 pb-4">
+                                      {service.tiers.length > 1 && (
+                                        <div className="flex flex-wrap gap-1.5">
+                                          {service.tiers.map((option) => (
+                                            <button
+                                              key={option.id}
+                                              type="button"
+                                              onClick={() => setTier(service.id, option.id)}
+                                              aria-pressed={line.tierId === option.id}
+                                              className={cn(
+                                                'rounded-lg px-2.5 py-1.5 text-xs font-medium transition-colors',
+                                                line.tierId === option.id
+                                                  ? 'bg-crystal-500 text-white'
+                                                  : 'bg-ink-50 text-ink-600 hover:bg-ink-100'
+                                              )}
+                                            >
+                                              {tServices(`${service.id}.tiers.${option.id}`)}
+                                              <span className="ml-1.5 opacity-70 tabular">
+                                                {tierPriceCompact(option, tRoot)}
+                                              </span>
+                                            </button>
+                                          ))}
+                                        </div>
+                                      )}
+
+                                      <div className="flex items-center justify-between rounded-xl bg-ink-50 p-2">
+                                        <span className="pl-2 text-xs font-medium text-ink-600">
+                                          {tRoot(
+                                            `units.${service.unit}.${line.quantity === 1 ? 'one' : 'many'}`
+                                          )}
+                                        </span>
+                                        <span className="flex items-center gap-1">
+                                          <button
+                                            type="button"
+                                            onClick={() => changeQuantity(service.id, -1)}
+                                            disabled={line.quantity <= 1}
+                                            aria-label="-"
+                                            className={cn(
+                                              'flex h-8 w-8 items-center justify-center rounded-lg',
+                                              line.quantity <= 1
+                                                ? 'text-ink-200'
+                                                : 'bg-white text-ink-900 shadow-sm'
+                                            )}
+                                          >
+                                            <Minus className="h-3.5 w-3.5" aria-hidden />
+                                          </button>
+                                          <span className="w-8 text-center font-display font-bold tabular">
+                                            {line.quantity}
+                                          </span>
+                                          <button
+                                            type="button"
+                                            onClick={() => changeQuantity(service.id, 1)}
+                                            disabled={line.quantity >= service.maxQuantity}
+                                            aria-label="+"
+                                            className={cn(
+                                              'flex h-8 w-8 items-center justify-center rounded-lg',
+                                              line.quantity >= service.maxQuantity
+                                                ? 'text-ink-200'
+                                                : 'bg-white text-ink-900 shadow-sm'
+                                            )}
+                                          >
+                                            <Plus className="h-3.5 w-3.5" aria-hidden />
+                                          </button>
+                                        </span>
+                                      </div>
+                                    </div>
                                   </motion.div>
                                 )}
                               </AnimatePresence>
-                            </motion.button>
+                            </div>
                           )
                         })}
                       </div>
                     </div>
                   )}
 
-                  {/* ─── Step 2: Date & Time ─── */}
+                  {/* Step 2 — date & time */}
                   {step === 2 && (
-                    <div>
-                      {/* Date picker */}
-                      <div className="flex items-center gap-2 mb-4">
-                        <div className="w-8 h-8 rounded-lg bg-crystal/10 flex items-center justify-center">
-                          <CalendarDays className="h-4 w-4 text-crystal" />
-                        </div>
-                        <h2 className="text-lg font-semibold text-navy-dark">
+                    <div className="space-y-8">
+                      <div>
+                        <h2 className="mb-4 flex items-center gap-2 font-display text-lg font-bold text-ink-900">
+                          <CalendarDays className="h-5 w-5 text-crystal-600" aria-hidden />
                           {t('selectDate')}
                         </h2>
-                      </div>
-                      {errors.date && (
-                        <motion.p
-                          initial={{ opacity: 0, y: -5 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          className="text-red-500 text-sm mb-3 bg-red-50 rounded-lg px-3 py-2"
-                        >
-                          {errors.date}
-                        </motion.p>
-                      )}
-
-                      {/* Horizontal scrollable date carousel */}
-                      <div className="relative mb-8">
-                        <div
-                          ref={dateScrollRef}
-                          className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide snap-x snap-mandatory -mx-2 px-2"
-                          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-                        >
+                        {errors.date && (
+                          <p className="mb-3 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600">
+                            {errors.date}
+                          </p>
+                        )}
+                        <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-2">
                           {availableDates.map((date) => {
-                            const dateStr = format(date, 'yyyy-MM-dd')
-                            const isSelected = selectedDate === dateStr
-                            const dayName = format(date, 'EEE', { locale: dateFnsLocale })
-                            const dayNum = format(date, 'd')
-                            const monthName = format(date, 'MMM', { locale: dateFnsLocale })
-
+                            const value = date.toISOString()
+                            const isActive = selectedDate === value
                             return (
-                              <motion.button
-                                key={dateStr}
-                                whileTap={{ scale: 0.93 }}
+                              <button
+                                key={value}
+                                type="button"
                                 onClick={() => {
-                                  setSelectedDate(dateStr)
+                                  setSelectedDate(value)
                                   setErrors((e) => ({ ...e, date: '' }))
                                 }}
+                                aria-pressed={isActive}
                                 className={cn(
-                                  'snap-center flex-shrink-0 w-[72px] py-3 rounded-2xl text-center transition-all duration-200 relative',
-                                  isSelected
-                                    ? 'bg-crystal text-white shadow-lg shadow-crystal/30'
-                                    : 'bg-slate-50 hover:bg-slate-100 text-navy-dark'
+                                  'flex w-[4.5rem] shrink-0 flex-col items-center rounded-2xl border-2 py-3 transition-all duration-200',
+                                  isActive
+                                    ? 'border-crystal-500 bg-crystal-500 text-white shadow-brand'
+                                    : 'border-ink-100 bg-white text-ink-600 hover:border-crystal-200'
                                 )}
                               >
-                                <div className={cn(
-                                  'text-[11px] font-medium uppercase tracking-wide',
-                                  isSelected ? 'text-crystal-100' : 'text-body/60'
-                                )}>
-                                  {dayName}
-                                </div>
-                                <div className="text-2xl font-bold mt-0.5">{dayNum}</div>
-                                <div className={cn(
-                                  'text-[11px] font-medium',
-                                  isSelected ? 'text-crystal-100' : 'text-body/60'
-                                )}>
-                                  {monthName}
-                                </div>
-                              </motion.button>
+                                <span className="text-[11px] uppercase opacity-70">
+                                  {format(date, 'EEE', { locale: dateLocale })}
+                                </span>
+                                <span className="font-display text-xl font-extrabold">
+                                  {format(date, 'd')}
+                                </span>
+                                <span className="text-[11px] opacity-70">
+                                  {format(date, 'MMM', { locale: dateLocale })}
+                                </span>
+                              </button>
                             )
                           })}
                         </div>
                       </div>
 
-                      {/* Time slots */}
-                      <div className="flex items-center gap-2 mb-4">
-                        <div className="w-8 h-8 rounded-lg bg-crystal/10 flex items-center justify-center">
-                          <Clock className="h-4 w-4 text-crystal" />
-                        </div>
-                        <h2 className="text-lg font-semibold text-navy-dark">
+                      <div>
+                        <h2 className="mb-4 flex items-center gap-2 font-display text-lg font-bold text-ink-900">
+                          <Clock className="h-5 w-5 text-crystal-600" aria-hidden />
                           {t('selectTime')}
                         </h2>
+                        {errors.time && (
+                          <p className="mb-3 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600">
+                            {errors.time}
+                          </p>
+                        )}
+                        <div className="grid gap-3 sm:grid-cols-3">
+                          {timeSlots.map((slot) => {
+                            const Icon = slot.icon
+                            const isActive = selectedTime === slot.key
+                            return (
+                              <button
+                                key={slot.key}
+                                type="button"
+                                onClick={() => {
+                                  setSelectedTime(slot.key)
+                                  setErrors((e) => ({ ...e, time: '' }))
+                                }}
+                                aria-pressed={isActive}
+                                className={cn(
+                                  'flex flex-col items-center gap-2 rounded-2xl border-2 p-4 transition-all duration-200',
+                                  isActive
+                                    ? 'border-crystal-500 bg-crystal-50'
+                                    : 'border-ink-100 bg-white hover:border-crystal-200'
+                                )}
+                              >
+                                <Icon
+                                  className={cn(
+                                    'h-6 w-6',
+                                    isActive ? 'text-crystal-600' : 'text-ink-300'
+                                  )}
+                                  aria-hidden
+                                />
+                                <span className="text-sm font-semibold text-ink-900">
+                                  {t(slot.key).split(' (')[0]}
+                                </span>
+                                <span className="text-xs text-ink-400 tabular">
+                                  {slot.hours}
+                                </span>
+                              </button>
+                            )
+                          })}
+                        </div>
+                        <p className="mt-4 text-xs text-ink-400">
+                          {t('availabilityNote')}
+                        </p>
                       </div>
-                      {errors.time && (
-                        <motion.p
-                          initial={{ opacity: 0, y: -5 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          className="text-red-500 text-sm mb-3 bg-red-50 rounded-lg px-3 py-2"
-                        >
-                          {errors.time}
-                        </motion.p>
-                      )}
-                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                        {timeSlotConfig.map((slot) => {
-                          const SlotIcon = slot.icon
-                          const isSelected = selectedTime === slot.key
-                          return (
-                            <motion.button
-                              key={slot.key}
-                              whileTap={{ scale: 0.96 }}
-                              onClick={() => {
-                                setSelectedTime(slot.key)
-                                setErrors((e) => ({ ...e, time: '' }))
-                              }}
-                              className={cn(
-                                'p-4 rounded-2xl border-2 text-center transition-all duration-200',
-                                isSelected
-                                  ? 'border-crystal bg-crystal/[0.03]'
-                                  : 'border-transparent bg-slate-50 hover:bg-slate-100'
-                              )}
-                            >
-                              <div className={cn(
-                                'w-10 h-10 rounded-xl flex items-center justify-center mx-auto mb-2 transition-all',
-                                isSelected
-                                  ? 'bg-crystal text-white shadow-sm shadow-crystal/30'
-                                  : 'bg-white text-crystal shadow-sm'
-                              )}>
-                                <SlotIcon className="h-5 w-5" />
-                              </div>
-                              <p className="font-semibold text-sm text-navy-dark">
-                                {t(slot.key)}
-                              </p>
-                              <p className={cn(
-                                'text-xs mt-0.5',
-                                isSelected ? 'text-crystal' : 'text-body/60'
-                              )}>
-                                {slot.hours}
-                              </p>
-                            </motion.button>
-                          )
-                        })}
-                      </div>
-                      <p className="text-xs text-body/60 mt-4 flex items-center gap-1.5">
-                        <ShieldCheck className="h-3.5 w-3.5 text-crystal" />
-                        {t('availabilityNote')}
-                      </p>
                     </div>
                   )}
 
-                  {/* ─── Step 3: Contact ─── */}
+                  {/* Step 3 — details */}
                   {step === 3 && (
                     <div>
-                      <div className="flex items-center gap-2 mb-5">
-                        <div className="w-8 h-8 rounded-lg bg-crystal/10 flex items-center justify-center">
-                          <User className="h-4 w-4 text-crystal" />
-                        </div>
-                        <h2 className="text-lg font-semibold text-navy-dark">
-                          {t('contactDetails')}
-                        </h2>
-                      </div>
-                      <div className="space-y-4">
-                        {/* Full Name */}
-                        <div className="relative">
-                          <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-                          <Input
-                            placeholder={t('fullName') + ' *'}
-                            value={formData.fullName}
-                            onChange={(e) => {
-                              setFormData({ ...formData, fullName: e.target.value })
-                              setErrors((err) => ({ ...err, fullName: '' }))
-                            }}
+                      <h2 className="mb-5 font-display text-lg font-bold text-ink-900">
+                        {t('contactDetails')}
+                      </h2>
+                      <div className="grid gap-4 sm:grid-cols-2">
+                        {fields.map((field) => (
+                          <div
+                            key={field.name}
                             className={cn(
-                              'pl-10 h-12 rounded-xl bg-slate-50 border-0 focus:bg-white focus:ring-2 focus:ring-crystal/30',
-                              errors.fullName && 'ring-2 ring-red-300 bg-red-50/50'
+                              'space-y-1.5',
+                              field.name === 'address' && 'sm:col-span-2'
                             )}
-                          />
-                          {errors.fullName && (
-                            <p className="text-red-500 text-xs mt-1 ml-1">{errors.fullName}</p>
-                          )}
-                        </div>
-                        {/* Phone */}
-                        <div className="relative">
-                          <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-                          <Input
-                            placeholder={t('phone') + ' *'}
-                            type="tel"
-                            value={formData.phone}
-                            onChange={(e) => {
-                              setFormData({ ...formData, phone: e.target.value })
-                              setErrors((err) => ({ ...err, phone: '' }))
-                            }}
-                            className={cn(
-                              'pl-10 h-12 rounded-xl bg-slate-50 border-0 focus:bg-white focus:ring-2 focus:ring-crystal/30',
-                              errors.phone && 'ring-2 ring-red-300 bg-red-50/50'
+                          >
+                            <Label htmlFor={field.name}>
+                              {field.label}
+                              {field.required && ' *'}
+                            </Label>
+                            <Input
+                              id={field.name}
+                              name={field.name}
+                              type={field.type}
+                              autoComplete={field.autoComplete}
+                              value={form[field.name]}
+                              onChange={(e) => {
+                                setForm((prev) => ({
+                                  ...prev,
+                                  [field.name]: e.target.value,
+                                }))
+                                setErrors((prev) => ({ ...prev, [field.name]: '' }))
+                              }}
+                              aria-invalid={Boolean(errors[field.name])}
+                              className={cn(
+                                errors[field.name] && 'border-red-400 focus-visible:ring-red-400'
+                              )}
+                            />
+                            {errors[field.name] && (
+                              <p className="text-xs text-red-600">
+                                {errors[field.name]}
+                              </p>
                             )}
-                          />
-                          {errors.phone && (
-                            <p className="text-red-500 text-xs mt-1 ml-1">{errors.phone}</p>
-                          )}
-                        </div>
-                        {/* Email */}
-                        <div className="relative">
-                          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-                          <Input
-                            placeholder={t('email')}
-                            type="email"
-                            value={formData.email}
-                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                            className="pl-10 h-12 rounded-xl bg-slate-50 border-0 focus:bg-white focus:ring-2 focus:ring-crystal/30"
-                          />
-                        </div>
-                        {/* Address */}
-                        <div className="relative">
-                          <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-                          <Input
-                            placeholder={t('address')}
-                            value={formData.address}
-                            onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                            className="pl-10 h-12 rounded-xl bg-slate-50 border-0 focus:bg-white focus:ring-2 focus:ring-crystal/30"
-                          />
-                        </div>
-                        {/* Notes */}
-                        <div className="relative">
-                          <FileText className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
+                          </div>
+                        ))}
+                        <div className="space-y-1.5 sm:col-span-2">
+                          <Label htmlFor="notes">{t('notes')}</Label>
                           <Textarea
-                            placeholder={t('notes')}
-                            value={formData.notes}
-                            onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                            className="pl-10 min-h-[80px] rounded-xl bg-slate-50 border-0 focus:bg-white focus:ring-2 focus:ring-crystal/30"
+                            id="notes"
+                            name="notes"
+                            placeholder={t('notesPlaceholder')}
+                            value={form.notes}
+                            onChange={(e) =>
+                              setForm((prev) => ({ ...prev, notes: e.target.value }))
+                            }
                           />
                         </div>
                       </div>
                     </div>
                   )}
 
-                  {/* ─── Step 4: Confirmation ─── */}
+                  {/* Step 4 — confirm */}
                   {step === 4 && (
                     <div>
-                      <div className="flex items-center gap-2 mb-5">
-                        <div className="w-8 h-8 rounded-lg bg-crystal/10 flex items-center justify-center">
-                          <ShieldCheck className="h-4 w-4 text-crystal" />
-                        </div>
-                        <h2 className="text-lg font-semibold text-navy-dark">
-                          {t('confirmation')}
-                        </h2>
-                      </div>
-                      <p className="text-body text-sm mb-5">{t('confirmationText')}</p>
+                      <h2 className="font-display text-lg font-bold text-ink-900">
+                        {t('confirmation')}
+                      </h2>
+                      <p className="mt-1 text-sm text-ink-400">
+                        {t('confirmationText')}
+                      </p>
 
-                      <div className="space-y-3">
-                        {/* Services */}
-                        <div className="bg-slate-50 rounded-2xl p-4 relative group">
-                          <button
-                            onClick={() => goTo(1)}
-                            className="absolute top-3 right-3 p-1.5 rounded-lg bg-white shadow-sm opacity-0 group-hover:opacity-100 transition-opacity"
-                            title={t('edit')}
-                          >
-                            <Pencil className="h-3.5 w-3.5 text-body" />
-                          </button>
-                          <p className="text-[11px] font-semibold text-body/60 uppercase tracking-wider mb-2">
+                      <dl className="mt-6 divide-y divide-ink-100 rounded-2xl border border-ink-100">
+                        <div className="flex items-start justify-between gap-4 p-4">
+                          <dt className="text-sm text-ink-400">
                             {t('selectedServices')}
-                          </p>
-                          <div className="flex flex-wrap gap-1.5">
-                            {selectedServices.map((id) => (
-                              <span
-                                key={id}
-                                className="inline-flex items-center gap-1 bg-crystal/10 text-crystal text-xs font-medium px-2.5 py-1 rounded-lg"
-                              >
-                                {tServices(`${id}.name`)}
-                              </span>
-                            ))}
-                          </div>
+                          </dt>
+                          <dd className="text-right text-sm font-medium text-ink-900">
+                            {selections.map((sel) => {
+                              const service = getService(sel.serviceId)!
+                              const tier = getTier(service, sel.tierId)
+                              return (
+                                <span key={sel.serviceId} className="block">
+                                  {tServices(`${service.id}.name`)}
+                                  {service.tiers.length > 1 &&
+                                    ` · ${tServices(`${service.id}.tiers.${tier.id}`)}`}{' '}
+                                  <span className="text-ink-400">x{sel.quantity}</span>
+                                </span>
+                              )
+                            })}
+                          </dd>
                         </div>
-
-                        {/* Date & Time */}
-                        <div className="grid grid-cols-2 gap-3">
-                          <div className="bg-slate-50 rounded-2xl p-4 relative group">
-                            <button
-                              onClick={() => goTo(2)}
-                              className="absolute top-3 right-3 p-1.5 rounded-lg bg-white shadow-sm opacity-0 group-hover:opacity-100 transition-opacity"
-                              title={t('edit')}
-                            >
-                              <Pencil className="h-3.5 w-3.5 text-body" />
-                            </button>
-                            <p className="text-[11px] font-semibold text-body/60 uppercase tracking-wider mb-1">
-                              {t('selectedDate')}
-                            </p>
-                            <p className="font-semibold text-navy-dark text-sm">
-                              {selectedDate && format(new Date(selectedDate), 'EEE, d MMM', { locale: dateFnsLocale })}
-                            </p>
-                          </div>
-                          <div className="bg-slate-50 rounded-2xl p-4">
-                            <p className="text-[11px] font-semibold text-body/60 uppercase tracking-wider mb-1">
-                              {t('selectedTime')}
-                            </p>
-                            <p className="font-semibold text-navy-dark text-sm">
-                              {selectedTime && t(selectedTime as any)}
-                            </p>
-                          </div>
+                        <div className="flex items-center justify-between gap-4 p-4">
+                          <dt className="text-sm text-ink-400">
+                            {t('selectedDate')}
+                          </dt>
+                          <dd className="text-right text-sm font-medium text-ink-900">
+                            {selectedDate &&
+                              format(new Date(selectedDate), 'EEEE d MMMM yyyy', {
+                                locale: dateLocale,
+                              })}
+                          </dd>
                         </div>
-
-                        {/* Contact info */}
-                        <div className="bg-slate-50 rounded-2xl p-4 relative group">
-                          <button
-                            onClick={() => goTo(3)}
-                            className="absolute top-3 right-3 p-1.5 rounded-lg bg-white shadow-sm opacity-0 group-hover:opacity-100 transition-opacity"
-                            title={t('edit')}
-                          >
-                            <Pencil className="h-3.5 w-3.5 text-body" />
-                          </button>
-                          <p className="text-[11px] font-semibold text-body/60 uppercase tracking-wider mb-2">
+                        <div className="flex items-center justify-between gap-4 p-4">
+                          <dt className="text-sm text-ink-400">
+                            {t('selectedTime')}
+                          </dt>
+                          <dd className="text-right text-sm font-medium text-ink-900">
+                            {selectedTime && t(selectedTime as 'morning')}
+                          </dd>
+                        </div>
+                        <div className="flex items-start justify-between gap-4 p-4">
+                          <dt className="text-sm text-ink-400">
                             {t('contactInfo')}
-                          </p>
-                          <div className="space-y-1 text-sm">
-                            <p className="font-semibold text-navy-dark">{formData.fullName}</p>
-                            <p className="text-body">{formData.phone}</p>
-                            {formData.email && <p className="text-body">{formData.email}</p>}
-                            {formData.address && <p className="text-body">{formData.address}</p>}
-                            {formData.notes && (
-                              <p className="text-body/70 text-xs mt-2 italic">&ldquo;{formData.notes}&rdquo;</p>
+                          </dt>
+                          <dd className="text-right text-sm font-medium text-ink-900">
+                            <span className="block">{form.fullName}</span>
+                            <span className="block">{form.phone}</span>
+                            {form.address && (
+                              <span className="block text-ink-400">{form.address}</span>
                             )}
-                          </div>
+                          </dd>
                         </div>
-                      </div>
+                        <div className="flex items-center justify-between gap-4 bg-crystal-50/60 p-4">
+                          <dt className="text-sm font-semibold text-ink-900">
+                            {tQuote('estimatedCost')}
+                          </dt>
+                          <dd className="font-display text-xl font-extrabold text-crystal-600 tabular">
+                            {totalText}
+                          </dd>
+                        </div>
+                      </dl>
+
+                      {estimate.hasOnRequest && (
+                        <p className="mt-3 rounded-lg bg-aqua-50 px-3 py-2 text-xs leading-relaxed text-aqua-600">
+                          {tQuote('onRequestNote')}
+                        </p>
+                      )}
                     </div>
                   )}
                 </motion.div>
               </AnimatePresence>
 
               {/* Navigation */}
-              <div className="flex justify-between mt-8 pt-5 border-t border-slate-100">
+              <div className="mt-8 flex items-center justify-between gap-3 border-t border-ink-100 pt-6">
                 {step > 1 ? (
-                  <Button
-                    variant="ghost"
-                    onClick={prevStep}
-                    className="text-body hover:text-navy-dark"
-                  >
-                    <ChevronLeft className="h-4 w-4 mr-1" />
+                  <Button variant="ghost" onClick={() => goTo(step - 1)}>
+                    <ChevronLeft className="h-4 w-4" aria-hidden />
                     {t('back')}
                   </Button>
                 ) : (
-                  <div />
+                  <span />
                 )}
 
                 {step < 4 ? (
-                  <Button onClick={nextStep} size="lg" className="px-8">
+                  <Button onClick={() => goTo(step + 1)}>
                     {t('next')}
-                    <ChevronRight className="h-4 w-4 ml-1" />
+                    <ChevronRight className="h-4 w-4" aria-hidden />
                   </Button>
                 ) : (
-                  <Button
-                    variant="whatsapp"
-                    size="lg"
-                    className="px-8 shadow-lg shadow-[#25D366]/20"
-                    onClick={handleSubmit}
-                  >
-                    <Send className="h-4 w-4 mr-2" />
+                  <Button variant="whatsapp" size="lg" onClick={handleSubmit}>
+                    <MessageCircle className="h-5 w-5" aria-hidden />
                     {t('submit')}
                   </Button>
                 )}
@@ -741,82 +779,64 @@ export function BookClient() {
             </div>
           </div>
 
-          {/* ─── Live Side Summary (desktop) ─── */}
-          <div className="hidden lg:block lg:col-span-1">
-            <div className="sticky top-24 space-y-4">
-              {/* Summary card */}
-              <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-5">
-                <h3 className="font-semibold text-navy-dark text-sm mb-4">
-                  {t('confirmation')}
-                </h3>
+          {/* Live summary */}
+          <aside>
+            <div className="sticky top-32 rounded-2xl border border-ink-100 bg-white p-5 shadow-card">
+              <h2 className="font-display text-sm font-bold text-ink-900">
+                {t('summaryTitle')}
+              </h2>
 
-                {/* Selected services */}
-                {selectedServices.length > 0 ? (
-                  <div className="mb-4">
-                    <p className="text-[10px] font-semibold text-body/50 uppercase tracking-wider mb-2">
-                      {t('selectedServices')}
-                    </p>
-                    <div className="space-y-1.5">
-                      {selectedServices.map((id) => {
-                        const service = serviceData.find((s) => s.id === id)
-                        const Icon = service ? iconMap[service.icon] : Sparkles
-                        return (
-                          <div key={id} className="flex items-center gap-2 text-xs">
-                            <Icon className="h-3.5 w-3.5 text-crystal" />
-                            <span className="text-navy-dark font-medium">{tServices(`${id}.name`)}</span>
-                          </div>
-                        )
-                      })}
-                    </div>
-                  </div>
-                ) : (
-                  <p className="text-xs text-body/50 mb-4">{t('validation.selectService')}</p>
-                )}
+              {lines.size === 0 ? (
+                <p className="mt-3 text-sm text-ink-400">{t('summaryEmpty')}</p>
+              ) : (
+                <>
+                  <ul className="mt-4 space-y-2.5">
+                    {selections.map((sel) => {
+                      const service = getService(sel.serviceId)!
+                      const tier = getTier(service, sel.tierId)
+                      return (
+                        <li
+                          key={sel.serviceId}
+                          className="flex items-baseline justify-between gap-3 text-sm"
+                        >
+                          <span className="min-w-0 text-ink-600">
+                            <span className="block truncate">
+                              {tServices(`${service.id}.name`)} x{sel.quantity}
+                            </span>
+                            {service.tiers.length > 1 && (
+                              <span className="block text-xs text-ink-400">
+                                {tServices(`${service.id}.tiers.${tier.id}`)}
+                              </span>
+                            )}
+                          </span>
+                          <span className="shrink-0 font-medium text-ink-900 tabular">
+                            {lineTotalText(tier, sel.quantity, tRoot)}
+                          </span>
+                        </li>
+                      )
+                    })}
+                  </ul>
 
-                {/* Date & time */}
-                {selectedDate && (
-                  <div className="mb-4">
-                    <p className="text-[10px] font-semibold text-body/50 uppercase tracking-wider mb-1">
-                      {t('selectedDate')}
-                    </p>
-                    <p className="text-xs font-medium text-navy-dark">
-                      {format(new Date(selectedDate), 'EEEE, d MMMM', { locale: dateFnsLocale })}
-                    </p>
+                  <div className="mt-4 flex items-baseline justify-between border-t border-ink-100 pt-4">
+                    <span className="text-sm font-semibold text-ink-900">
+                      {tQuote('total')}
+                    </span>
+                    <span className="font-display text-lg font-extrabold text-crystal-600 tabular">
+                      {totalText}
+                    </span>
                   </div>
-                )}
-                {selectedTime && (
-                  <div className="mb-4">
-                    <p className="text-[10px] font-semibold text-body/50 uppercase tracking-wider mb-1">
-                      {t('selectedTime')}
-                    </p>
-                    <p className="text-xs font-medium text-navy-dark">{t(selectedTime as any)}</p>
-                  </div>
-                )}
+                </>
+              )}
 
-                {/* Contact */}
-                {formData.fullName && (
-                  <div>
-                    <p className="text-[10px] font-semibold text-body/50 uppercase tracking-wider mb-1">
-                      {t('contactInfo')}
-                    </p>
-                    <p className="text-xs font-medium text-navy-dark">{formData.fullName}</p>
-                    {formData.phone && <p className="text-xs text-body">{formData.phone}</p>}
-                  </div>
-                )}
-              </div>
-
-              {/* Quick contact card */}
-              <div className="bg-gradient-to-br from-crystal-50 to-crystal-100/50 rounded-2xl p-4 text-center">
-                <p className="text-xs text-body mb-2">{t('availabilityNote')}</p>
-                <a href="tel:+35796653034">
-                  <Button variant="secondary" size="sm" className="w-full text-xs">
-                    <Phone className="h-3.5 w-3.5 mr-1.5" />
-                    96653034
-                  </Button>
-                </a>
-              </div>
+              {selectedDate && (
+                <p className="mt-4 flex items-center gap-2 border-t border-ink-100 pt-4 text-xs text-ink-500">
+                  <CalendarDays className="h-3.5 w-3.5 text-crystal-500" aria-hidden />
+                  {format(new Date(selectedDate), 'd MMM yyyy', { locale: dateLocale })}
+                  {selectedTime && ` · ${t(selectedTime as 'morning').split(' (')[0]}`}
+                </p>
+              )}
             </div>
-          </div>
+          </aside>
         </div>
       </div>
     </section>

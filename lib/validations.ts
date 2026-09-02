@@ -3,7 +3,7 @@ import { z } from 'zod'
 export const bookingSchema = z.object({
   services: z.array(z.string()).min(1, 'Select at least one service'),
   preferredDate: z.string().min(1, 'Select a date'),
-  preferredTime: z.enum(['morning', 'afternoon', 'evening']),
+  preferredTime: z.enum(['morning', 'midday', 'afternoon']),
   fullName: z.string().min(2, 'Name is required'),
   phone: z.string().min(8, 'Valid phone number required'),
   email: z.string().email('Invalid email').optional().or(z.literal('')),

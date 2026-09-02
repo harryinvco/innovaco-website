@@ -1,397 +1,490 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
-import { motion, AnimatePresence } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import {
-  Car,
-  Sofa,
-  BedDouble,
-  Heater,
-  SquareDashedBottom,
-  Armchair,
-  Baby,
-  Minus,
-  Plus,
-  MessageCircle,
+  ArrowRight,
   CalendarCheck,
   Check,
-  Sparkles,
-  Receipt,
-  ArrowRight,
   Info,
+  MessageCircle,
+  Minus,
   Phone,
-  X,
+  Plus,
+  Receipt,
   ShoppingCart,
+  Sparkles,
+  X,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { ServiceIcon } from '@/components/shared/ServiceIcon'
 import {
-  services as serviceData,
   calculateEstimate,
+  entryPrice,
   generateWhatsAppLink,
+  getService,
+  getTier,
+  services as serviceData,
   type QuoteSelection,
 } from '@/lib/services'
+import {
+  euro,
+  lineTotalText,
+  servicePriceText,
+  tierPriceCompact,
+} from '@/lib/price'
+import { site } from '@/lib/site'
 import { cn } from '@/lib/utils'
 
-const iconMap: Record<string, React.ElementType> = {
-  Car, Sofa, BedDouble, Heater, SquareDashedBottom,
-  Armchair, ArmchairIcon: Armchair, Baby,
+interface Line {
+  tierId: string
+  quantity: number
 }
 
 export function QuoteClient() {
   const t = useTranslations('quote')
+  const tRoot = useTranslations()
   const tServices = useTranslations('services')
   const locale = useLocale()
   const searchParams = useSearchParams()
 
-  const [selections, setSelections] = useState<Map<string, number>>(new Map())
-  const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false)
+  const [lines, setLines] = useState<Map<string, Line>>(new Map())
+  const [drawerOpen, setDrawerOpen] = useState(false)
 
+  // Deep link from a service card: /quote?service=mattress
   useEffect(() => {
-    const preSelect = searchParams.get('service')
-    if (preSelect && serviceData.find((s) => s.id === preSelect)) {
-      setSelections(new Map([[preSelect, 1]]))
+    const preselect = searchParams.get('service')
+    const service = preselect ? getService(preselect) : undefined
+    if (service) {
+      setLines(
+        new Map([[service.id, { tierId: service.tiers[0].id, quantity: 1 }]])
+      )
     }
   }, [searchParams])
 
   const toggleService = (id: string) => {
-    const next = new Map(selections)
-    if (next.has(id)) {
-      next.delete(id)
-    } else {
-      next.set(id, 1)
-    }
-    setSelections(next)
-  }
-
-  const updateQuantity = (id: string, delta: number) => {
-    const next = new Map(selections)
-    const service = serviceData.find((s) => s.id === id)
+    const service = getService(id)
     if (!service) return
-    const current = next.get(id) || 1
-    const newVal = Math.max(1, Math.min(service.maxQuantity, current + delta))
-    next.set(id, newVal)
-    setSelections(next)
+    setLines((prev) => {
+      const next = new Map(prev)
+      if (next.has(id)) next.delete(id)
+      else next.set(id, { tierId: service.tiers[0].id, quantity: 1 })
+      return next
+    })
   }
 
-  const removeService = (id: string) => {
-    const next = new Map(selections)
-    next.delete(id)
-    setSelections(next)
+  const setTier = (id: string, tierId: string) =>
+    setLines((prev) => {
+      const next = new Map(prev)
+      const line = next.get(id)
+      if (line) next.set(id, { ...line, tierId })
+      return next
+    })
+
+  const changeQuantity = (id: string, delta: number) => {
+    const service = getService(id)
+    if (!service) return
+    setLines((prev) => {
+      const next = new Map(prev)
+      const line = next.get(id)
+      if (!line) return prev
+      const quantity = Math.max(
+        1,
+        Math.min(service.maxQuantity, line.quantity + delta)
+      )
+      next.set(id, { ...line, quantity })
+      return next
+    })
   }
 
-  const quoteSelections: QuoteSelection[] = Array.from(selections.entries()).map(
-    ([serviceId, quantity]) => ({ serviceId, quantity })
+  const removeService = (id: string) =>
+    setLines((prev) => {
+      const next = new Map(prev)
+      next.delete(id)
+      return next
+    })
+
+  const selections: QuoteSelection[] = useMemo(
+    () =>
+      Array.from(lines.entries()).map(([serviceId, line]) => ({
+        serviceId,
+        tierId: line.tierId,
+        quantity: line.quantity,
+      })),
+    [lines]
   )
-  const estimate = calculateEstimate(quoteSelections)
-  const hasSelections = selections.size > 0
-  const totalItems = Array.from(selections.values()).reduce((a, b) => a + b, 0)
 
-  const buildWhatsAppMessage = () => {
-    const lines = ['Γεια σας! Θα ήθελα προσφορά για:', '']
-    Array.from(selections.entries()).forEach(([serviceId, qty]) => {
-      const service = serviceData.find((s) => s.id === serviceId)
-      if (service) {
-        lines.push(`- ${tServices(`${service.id}.name`)} x${qty}`)
+  const estimate = useMemo(() => calculateEstimate(selections), [selections])
+  const hasSelections = lines.size > 0
+  const totalItems = Array.from(lines.values()).reduce(
+    (sum, line) => sum + line.quantity,
+    0
+  )
+
+  const totalText = useMemo(() => {
+    if (estimate.min === 0 && estimate.max === 0) {
+      return estimate.hasOnRequest ? tRoot('price.onRequestShort') : euro(0)
+    }
+    const range =
+      estimate.min === estimate.max
+        ? euro(estimate.min)
+        : `${euro(estimate.min)} – ${euro(estimate.max)}`
+    return estimate.startingFrom ? `${tRoot('price.from')} ${range}` : range
+  }, [estimate, tRoot])
+
+  const whatsAppHref = useMemo(() => {
+    const priced: string[] = []
+    const onRequest: string[] = []
+
+    for (const sel of selections) {
+      const service = getService(sel.serviceId)
+      if (!service) continue
+      const tier = getTier(service, sel.tierId)
+      const name = tServices(`${service.id}.name`)
+      const tierName =
+        service.tiers.length > 1
+          ? ` (${tServices(`${service.id}.tiers.${tier.id}`)})`
+          : ''
+      if (tier.kind === 'onRequest') {
+        onRequest.push(`• ${name}${tierName} x${sel.quantity}`)
+      } else {
+        priced.push(
+          `• ${name}${tierName} x${sel.quantity} — ${lineTotalText(tier, sel.quantity, tRoot)}`
+        )
       }
-    })
-    lines.push('', `Εκτιμώμενο κόστος: €${estimate.min} - €${estimate.max}`)
-    return generateWhatsAppLink(lines.join('\n'))
-  }
+    }
 
-  const buildBookingParams = () => {
+    const parts = [t('whatsappIntro'), '', ...priced]
+    if (priced.length > 0) {
+      parts.push('', `${t('whatsappTotal')}: ${totalText}`)
+    }
+    if (onRequest.length > 0) {
+      parts.push('', t('whatsappOnRequest'), ...onRequest)
+    }
+    return generateWhatsAppLink(parts.join('\n'))
+  }, [selections, t, tRoot, tServices, totalText])
+
+  const bookingHref = useMemo(() => {
     const params = new URLSearchParams()
-    Array.from(selections.entries()).forEach(([serviceId, qty]) => {
-      params.append('s', `${serviceId}:${qty}`)
-    })
+    for (const sel of selections) {
+      params.append('s', `${sel.serviceId}:${sel.tierId}:${sel.quantity}`)
+    }
     return `/${locale}/book?${params.toString()}`
-  }
+  }, [selections, locale])
 
   return (
-    <section className="pt-24 pb-32 lg:pb-20 min-h-screen bg-gradient-to-br from-slate-50 via-white to-crystal-50/30">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-
-        {/* Header */}
+    <section className="min-h-screen bg-gradient-to-b from-crystal-50/60 via-white to-white pb-40 pt-12 lg:pb-20">
+      <div className="container-page max-w-6xl">
         <motion.div
-          initial={{ opacity: 0, y: -10 }}
+          initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-10"
+          className="text-center"
         >
-          <div className="inline-flex items-center gap-1.5 bg-crystal/10 text-crystal text-sm font-medium px-3.5 py-1.5 rounded-full mb-4">
-            <Receipt className="h-3.5 w-3.5" />
-            {t('pageTitle')}
-          </div>
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-navy-dark">
-            {t('pageTitle')}
-          </h1>
-          <p className="mt-2 text-body max-w-lg mx-auto">
-            {t('pageSubtitle')}
-          </p>
+          <span className="eyebrow">
+            <Receipt className="h-3.5 w-3.5" aria-hidden />
+            {t('badge')}
+          </span>
+          <h1 className="heading-2 mt-4">{t('pageTitle')}</h1>
+          <p className="lead mx-auto mt-3 max-w-xl">{t('pageSubtitle')}</p>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
-
-          {/* ─── Service Selection Grid ─── */}
+        <div className="mt-10 grid gap-8 lg:grid-cols-5">
+          {/* ── Service picker ── */}
           <div className="lg:col-span-3">
-            <div className="flex items-center gap-2 mb-5">
-              <div className="w-8 h-8 rounded-lg bg-crystal/10 flex items-center justify-center">
-                <Sparkles className="h-4 w-4 text-crystal" />
-              </div>
-              <h2 className="text-lg font-semibold text-navy-dark">
+            <div className="mb-5 flex items-center gap-2">
+              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-crystal-50">
+                <Sparkles className="h-4 w-4 text-crystal-600" aria-hidden />
+              </span>
+              <h2 className="font-display text-lg font-bold text-ink-900">
                 {t('selectServices')}
               </h2>
               {hasSelections && (
-                <span className="ml-auto text-xs text-crystal font-semibold bg-crystal/10 px-2.5 py-1 rounded-full">
-                  {selections.size} {t('selected')}
+                <span className="ml-auto rounded-full bg-crystal-50 px-2.5 py-1 text-xs font-semibold text-crystal-700">
+                  {lines.size} {t('selected', { count: lines.size })}
                 </span>
               )}
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="grid items-start gap-3 sm:grid-cols-2">
               {serviceData.map((service, i) => {
-                const Icon = iconMap[service.icon]
-                const isSelected = selections.has(service.id)
-                const qty = selections.get(service.id) || 0
+                const line = lines.get(service.id)
+                const isSelected = Boolean(line)
+                const tier = getTier(service, line?.tierId)
 
                 return (
                   <motion.div
                     key={service.id}
-                    initial={{ opacity: 0, y: 10 }}
+                    initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: i * 0.03 }}
+                    transition={{ delay: Math.min(i, 8) * 0.03 }}
                     layout
+                    className={cn(
+                      'overflow-hidden rounded-2xl border-2 bg-white transition-all duration-200',
+                      isSelected
+                        ? 'border-crystal-500 shadow-card'
+                        : 'border-ink-100 hover:border-ink-200 hover:shadow-card'
+                    )}
                   >
-                    <div
-                      className={cn(
-                        'rounded-2xl border-2 transition-all duration-200 overflow-hidden',
-                        isSelected
-                          ? 'border-crystal bg-white shadow-md shadow-crystal/5'
-                          : 'border-transparent bg-white shadow-sm hover:shadow-md'
-                      )}
+                    <button
+                      type="button"
+                      onClick={() => toggleService(service.id)}
+                      aria-pressed={isSelected}
+                      className="flex w-full items-center gap-3 p-4 text-left"
                     >
-                      {/* Main clickable area */}
-                      <motion.button
-                        whileTap={{ scale: 0.98 }}
-                        onClick={() => toggleService(service.id)}
-                        className="flex items-center gap-3 p-4 w-full text-left"
+                      <span
+                        className={cn(
+                          'flex h-11 w-11 shrink-0 items-center justify-center rounded-xl transition-colors duration-200',
+                          isSelected
+                            ? 'bg-crystal-500 text-white'
+                            : 'bg-crystal-50 text-crystal-600'
+                        )}
                       >
-                        <div
-                          className={cn(
-                            'w-11 h-11 rounded-xl flex items-center justify-center shrink-0 transition-all duration-200',
-                            isSelected
-                              ? 'bg-crystal text-white shadow-sm shadow-crystal/30'
-                              : 'bg-slate-100 text-crystal'
-                          )}
-                        >
-                          <Icon className="h-5 w-5" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="font-semibold text-sm text-navy-dark truncate">
-                            {tServices(`${service.id}.name`)}
-                          </p>
-                          <p className="text-xs text-body/60 mt-0.5">
-                            &euro;{service.priceMin} – {service.priceMax} / {tServices('perUnit')}
-                          </p>
-                        </div>
-                        {/* Selection indicator */}
-                        <div
-                          className={cn(
-                            'w-6 h-6 rounded-full flex items-center justify-center shrink-0 transition-all duration-200',
-                            isSelected
-                              ? 'bg-crystal text-white'
-                              : 'border-2 border-slate-200'
-                          )}
-                        >
-                          {isSelected && (
-                            <motion.div
-                              initial={{ scale: 0 }}
-                              animate={{ scale: 1 }}
-                              transition={{ type: 'spring', stiffness: 400 }}
-                            >
-                              <Check className="h-3.5 w-3.5" strokeWidth={3} />
-                            </motion.div>
-                          )}
-                        </div>
-                      </motion.button>
+                        <ServiceIcon name={service.icon} className="h-5 w-5" />
+                      </span>
 
-                      {/* Quantity controls — expand when selected */}
-                      <AnimatePresence>
+                      <span className="min-w-0 flex-1">
+                        <span className="block font-display text-sm font-bold leading-snug text-ink-900">
+                          {tServices(`${service.id}.name`)}
+                        </span>
+                        <span className="mt-0.5 block text-xs text-ink-400 tabular">
+                          {servicePriceText(service, tRoot)}
+                          {entryPrice(service) !== null &&
+                            ` / ${tRoot(`units.${service.unit}.one`)}`}
+                        </span>
+                      </span>
+
+                      <span
+                        className={cn(
+                          'flex h-6 w-6 shrink-0 items-center justify-center rounded-full transition-colors duration-200',
+                          isSelected
+                            ? 'bg-crystal-500 text-white'
+                            : 'border-2 border-ink-200'
+                        )}
+                      >
                         {isSelected && (
-                          <motion.div
-                            initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: 'auto', opacity: 1 }}
-                            exit={{ height: 0, opacity: 0 }}
-                            transition={{ duration: 0.2, ease: 'easeInOut' }}
-                          >
-                            <div className="px-4 pb-4 pt-1">
-                              <div className="flex items-center justify-between bg-slate-50 rounded-xl p-3">
-                                <span className="text-xs font-medium text-body">
-                                  {t(service.quantityLabel.replace('quote.', '') as any)}
-                                </span>
-                                <div className="flex items-center gap-1">
-                                  <motion.button
-                                    whileTap={{ scale: 0.85 }}
-                                    onClick={(e) => { e.stopPropagation(); updateQuantity(service.id, -1) }}
-                                    disabled={qty <= 1}
-                                    className={cn(
-                                      'w-8 h-8 rounded-lg flex items-center justify-center transition-all',
-                                      qty <= 1
-                                        ? 'bg-slate-100 text-slate-300'
-                                        : 'bg-white text-navy-dark shadow-sm hover:shadow-md active:bg-slate-50'
-                                    )}
-                                  >
-                                    <Minus className="h-3.5 w-3.5" />
-                                  </motion.button>
-                                  <motion.span
-                                    key={qty}
-                                    initial={{ scale: 1.3, color: '#0EA5E9' }}
-                                    animate={{ scale: 1, color: '#0F172A' }}
-                                    className="w-10 text-center font-bold text-base"
-                                  >
-                                    {qty}
-                                  </motion.span>
-                                  <motion.button
-                                    whileTap={{ scale: 0.85 }}
-                                    onClick={(e) => { e.stopPropagation(); updateQuantity(service.id, 1) }}
-                                    disabled={qty >= service.maxQuantity}
-                                    className={cn(
-                                      'w-8 h-8 rounded-lg flex items-center justify-center transition-all',
-                                      qty >= service.maxQuantity
-                                        ? 'bg-slate-100 text-slate-300'
-                                        : 'bg-white text-navy-dark shadow-sm hover:shadow-md active:bg-slate-50'
-                                    )}
-                                  >
-                                    <Plus className="h-3.5 w-3.5" />
-                                  </motion.button>
+                          <Check className="h-3.5 w-3.5" strokeWidth={3} aria-hidden />
+                        )}
+                      </span>
+                    </button>
+
+                    <AnimatePresence initial={false}>
+                      {isSelected && line && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: 'auto', opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.2, ease: 'easeInOut' }}
+                        >
+                          <div className="space-y-3 px-4 pb-4">
+                            {/* Tier picker for services with sizes/types */}
+                            {service.tiers.length > 1 && (
+                              <div>
+                                <p className="mb-1.5 text-[11px] font-semibold uppercase tracking-wider text-ink-400">
+                                  {t('chooseType')}
+                                </p>
+                                <div className="flex flex-wrap gap-1.5">
+                                  {service.tiers.map((option) => (
+                                    <button
+                                      key={option.id}
+                                      type="button"
+                                      onClick={() => setTier(service.id, option.id)}
+                                      aria-pressed={line.tierId === option.id}
+                                      className={cn(
+                                        'rounded-lg px-2.5 py-1.5 text-xs font-medium transition-colors',
+                                        line.tierId === option.id
+                                          ? 'bg-crystal-500 text-white'
+                                          : 'bg-ink-50 text-ink-600 hover:bg-ink-100'
+                                      )}
+                                    >
+                                      {tServices(`${service.id}.tiers.${option.id}`)}
+                                      <span className="ml-1.5 opacity-70 tabular">
+                                        {tierPriceCompact(option, tRoot)}
+                                      </span>
+                                    </button>
+                                  ))}
                                 </div>
                               </div>
-                              {/* Per-service subtotal */}
-                              <div className="flex justify-between items-center mt-2 px-1">
-                                <span className="text-[11px] text-body/50">{t('subtotal')}</span>
-                                <span className="text-sm font-semibold text-navy-dark">
-                                  &euro;{service.priceMin * qty} – {service.priceMax * qty}
+                            )}
+
+                            <div className="flex items-center justify-between rounded-xl bg-ink-50 p-2.5">
+                              <span className="pl-1.5 text-xs font-medium text-ink-600">
+                                {tRoot(
+                                  `units.${service.unit}.${line.quantity === 1 ? 'one' : 'many'}`
+                                )}
+                              </span>
+                              <span className="flex items-center gap-1">
+                                <button
+                                  type="button"
+                                  onClick={() => changeQuantity(service.id, -1)}
+                                  disabled={line.quantity <= 1}
+                                  aria-label="-"
+                                  className={cn(
+                                    'flex h-8 w-8 items-center justify-center rounded-lg transition-all',
+                                    line.quantity <= 1
+                                      ? 'text-ink-200'
+                                      : 'bg-white text-ink-900 shadow-sm hover:shadow'
+                                  )}
+                                >
+                                  <Minus className="h-3.5 w-3.5" aria-hidden />
+                                </button>
+                                <span className="w-9 text-center font-display font-bold tabular">
+                                  {line.quantity}
                                 </span>
-                              </div>
+                                <button
+                                  type="button"
+                                  onClick={() => changeQuantity(service.id, 1)}
+                                  disabled={line.quantity >= service.maxQuantity}
+                                  aria-label="+"
+                                  className={cn(
+                                    'flex h-8 w-8 items-center justify-center rounded-lg transition-all',
+                                    line.quantity >= service.maxQuantity
+                                      ? 'text-ink-200'
+                                      : 'bg-white text-ink-900 shadow-sm hover:shadow'
+                                  )}
+                                >
+                                  <Plus className="h-3.5 w-3.5" aria-hidden />
+                                </button>
+                              </span>
                             </div>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </div>
+
+                            <div className="flex items-baseline justify-between px-1">
+                              <span className="text-[11px] text-ink-400">
+                                {t('subtotal')}
+                              </span>
+                              <span className="font-display text-sm font-bold text-ink-900 tabular">
+                                {lineTotalText(tier, line.quantity, tRoot)}
+                              </span>
+                            </div>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   </motion.div>
                 )
               })}
             </div>
           </div>
 
-          {/* ─── Desktop Summary Panel ─── */}
-          <div className="hidden lg:block lg:col-span-2">
-            <div className="sticky top-24 space-y-4">
-              <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
-                {/* Summary header */}
-                <div className="bg-gradient-to-r from-crystal-50 to-crystal-100/50 px-6 py-4 border-b border-slate-100">
-                  <div className="flex items-center justify-between">
-                    <h2 className="font-semibold text-navy-dark flex items-center gap-2">
-                      <Receipt className="h-4 w-4 text-crystal" />
-                      {t('summary')}
-                    </h2>
-                    {hasSelections && (
-                      <span className="text-xs font-bold text-crystal bg-white px-2.5 py-1 rounded-full shadow-sm">
-                        {totalItems} {totalItems === 1 ? 'item' : 'items'}
-                      </span>
-                    )}
-                  </div>
+          {/* ── Desktop summary ── */}
+          <aside className="hidden lg:col-span-2 lg:block">
+            <div className="sticky top-32 space-y-4">
+              <div className="overflow-hidden rounded-2xl border border-ink-100 bg-white shadow-card">
+                <div className="flex items-center justify-between border-b border-ink-100 bg-crystal-50/60 px-6 py-4">
+                  <h2 className="flex items-center gap-2 font-display font-bold text-ink-900">
+                    <Receipt className="h-4 w-4 text-crystal-600" aria-hidden />
+                    {t('summary')}
+                  </h2>
+                  {hasSelections && (
+                    <span className="rounded-full bg-white px-2.5 py-1 text-xs font-bold text-crystal-700 shadow-sm">
+                      {totalItems} {t('itemsCount', { count: totalItems })}
+                    </span>
+                  )}
                 </div>
 
                 <div className="p-6">
                   {!hasSelections ? (
-                    <div className="text-center py-8">
-                      <div className="w-16 h-16 rounded-2xl bg-slate-100 flex items-center justify-center mx-auto mb-3">
-                        <ShoppingCart className="h-7 w-7 text-slate-300" />
-                      </div>
-                      <p className="text-body/60 text-sm">{t('noServicesSelected')}</p>
+                    <div className="py-8 text-center">
+                      <span className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-2xl bg-ink-50">
+                        <ShoppingCart className="h-7 w-7 text-ink-200" aria-hidden />
+                      </span>
+                      <p className="text-sm text-ink-400">
+                        {t('noServicesSelected')}
+                      </p>
                     </div>
                   ) : (
                     <>
-                      {/* Line items */}
-                      <div className="space-y-3 mb-5">
-                        <AnimatePresence>
-                          {Array.from(selections.entries()).map(([serviceId, qty]) => {
-                            const service = serviceData.find((s) => s.id === serviceId)
+                      <ul className="mb-5 space-y-3">
+                        <AnimatePresence initial={false}>
+                          {selections.map((sel) => {
+                            const service = getService(sel.serviceId)
                             if (!service) return null
-                            const Icon = iconMap[service.icon]
+                            const tier = getTier(service, sel.tierId)
                             return (
-                              <motion.div
-                                key={serviceId}
-                                initial={{ opacity: 0, x: 20 }}
+                              <motion.li
+                                key={sel.serviceId}
+                                initial={{ opacity: 0, x: 16 }}
                                 animate={{ opacity: 1, x: 0 }}
-                                exit={{ opacity: 0, x: -20, height: 0 }}
+                                exit={{ opacity: 0, x: -16, height: 0 }}
                                 transition={{ duration: 0.2 }}
-                                className="flex items-center gap-3 group"
+                                className="group flex items-center gap-3"
                               >
-                                <div className="w-9 h-9 rounded-lg bg-crystal/10 flex items-center justify-center shrink-0">
-                                  <Icon className="h-4 w-4 text-crystal" />
-                                </div>
-                                <div className="flex-1 min-w-0">
-                                  <p className="text-sm font-medium text-navy-dark truncate">
+                                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-crystal-50">
+                                  <ServiceIcon
+                                    name={service.icon}
+                                    className="h-4 w-4 text-crystal-600"
+                                  />
+                                </span>
+                                <span className="min-w-0 flex-1">
+                                  <span className="block truncate text-sm font-medium text-ink-900">
                                     {tServices(`${service.id}.name`)}
-                                  </p>
-                                  <p className="text-xs text-body/50">
-                                    x{qty} &middot; &euro;{service.priceMin * qty} – {service.priceMax * qty}
-                                  </p>
-                                </div>
+                                  </span>
+                                  <span className="block text-xs text-ink-400 tabular">
+                                    {service.tiers.length > 1 &&
+                                      `${tServices(`${service.id}.tiers.${tier.id}`)} · `}
+                                    x{sel.quantity} ·{' '}
+                                    {lineTotalText(tier, sel.quantity, tRoot)}
+                                  </span>
+                                </span>
                                 <button
-                                  onClick={() => removeService(serviceId)}
-                                  className="p-1 rounded-md opacity-0 group-hover:opacity-100 hover:bg-red-50 transition-all"
+                                  type="button"
+                                  onClick={() => removeService(sel.serviceId)}
+                                  aria-label={tServices(`${service.id}.name`)}
+                                  className="rounded-md p-1 opacity-0 transition-all hover:bg-red-50 focus-visible:opacity-100 group-hover:opacity-100"
                                 >
-                                  <X className="h-3.5 w-3.5 text-red-400" />
+                                  <X className="h-3.5 w-3.5 text-red-400" aria-hidden />
                                 </button>
-                              </motion.div>
+                              </motion.li>
                             )
                           })}
                         </AnimatePresence>
-                      </div>
+                      </ul>
 
-                      {/* Divider */}
-                      <div className="h-px bg-slate-100 mb-4" />
+                      <div className="mb-4 h-px bg-ink-100" />
 
-                      {/* Total */}
-                      <div className="flex justify-between items-center mb-1">
-                        <span className="text-sm font-semibold text-navy-dark">{t('total')}</span>
+                      <div className="mb-2 flex items-baseline justify-between gap-2">
+                        <span className="text-sm font-semibold text-ink-900">
+                          {t('total')}
+                        </span>
                         <motion.span
-                          key={`${estimate.min}-${estimate.max}`}
-                          initial={{ scale: 1.1, color: '#0EA5E9' }}
-                          animate={{ scale: 1, color: '#0F172A' }}
-                          className="text-2xl font-bold"
+                          key={totalText}
+                          initial={{ scale: 1.06 }}
+                          animate={{ scale: 1 }}
+                          className="font-display text-2xl font-extrabold text-ink-900 tabular"
                         >
-                          &euro;{estimate.min} – {estimate.max}
+                          {totalText}
                         </motion.span>
                       </div>
 
-                      {/* Disclaimer */}
-                      <p className="text-[11px] text-body/50 flex items-start gap-1.5 mb-6">
-                        <Info className="h-3.5 w-3.5 shrink-0 mt-0.5" />
+                      {estimate.hasOnRequest && (
+                        <p className="mb-3 rounded-lg bg-aqua-50 px-3 py-2 text-[11px] leading-relaxed text-aqua-600">
+                          {t('onRequestNote')}
+                        </p>
+                      )}
+
+                      <p className="mb-6 flex items-start gap-1.5 text-[11px] leading-relaxed text-ink-400">
+                        <Info className="mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden />
                         {t('disclaimer')}
                       </p>
 
-                      {/* CTAs */}
                       <div className="space-y-2.5">
-                        <Link href={buildBookingParams()} className="block">
-                          <Button size="lg" className="w-full shadow-sm">
-                            <CalendarCheck className="h-4 w-4 mr-2" />
+                        <Link href={bookingHref} className="block">
+                          <Button size="lg" className="w-full">
+                            <CalendarCheck className="h-4 w-4" aria-hidden />
                             {t('proceedToBook')}
-                            <ArrowRight className="h-4 w-4 ml-auto" />
+                            <ArrowRight className="ml-auto h-4 w-4" aria-hidden />
                           </Button>
                         </Link>
                         <a
-                          href={buildWhatsAppMessage()}
+                          href={whatsAppHref}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="block"
                         >
-                          <Button variant="whatsapp" className="w-full shadow-sm">
-                            <MessageCircle className="h-4 w-4 mr-2" />
+                          <Button variant="whatsapp" className="w-full">
+                            <MessageCircle className="h-4 w-4" aria-hidden />
                             {t('contactWhatsApp')}
                           </Button>
                         </a>
@@ -401,114 +494,123 @@ export function QuoteClient() {
                 </div>
               </div>
 
-              {/* Help card */}
-              <div className="bg-gradient-to-br from-crystal-50 to-crystal-100/50 rounded-2xl p-4 text-center">
-                <p className="text-xs text-body/70 mb-2">{t('needHelp')}</p>
-                <a href="tel:+35796653034">
-                  <Button variant="secondary" size="sm" className="w-full text-xs">
-                    <Phone className="h-3.5 w-3.5 mr-1.5" />
-                    96653034
+              <div className="rounded-2xl bg-crystal-50/70 p-4 text-center">
+                <p className="mb-2 text-xs text-ink-500">{t('needHelp')}</p>
+                <a href={`tel:${site.phoneE164}`}>
+                  <Button variant="outline" size="sm" className="w-full">
+                    <Phone className="h-3.5 w-3.5" aria-hidden />
+                    {site.phoneDisplay}
                   </Button>
                 </a>
               </div>
             </div>
-          </div>
+          </aside>
         </div>
       </div>
 
-      {/* ─── Mobile Bottom Bar ─── */}
+      {/* ── Mobile summary bar ── */}
       <AnimatePresence>
         {hasSelections && (
           <motion.div
-            initial={{ y: 100 }}
+            initial={{ y: 120 }}
             animate={{ y: 0 }}
-            exit={{ y: 100 }}
+            exit={{ y: 120 }}
             transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-            className="fixed bottom-0 left-0 right-0 lg:hidden z-40"
+            className="fixed inset-x-0 bottom-0 z-40 lg:hidden"
           >
-            <div className="bg-white/95 backdrop-blur-lg border-t border-slate-200 px-4 py-3 safe-bottom">
-              {/* Collapsed bar */}
-              {!mobileDrawerOpen && (
-                <div className="flex items-center justify-between gap-3">
-                  <button
-                    onClick={() => setMobileDrawerOpen(true)}
-                    className="flex-1 text-left"
-                  >
-                    <p className="text-xs text-body/60">
-                      {selections.size} {t('servicesCount')} &middot; {totalItems} {t('itemsCount')}
-                    </p>
-                    <p className="text-lg font-bold text-navy-dark">
-                      &euro;{estimate.min} – {estimate.max}
-                    </p>
-                  </button>
-                  <Link href={buildBookingParams()}>
-                    <Button size="lg" className="shrink-0">
-                      {t('proceedToBook')}
-                      <ArrowRight className="h-4 w-4 ml-1.5" />
-                    </Button>
-                  </Link>
-                </div>
-              )}
-
-              {/* Expanded drawer */}
-              {mobileDrawerOpen && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                >
-                  <div className="flex items-center justify-between mb-3">
-                    <h3 className="font-semibold text-navy-dark text-sm">{t('summary')}</h3>
+            <div className="safe-bottom border-t border-ink-100 bg-white/95 px-4 pt-3 backdrop-blur-lg">
+              {drawerOpen ? (
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                  <div className="mb-3 flex items-center justify-between">
+                    <h2 className="font-display text-sm font-bold text-ink-900">
+                      {t('summary')}
+                    </h2>
                     <button
-                      onClick={() => setMobileDrawerOpen(false)}
-                      className="p-1.5 rounded-lg hover:bg-slate-100"
+                      type="button"
+                      onClick={() => setDrawerOpen(false)}
+                      aria-label={tRoot('common.close')}
+                      className="rounded-lg p-1.5 hover:bg-ink-50"
                     >
-                      <X className="h-4 w-4 text-body" />
+                      <X className="h-4 w-4 text-ink-500" aria-hidden />
                     </button>
                   </div>
 
-                  <div className="space-y-2 mb-3 max-h-48 overflow-y-auto">
-                    {Array.from(selections.entries()).map(([serviceId, qty]) => {
-                      const service = serviceData.find((s) => s.id === serviceId)
+                  <ul className="mb-3 max-h-48 space-y-2 overflow-y-auto">
+                    {selections.map((sel) => {
+                      const service = getService(sel.serviceId)
                       if (!service) return null
+                      const tier = getTier(service, sel.tierId)
                       return (
-                        <div key={serviceId} className="flex items-center justify-between text-sm">
-                          <span className="text-body truncate mr-2">
-                            {tServices(`${service.id}.name`)} x{qty}
+                        <li
+                          key={sel.serviceId}
+                          className="flex items-center justify-between gap-3 text-sm"
+                        >
+                          <span className="truncate text-ink-600">
+                            {tServices(`${service.id}.name`)}
+                            {service.tiers.length > 1 &&
+                              ` · ${tServices(`${service.id}.tiers.${tier.id}`)}`}{' '}
+                            x{sel.quantity}
                           </span>
-                          <span className="font-medium text-navy-dark shrink-0">
-                            &euro;{service.priceMin * qty}–{service.priceMax * qty}
+                          <span className="shrink-0 font-medium text-ink-900 tabular">
+                            {lineTotalText(tier, sel.quantity, tRoot)}
                           </span>
-                        </div>
+                        </li>
                       )
                     })}
-                  </div>
+                  </ul>
 
-                  <div className="flex justify-between items-center py-2 border-t border-slate-100 mb-3">
-                    <span className="font-semibold text-navy-dark text-sm">{t('total')}</span>
-                    <span className="text-xl font-bold text-crystal">
-                      &euro;{estimate.min} – {estimate.max}
+                  {estimate.hasOnRequest && (
+                    <p className="mb-3 rounded-lg bg-aqua-50 px-3 py-2 text-[11px] leading-relaxed text-aqua-600">
+                      {t('onRequestNote')}
+                    </p>
+                  )}
+
+                  <div className="mb-3 flex items-center justify-between border-t border-ink-100 py-2">
+                    <span className="text-sm font-semibold text-ink-900">
+                      {t('total')}
+                    </span>
+                    <span className="font-display text-xl font-extrabold text-crystal-600 tabular">
+                      {totalText}
                     </span>
                   </div>
 
                   <div className="grid grid-cols-2 gap-2">
-                    <a
-                      href={buildWhatsAppMessage()}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
+                    <a href={whatsAppHref} target="_blank" rel="noopener noreferrer">
                       <Button variant="whatsapp" className="w-full" size="sm">
-                        <MessageCircle className="h-4 w-4 mr-1" />
+                        <MessageCircle className="h-4 w-4" aria-hidden />
                         WhatsApp
                       </Button>
                     </a>
-                    <Link href={buildBookingParams()}>
+                    <Link href={bookingHref}>
                       <Button className="w-full" size="sm">
                         {t('proceedToBook')}
-                        <ArrowRight className="h-3.5 w-3.5 ml-1" />
+                        <ArrowRight className="h-3.5 w-3.5" aria-hidden />
                       </Button>
                     </Link>
                   </div>
                 </motion.div>
+              ) : (
+                <div className="flex items-center justify-between gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setDrawerOpen(true)}
+                    className="flex-1 text-left"
+                  >
+                    <span className="block text-xs text-ink-400">
+                      {lines.size} {t('servicesCount', { count: lines.size })} ·{' '}
+                      {totalItems} {t('itemsCount', { count: totalItems })}
+                    </span>
+                    <span className="block font-display text-lg font-extrabold text-ink-900 tabular">
+                      {totalText}
+                    </span>
+                  </button>
+                  <Link href={bookingHref}>
+                    <Button size="lg" className="shrink-0">
+                      {t('proceedToBook')}
+                      <ArrowRight className="h-4 w-4" aria-hidden />
+                    </Button>
+                  </Link>
+                </div>
               )}
             </div>
           </motion.div>

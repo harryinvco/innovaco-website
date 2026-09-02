@@ -1,175 +1,43 @@
-'use client'
+import type { Metadata } from 'next'
+import { getTranslations } from 'next-intl/server'
+import { ContactClient } from './ContactClient'
 
-import { useState } from 'react'
-import { useTranslations } from 'next-intl'
-import { Phone, MessageCircle, MapPin, Clock } from 'lucide-react'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Textarea } from '@/components/ui/textarea'
-import { AnimatedSection, AnimatedItem } from '@/components/shared/AnimatedSection'
-import { generateWhatsAppLink } from '@/lib/services'
-
-export default function ContactPage() {
-  const t = useTranslations('contact')
-
-  const [formData, setFormData] = useState({
-    name: '',
-    phone: '',
-    email: '',
-    message: '',
-  })
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    const msg = [
-      `Μήνυμα από ${formData.name}`,
-      `Τηλέφωνο: ${formData.phone}`,
-      formData.email ? `Email: ${formData.email}` : '',
-      ``,
-      formData.message,
-    ]
-      .filter(Boolean)
-      .join('\n')
-
-    window.open(generateWhatsAppLink(msg), '_blank')
+export async function generateMetadata({
+  params: { locale },
+}: {
+  params: { locale: string }
+}): Promise<Metadata> {
+  const t = await getTranslations({ locale, namespace: 'contact' })
+  return {
+    title: t('pageTitle'),
+    description: t('pageSubtitle'),
+    alternates: { canonical: `/${locale}/contact` },
   }
+}
 
-  const contactInfo = [
-    {
-      icon: Phone,
-      label: t('phone'),
-      value: '96653034',
-      href: 'tel:+35796653034',
-    },
-    {
-      icon: MessageCircle,
-      label: t('whatsapp'),
-      value: 'WhatsApp',
-      href: 'https://wa.me/35796653034',
-      external: true,
-    },
-    {
-      icon: MapPin,
-      label: t('location'),
-      value: t('locationValue'),
-    },
-    {
-      icon: Clock,
-      label: t('hours'),
-      value: t('hoursValue'),
-    },
-  ]
+export default async function ContactPage({
+  params: { locale },
+}: {
+  params: { locale: string }
+}) {
+  const t = await getTranslations({ locale, namespace: 'contact' })
 
   return (
-    <section className="pt-28 pb-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <AnimatedSection className="text-center mb-14">
-          <Badge className="mb-4">{t('pageTitle')}</Badge>
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-navy-dark">
-            {t('pageTitle')}
-          </h1>
-          <p className="mt-4 text-body text-lg">{t('pageSubtitle')}</p>
-        </AnimatedSection>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-          {/* Contact Info */}
-          <div className="space-y-4">
-            {contactInfo.map((info, i) => (
-              <AnimatedItem key={i} delay={i * 0.1}>
-                <Card>
-                  <CardContent className="flex items-center gap-4 p-5">
-                    <div className="w-12 h-12 rounded-xl bg-crystal/10 flex items-center justify-center shrink-0">
-                      <info.icon className="h-6 w-6 text-crystal" />
-                    </div>
-                    <div>
-                      <p className="text-sm text-body">{info.label}</p>
-                      {info.href ? (
-                        <a
-                          href={info.href}
-                          target={info.external ? '_blank' : undefined}
-                          rel={info.external ? 'noopener noreferrer' : undefined}
-                          className="font-semibold text-navy-dark hover:text-crystal transition-colors"
-                        >
-                          {info.value}
-                        </a>
-                      ) : (
-                        <p className="font-semibold text-navy-dark">
-                          {info.value}
-                        </p>
-                      )}
-                    </div>
-                  </CardContent>
-                </Card>
-              </AnimatedItem>
-            ))}
-          </div>
-
-          {/* Contact Form */}
-          <AnimatedItem delay={0.2}>
-            <Card>
-              <CardContent className="p-6">
-                <h2 className="text-lg font-semibold text-navy-dark mb-4">
-                  {t('formTitle')}
-                </h2>
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  <div>
-                    <Label htmlFor="name">{t('name')} *</Label>
-                    <Input
-                      id="name"
-                      required
-                      value={formData.name}
-                      onChange={(e) =>
-                        setFormData({ ...formData, name: e.target.value })
-                      }
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="phone">{t('phonePlaceholder')} *</Label>
-                    <Input
-                      id="phone"
-                      type="tel"
-                      required
-                      value={formData.phone}
-                      onChange={(e) =>
-                        setFormData({ ...formData, phone: e.target.value })
-                      }
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="email">{t('emailPlaceholder')}</Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      value={formData.email}
-                      onChange={(e) =>
-                        setFormData({ ...formData, email: e.target.value })
-                      }
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="message">{t('message')} *</Label>
-                    <Textarea
-                      id="message"
-                      required
-                      value={formData.message}
-                      onChange={(e) =>
-                        setFormData({ ...formData, message: e.target.value })
-                      }
-                    />
-                  </div>
-                  <Button type="submit" variant="whatsapp" className="w-full">
-                    <MessageCircle className="h-4 w-4 mr-2" />
-                    {t('send')}
-                  </Button>
-                </form>
-              </CardContent>
-            </Card>
-          </AnimatedItem>
+    <>
+      <section className="relative overflow-hidden border-b border-ink-100 bg-gradient-to-b from-crystal-50/70 to-white py-14 sm:py-16">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_0%,rgba(38,120,209,0.12),transparent)]" />
+        <div className="container-page relative text-center">
+          <span className="eyebrow">{t('badge')}</span>
+          <h1 className="heading-1 mt-5">{t('pageTitle')}</h1>
+          <p className="lead mx-auto mt-4 max-w-2xl">{t('pageSubtitle')}</p>
         </div>
-      </div>
-    </section>
+      </section>
+
+      <section className="section-below-header">
+        <div className="container-page max-w-5xl">
+          <ContactClient />
+        </div>
+      </section>
+    </>
   )
 }

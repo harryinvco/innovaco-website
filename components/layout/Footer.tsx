@@ -3,83 +3,90 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useLocale, useTranslations } from 'next-intl'
-import { Phone, MessageCircle, MapPin } from 'lucide-react'
+import { Clock, MapPin, MessageCircle, Phone } from 'lucide-react'
+import { generateWhatsAppLink, services } from '@/lib/services'
+import { site } from '@/lib/site'
 
 export function Footer() {
   const t = useTranslations('footer')
   const tNav = useTranslations('nav')
+  const tc = useTranslations('common')
   const tServices = useTranslations('services')
+  const tContact = useTranslations('contact')
   const locale = useLocale()
 
-  const serviceNames = [
-    'car',
-    'sofa',
-    'mattress',
-    'radiator',
-    'carpet',
-    'leather',
-    'chair',
-    'stroller',
-  ] as const
-
-  const quickLinks = [
-    { key: 'home', href: `/${locale}` },
-    { key: 'services', href: `/${locale}/services` },
-    { key: 'quote', href: `/${locale}/quote` },
-    { key: 'book', href: `/${locale}/book` },
-    { key: 'contact', href: `/${locale}/contact` },
-  ]
+  const quickLinks = ['home', 'services', 'pricing', 'quote', 'book', 'contact']
+  const hrefFor = (key: string) =>
+    key === 'home' ? `/${locale}` : `/${locale}/${key}`
 
   return (
-    <footer className="bg-navy-dark text-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+    <footer className="bg-ink-900 text-white">
+      <div className="container-page py-14 lg:py-16">
+        <div className="grid grid-cols-2 gap-x-8 gap-y-10 lg:grid-cols-12">
           {/* Brand */}
-          <div>
-            <div className="mb-3">
-              <Image
-                src="/images/logo.png"
-                alt={t('brand')}
-                width={160}
-                height={50}
-                className="h-12 w-auto brightness-0 invert"
-              />
+          <div className="col-span-2 lg:col-span-4">
+            <Image
+              src="/images/logo-white.png"
+              alt={site.name}
+              width={280}
+              height={169}
+              className="h-14 w-auto"
+            />
+            <p className="mt-5 max-w-xs text-sm leading-relaxed text-white/60">
+              {t('tagline')}
+            </p>
+            <div className="mt-6 flex gap-2">
+              <a
+                href={`tel:${site.phoneE164}`}
+                className="inline-flex h-10 items-center gap-2 rounded-xl bg-white/10 px-4 text-sm font-semibold transition-colors hover:bg-white/20"
+              >
+                <Phone className="h-4 w-4" aria-hidden />
+                {tc('phone')}
+              </a>
+              <a
+                href={generateWhatsAppLink(tc('defaultWhatsAppMessage'))}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex h-10 items-center gap-2 rounded-xl bg-whatsapp px-4 text-sm font-semibold transition-colors hover:bg-whatsapp-dark"
+              >
+                <MessageCircle className="h-4 w-4" aria-hidden />
+                WhatsApp
+              </a>
             </div>
-            <p className="text-slate-400 text-sm">{t('tagline')}</p>
           </div>
 
           {/* Services */}
-          <div>
-            <h3 className="font-semibold text-sm uppercase tracking-wider text-slate-300 mb-4">
+          <div className="lg:col-span-4">
+            <h2 className="mb-4 text-sm font-semibold text-white">
               {t('services')}
-            </h3>
-            <ul className="space-y-2">
-              {serviceNames.map((name) => (
-                <li key={name}>
+            </h2>
+            <ul className="grid gap-2 sm:grid-cols-2">
+              {services.map((service) => (
+                <li key={service.id}>
                   <Link
-                    href={`/${locale}/services`}
-                    className="text-sm text-slate-400 hover:text-crystal transition-colors"
+                    href={`/${locale}/services#${service.id}`}
+                    className="text-sm text-white/60 transition-colors hover:text-aqua-300"
                   >
-                    {tServices(`${name}.name`)}
+                    {tServices(`${service.id}.name`)}
                   </Link>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Quick Links */}
-          <div>
-            <h3 className="font-semibold text-sm uppercase tracking-wider text-slate-300 mb-4">
+          {/* Quick links */}
+          <div className="lg:col-span-2">
+            <h2 className="mb-4 text-sm font-semibold text-white">
               {t('quickLinks')}
-            </h3>
+            </h2>
             <ul className="space-y-2">
-              {quickLinks.map((link) => (
-                <li key={link.key}>
+              {quickLinks.map((key) => (
+                <li key={key}>
                   <Link
-                    href={link.href}
-                    className="text-sm text-slate-400 hover:text-crystal transition-colors"
+                    href={hrefFor(key)}
+                    className="text-sm text-white/60 transition-colors hover:text-aqua-300"
                   >
-                    {tNav(link.key)}
+                    {tNav(key)}
                   </Link>
                 </li>
               ))}
@@ -87,42 +94,35 @@ export function Footer() {
           </div>
 
           {/* Contact */}
-          <div>
-            <h3 className="font-semibold text-sm uppercase tracking-wider text-slate-300 mb-4">
+          <div className="lg:col-span-2">
+            <h2 className="mb-4 text-sm font-semibold text-white">
               {t('contactInfo')}
-            </h3>
-            <ul className="space-y-3">
+            </h2>
+            <ul className="space-y-3 text-sm text-white/60">
               <li>
                 <a
-                  href="tel:+35796653034"
-                  className="flex items-center gap-2 text-sm text-slate-400 hover:text-crystal transition-colors"
+                  href={`tel:${site.phoneE164}`}
+                  className="flex items-start gap-2 transition-colors hover:text-aqua-300"
                 >
-                  <Phone className="h-4 w-4" />
-                  96653034
+                  <Phone className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
+                  {tc('phone')}
                 </a>
               </li>
-              <li>
-                <a
-                  href="https://wa.me/35796653034"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-sm text-slate-400 hover:text-[#25D366] transition-colors"
-                >
-                  <MessageCircle className="h-4 w-4" />
-                  WhatsApp
-                </a>
+              <li className="flex items-start gap-2">
+                <MapPin className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
+                {tContact('locationValue')}
               </li>
-              <li className="flex items-center gap-2 text-sm text-slate-400">
-                <MapPin className="h-4 w-4" />
-                Cyprus
+              <li className="flex items-start gap-2">
+                <Clock className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
+                {t('hours')}
               </li>
             </ul>
           </div>
         </div>
 
-        <div className="mt-12 pt-8 border-t border-slate-700">
-          <p className="text-center text-sm text-slate-500">
-            &copy; {new Date().getFullYear()} Krystallo Cleaning Services. {t('rights')}.
+        <div className="mt-12 border-t border-white/10 pt-6">
+          <p className="text-center text-xs text-white/40">
+            &copy; {new Date().getFullYear()} {site.name}. {t('rights')}.
           </p>
         </div>
       </div>
