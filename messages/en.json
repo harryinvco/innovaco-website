@@ -350,9 +350,6 @@
     "selectServices": "Choose your services",
     "selectDate": "Choose a date",
     "selectTime": "Choose a time",
-    "morning": "Morning (09:00–12:00)",
-    "midday": "Midday (12:00–15:00)",
-    "afternoon": "Afternoon (15:00–18:00)",
     "contactDetails": "Your details",
     "fullName": "Full name",
     "phone": "Phone",
@@ -385,7 +382,10 @@
       "nameRequired": "Please enter your name",
       "phoneRequired": "Please enter a valid phone number"
     },
-    "availabilityNote": "We'll message you to confirm availability"
+    "availabilityNote": "We'll message you to confirm availability",
+    "slot1": "Morning (08:00–10:00)",
+    "slot2": "Late morning (10:00–12:00)",
+    "slot3": "Midday (12:00–14:00)"
   },
   "contact": {
     "pageTitle": "Contact us",
@@ -397,7 +397,7 @@
     "location": "Service area",
     "locationValue": "All of Cyprus",
     "hours": "Opening hours",
-    "hoursValue": "Monday – Saturday, 08:00–19:00",
+    "hoursValue": "Monday – Friday, 08:00–14:00",
     "formTitle": "Send us a message",
     "formSubtitle": "Leave your details and we'll get back to you on WhatsApp.",
     "name": "Name",
@@ -414,7 +414,7 @@
     "services": "Services",
     "quickLinks": "Quick links",
     "contactInfo": "Contact",
-    "hours": "Mon – Sat, 08:00–19:00",
+    "hours": "Mon – Fri, 08:00–14:00",
     "rights": "All rights reserved"
   }
 }

@@ -9,5 +9,5 @@ export const site = {
   url: 'https://krystallo.cy',
   email: 'info@krystallo.cy',
   areaServed: 'Cyprus',
-  openingHours: 'Mo-Sa 08:00-19:00',
+  openingHours: 'Mo-Fr 08:00-14:00',
 } as const

@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
 import { AnimatePresence, motion } from 'framer-motion'
-import { addDays, format, isSunday } from 'date-fns'
+import { addDays, format, isWeekend } from 'date-fns'
 import { el, enUS } from 'date-fns/locale'
 import {
   CalendarDays,
@@ -44,10 +44,11 @@ import {
 } from '@/lib/price'
 import { cn } from '@/lib/utils'
 
+/* Slots span the working day, 08:00–14:00 — see `site.openingHours`. */
 const timeSlots = [
-  { key: 'morning', icon: Sun, hours: '09:00 – 12:00' },
-  { key: 'midday', icon: CloudSun, hours: '12:00 – 15:00' },
-  { key: 'afternoon', icon: Sunset, hours: '15:00 – 18:00' },
+  { key: 'slot1', icon: Sun, hours: '08:00 – 10:00' },
+  { key: 'slot2', icon: CloudSun, hours: '10:00 – 12:00' },
+  { key: 'slot3', icon: Sunset, hours: '12:00 – 14:00' },
 ] as const
 
 const stepVariants = {
@@ -110,7 +111,7 @@ export function BookClient() {
     const dates: Date[] = []
     for (let i = 1; i <= 21; i++) {
       const day = addDays(today, i)
-      if (!isSunday(day)) dates.push(day)
+      if (!isWeekend(day)) dates.push(day)
     }
     return dates
   }, [])
@@ -223,7 +224,7 @@ export function BookClient() {
       `${tQuote('estimatedCost')}: ${totalText}`,
       '',
       `${t('selectedDate')}: ${format(new Date(selectedDate), 'EEEE d MMMM yyyy', { locale: dateLocale })}`,
-      `${t('selectedTime')}: ${t(selectedTime as 'morning')}`,
+      `${t('selectedTime')}: ${t(selectedTime as 'slot1')}`,
       '',
       `${t('fullName')}: ${form.fullName}`,
       `${t('phone')}: ${form.phone}`,
@@ -718,7 +719,7 @@ export function BookClient() {
                             {t('selectedTime')}
                           </dt>
                           <dd className="text-right text-sm font-medium text-ink-900">
-                            {selectedTime && t(selectedTime as 'morning')}
+                            {selectedTime && t(selectedTime as 'slot1')}
                           </dd>
                         </div>
                         <div className="flex items-start justify-between gap-4 p-4">
@@ -832,7 +833,7 @@ export function BookClient() {
                 <p className="mt-4 flex items-center gap-2 border-t border-ink-100 pt-4 text-xs text-ink-500">
                   <CalendarDays className="h-3.5 w-3.5 text-crystal-500" aria-hidden />
                   {format(new Date(selectedDate), 'd MMM yyyy', { locale: dateLocale })}
-                  {selectedTime && ` · ${t(selectedTime as 'morning').split(' (')[0]}`}
+                  {selectedTime && ` · ${t(selectedTime as 'slot1').split(' (')[0]}`}
                 </p>
               )}
             </div>
