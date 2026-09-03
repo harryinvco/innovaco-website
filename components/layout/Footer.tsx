@@ -20,7 +20,7 @@ export function Footer() {
     key === 'home' ? `/${locale}` : `/${locale}/${key}`
 
   return (
-    <footer className="bg-ink-900 text-white">
+    <footer className="bg-ink-900 pb-safe-bar text-white lg:pb-0">
       <div className="container-page py-14 lg:py-16">
         <div className="grid grid-cols-2 gap-x-8 gap-y-10 lg:grid-cols-12">
           {/* Brand */}
@@ -120,9 +120,21 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 border-t border-white/10 pt-6">
-          <p className="text-center text-xs text-white/40">
+        <div className="mt-12 flex flex-col items-center gap-3 border-t border-white/10 pt-6 sm:flex-row sm:justify-between">
+          <p className="text-xs text-white/40">
             &copy; {new Date().getFullYear()} {site.name}. {t('rights')}.
+          </p>
+          <p className="text-[13px] text-white/50">
+            {t('madeBy')}{' '}
+            <a
+              href="https://innovaco.com.cy"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-semibold text-white/80 underline-offset-4 transition-colors hover:text-aqua-300 hover:underline"
+            >
+              Innovaco
+            </a>{' '}
+            <span aria-hidden>&#127464;&#127486;</span>
           </p>
         </div>
       </div>

@@ -83,10 +83,7 @@ export default async function LocaleLayout({
           </a>
           <Header />
           <PageTransition>
-            <main
-              id="main-content"
-              className="header-offset pb-safe-bar lg:pb-0"
-            >
+            <main id="main-content" className="header-offset">
               {children}
             </main>
           </PageTransition>
