@@ -382,6 +382,7 @@
       "nameRequired": "Please enter your name",
       "phoneRequired": "Please enter a valid phone number"
     },
+    "noticeNote": "We need at least {days} days' notice so we can schedule the right team. Need something sooner? Give us a call.",
     "availabilityNote": "We'll message you to confirm availability",
     "slot1": "Morning (08:00–10:00)",
     "slot2": "Late morning (10:00–12:00)",

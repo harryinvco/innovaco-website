@@ -13,6 +13,7 @@ import {
   ChevronRight,
   Clock,
   CloudSun,
+  Info,
   MessageCircle,
   Minus,
   PartyPopper,
@@ -43,6 +44,15 @@ import {
   tierPriceCompact,
 } from '@/lib/price'
 import { cn } from '@/lib/utils'
+
+/**
+ * How much notice a booking needs, in days. The calendar starts this far out
+ * so there is always time to schedule a team for the job.
+ */
+const MIN_NOTICE_DAYS = 5
+
+/** How far ahead the calendar lets anyone book, in days from today. */
+const BOOKING_HORIZON_DAYS = 21
 
 /* Slots span the working day, 08:00–14:00 — see `site.openingHours`. */
 const timeSlots = [
@@ -109,7 +119,7 @@ export function BookClient() {
   const availableDates = useMemo(() => {
     const today = new Date()
     const dates: Date[] = []
-    for (let i = 1; i <= 21; i++) {
+    for (let i = MIN_NOTICE_DAYS; i <= BOOKING_HORIZON_DAYS; i++) {
       const day = addDays(today, i)
       if (!isWeekend(day)) dates.push(day)
     }
@@ -519,6 +529,10 @@ export function BookClient() {
                           <CalendarDays className="h-5 w-5 text-crystal-600" aria-hidden />
                           {t('selectDate')}
                         </h2>
+                        <p className="mb-4 flex items-start gap-2 rounded-xl bg-crystal-50/70 px-3.5 py-2.5 text-xs leading-relaxed text-ink-500">
+                          <Info className="mt-0.5 h-3.5 w-3.5 shrink-0 text-crystal-500" aria-hidden />
+                          {t('noticeNote', { days: MIN_NOTICE_DAYS })}
+                        </p>
                         {errors.date && (
                           <p className="mb-3 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600">
                             {errors.date}
