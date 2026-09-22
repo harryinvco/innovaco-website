@@ -171,17 +171,20 @@ export function Hero() {
             <div className="absolute -inset-6 rounded-[2.5rem] bg-gradient-to-br from-crystal-200/40 to-aqua-200/30 blur-2xl" />
 
             <div className="relative overflow-hidden rounded-3xl shadow-2xl shadow-crystal-900/15">
+              {/* Shot is 2:1, so the frame stays wide on desktop to keep the
+                  technician and the bed in one composition rather than
+                  cropping the room away. */}
               <Image
-                src="/images/work-in-action.webp"
+                src="/images/mattress-steam-clean.webp"
                 alt={t('imageCaption')}
-                width={720}
-                height={720}
-                className="aspect-[4/3] w-full object-cover sm:aspect-square lg:aspect-[4/3]"
-                sizes="(max-width: 1024px) 90vw, 45vw"
+                width={1600}
+                height={778}
+                className="aspect-[4/3] w-full object-cover sm:aspect-[3/2] lg:aspect-[5/4]"
+                sizes="(max-width: 1024px) 100vw, 70vw"
                 priority
               />
               <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-ink-900/70 to-transparent" />
-              <p className="absolute inset-x-5 bottom-4 text-sm font-medium text-white/90">
+              <p className="absolute bottom-4 left-5 right-5 max-w-[62%] text-sm font-medium leading-snug text-white/90 sm:right-auto">
                 {t('imageCaption')}
               </p>
             </div>
