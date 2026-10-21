@@ -4,7 +4,6 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useLocale, useTranslations } from 'next-intl'
 import { Clock, MapPin, MessageCircle, Phone } from 'lucide-react'
-import { IsraelFlag, PrideFlag, UsaFlag } from '@/components/shared/Flags'
 import { generateWhatsAppLink, services } from '@/lib/services'
 import { site } from '@/lib/site'
 
@@ -121,23 +120,7 @@ export function Footer() {
           </div>
         </div>
 
-        {/* Statements the business asked to carry on every page */}
-        <div className="mt-12 flex flex-col items-center justify-center gap-5 border-t border-white/10 pt-10 sm:flex-row sm:gap-10">
-          <p className="flex flex-col items-center justify-center gap-2.5 text-center font-display text-lg font-extrabold leading-snug tracking-tight text-white sm:flex-row sm:gap-3 sm:text-xl">
-            <PrideFlag className="h-7 w-[2.625rem] shrink-0 rounded-sm ring-1 ring-inset ring-white/20 sm:h-8 sm:w-12" />
-            {t('lgbtq')}
-          </p>
-          <span className="hidden h-8 w-px bg-white/15 sm:block" />
-          <p className="flex flex-col items-center justify-center gap-2.5 text-center font-display text-lg font-extrabold leading-snug tracking-tight text-white sm:flex-row sm:gap-3 sm:text-xl">
-            <span className="flex shrink-0 items-center gap-2">
-              <UsaFlag className="h-7 w-[2.625rem] rounded-sm ring-1 ring-inset ring-white/20 sm:h-8 sm:w-12" />
-              <IsraelFlag className="h-7 w-[2.625rem] rounded-sm ring-1 ring-inset ring-white/20 sm:h-8 sm:w-12" />
-            </span>
-            {t('usaIsrael')}
-          </p>
-        </div>
-
-        <div className="mt-10 flex flex-col items-center gap-3 border-t border-white/10 pt-6 sm:flex-row sm:justify-between">
+        <div className="mt-12 flex flex-col items-center gap-3 border-t border-white/10 pt-6 sm:flex-row sm:justify-between">
           <p className="text-xs text-white/40">
             &copy; {new Date().getFullYear()} {site.name}. {t('rights')}.
           </p>
