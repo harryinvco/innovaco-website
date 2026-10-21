@@ -4,7 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useLocale, useTranslations } from 'next-intl'
 import { Clock, MapPin, MessageCircle, Phone } from 'lucide-react'
-import { PalestineFlag, PrideFlag } from '@/components/shared/Flags'
+import { IsraelFlag, PrideFlag, UsaFlag } from '@/components/shared/Flags'
 import { generateWhatsAppLink, services } from '@/lib/services'
 import { site } from '@/lib/site'
 
@@ -129,8 +129,11 @@ export function Footer() {
           </p>
           <span className="hidden h-8 w-px bg-white/15 sm:block" />
           <p className="flex flex-col items-center justify-center gap-2.5 text-center font-display text-lg font-extrabold leading-snug tracking-tight text-white sm:flex-row sm:gap-3 sm:text-xl">
-            <PalestineFlag className="h-7 w-[2.625rem] shrink-0 rounded-sm ring-1 ring-inset ring-white/20 sm:h-8 sm:w-12" />
-            {t('palestine')}
+            <span className="flex shrink-0 items-center gap-2">
+              <UsaFlag className="h-7 w-[2.625rem] rounded-sm ring-1 ring-inset ring-white/20 sm:h-8 sm:w-12" />
+              <IsraelFlag className="h-7 w-[2.625rem] rounded-sm ring-1 ring-inset ring-white/20 sm:h-8 sm:w-12" />
+            </span>
+            {t('usaIsrael')}
           </p>
         </div>
 
